@@ -21,10 +21,9 @@ function getCookie(cname) {
 }
 
 const Etape = (props) => {
-    if (getCookieConsentValue("cookieConsent")) {
+    if (getCookieConsentValue("cookieConsent") && getCookie("QrCode-" + props.nbQrCode) === "") {
         document.cookie = "QrCode-" + props.nbQrCode + "=" + JSON.stringify({"mot": props.mot.toString(), "url": window.location.href, "timestamp": Date.now()})
     }
-    console.log(getCookie("QrCode-" + props.nbQrCode))
     return (<div>
             <NavBar page="/etape_0"/>
             <h3 style={{
@@ -33,7 +32,7 @@ const Etape = (props) => {
                 marginTop: "40px"
             }}>QrCode {props.nbQrCode}: {props.mot}</h3>
             {props.children}
-            <Footer></Footer>
+            {!props.hideFooter && (<Footer></Footer>)}
         </div>
     )
 }
@@ -41,7 +40,8 @@ const Etape = (props) => {
 Etape.propTypes =
     {
         nbQrCode: PropTypes.number.isRequired,
-        mot: PropTypes.string.isRequired
+        mot: PropTypes.string.isRequired,
+        hideFooter: PropTypes.any
     }
 
 Etape.defaultProps =

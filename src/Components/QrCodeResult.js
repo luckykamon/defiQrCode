@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from "./Navbar";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
+import PropTypes from "prop-types";
 
 function getCookie(cname) {
     let name = cname + "=";
@@ -18,6 +19,19 @@ function getCookie(cname) {
     }
     return "";
 }
+
+const BaliseAIfHref = (props) => {
+    if (props.href !== "") {
+        return <a href={props.href}>{props.children}</a>
+    } else {
+        return (props.children)
+    }
+}
+
+BaliseAIfHref.propTypes =
+    {
+        href: PropTypes.string
+    }
 
 const ResultScan = () => {
     let resultScanTab = []
@@ -41,12 +55,12 @@ const ResultScan = () => {
     return (
         <tbody>
         {resultScanTab.map(resultScan =>
-            <tr key={resultScan["nbQrCode"]}>
-                <td>{resultScan["nbQrCode"]}</td>
-                <td>{resultScan["mot"]}</td>
-                <td><a href={resultScan["url"]}>{resultScan["url"]}</a></td>
-                <td>{resultScan["timestamp"]}</td>
-            </tr>
+                <tr key={resultScan["nbQrCode"]}>
+                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["nbQrCode"]}</BaliseAIfHref></td>
+                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["mot"]}</BaliseAIfHref></td>
+                    {/*<td><a href={resultScan["url"]}>{resultScan["url"] !== "" && (URL)}</a></td>*/}
+                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["timestamp"]}</BaliseAIfHref></td>
+                </tr>
         )}
         </tbody>
     )
@@ -67,7 +81,7 @@ const TableResult = () => {
             <tr>
                 <th style={{width: "25%"}}>Numéro QrCode</th>
                 <th style={{width: "25%"}}>Mot trouvé</th>
-                <th style={{width: "25%"}}>URL</th>
+                {/*<th style={{width: "25%"}}>URL</th>*/}
                 <th style={{width: "25%"}}>Date</th>
             </tr>
             </thead>

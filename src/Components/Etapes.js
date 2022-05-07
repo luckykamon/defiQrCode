@@ -34,7 +34,7 @@ const StartMap = () => {
 
 const Etape_0 = () => {
     return (
-        <Etape nbQrCode={0} mot={"Les"}>
+        <Etape nbQrCode={0} mot={"Les"} hideFooter>
             <Image src={"/images/parcours/etape_0/FDE5DFA0-60BA-450C-820F-EC43F440848B_1_105_c.jpeg"} alt={"zoom etape 0"}/>
             <Image src={"/images/parcours/etape_0/E3A426AF-358D-4F7A-842E-7662E5D8B0FA_1_105_c.jpeg"} alt={"dezoom etape 0"}/>
             <Image src={"/images/parcours/etape_0/22E4D739-56E2-4BC6-A03B-CDADFB1DACEA_1_105_c.jpeg"} alt={"panorama etape 0"}/>

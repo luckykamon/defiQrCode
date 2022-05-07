@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import QrCodeResult from "./Components/QrCodeResult"
@@ -19,6 +18,7 @@ import {
     Etape_10,
     Etape_11
 } from "./Components/Etapes"
+import About from "./Components/About";
 
 
 const Confidentialite = () => {
@@ -41,7 +41,7 @@ const Confidentialite = () => {
 ReactDOM.render(
     <BrowserRouter>
         <Routes>
-            <Route path="/" element={<App/>}/>
+            <Route path="/" element={<About/>}/>
             <Route path="confidentialite" element={<Confidentialite/>}/>
             <Route path="QrCodeResult" element={<QrCodeResult/>}/>
             <Route path="etape_0" element={<Etape_0/>}/>
@@ -56,10 +56,7 @@ ReactDOM.render(
             <Route path="e8EP7hPTDgYT" element={<Etape_9/>}/>
             <Route path="2dntPyEx7Et9" element={<Etape_10/>}/>
             <Route path="ezMyOYo0X2De" element={<Etape_11/>}/>
-            {/*<Route path="result" element={<Result/>}/>*/}
-            {/*<Route path="createAccount" element={<CreateAccount/>}/>*/}é
-            {/*<Route path="test" element={<Test/>}/>*/}
-            <Route path="*" element={<App/>}/>
+            <Route path="*" element={<About/>}/>
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
