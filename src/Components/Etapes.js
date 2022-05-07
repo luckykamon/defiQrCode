@@ -32,7 +32,7 @@ const StartMap = () => {
     );
 }
 
-const Etape_0 = () => {
+const Etape0 = () => {
     return (
         <Etape nbQrCode={0} mot={"Les"} hideFooter>
             <Image src={"/images/parcours/etape_0/FDE5DFA0-60BA-450C-820F-EC43F440848B_1_105_c.jpeg"} alt={"zoom etape 0"}/>
@@ -43,7 +43,7 @@ const Etape_0 = () => {
     )
 }
 
-const Etape_1 = () => {
+const Etape1 = () => {
     return (
         <Etape nbQrCode={1} mot={"capains"}>
             <Image src={"/images/parcours/etape_1/80BE8BBD-031E-4065-83BB-EB480D3C2E5F_1_105_c.jpeg"} alt={"zoom etape 1"}/>
@@ -53,7 +53,7 @@ const Etape_1 = () => {
     )
 }
 
-const Etape_2 = () => {
+const Etape2 = () => {
     return (
         <Etape nbQrCode={2} mot={"font"}>
             <Image src={"/images/parcours/etape_2/4B44CCB1-061F-4168-902F-680E62584DAF_1_105_c.jpeg"} alt={"zoom etape 2"}/>
@@ -64,7 +64,7 @@ const Etape_2 = () => {
     )
 }
 
-const Etape_3 = () => {
+const Etape3 = () => {
     return (
         <Etape nbQrCode={3} mot={"la"}>
             <Image src={"/images/parcours/etape_3/15D01B24-AFC9-46DE-A2BD-7B22617B1B37_1_105_c.jpeg"} alt={"Arbre"}></Image>
@@ -72,7 +72,7 @@ const Etape_3 = () => {
     )
 }
 
-const Etape_4 = () => {
+const Etape4 = () => {
     return (
         <Etape nbQrCode={4} mot={"fete"}>
             <Image src={"/images/parcours/etape_4/8B4E6207-46D8-4F6A-95E7-39A7E5B6B9CA_1_105_c.jpeg"} alt={"zoom etape 4"}/>
@@ -83,7 +83,7 @@ const Etape_4 = () => {
     )
 }
 
-const Etape_5 = () => {
+const Etape5 = () => {
     return (
         <Etape nbQrCode={5} mot={"toute"}>
             <Image src={"/images/parcours/etape_5/5D4D49E8-112E-4364-BB8A-4C2849DA96ED_1_105_c.jpeg"} alt={"zoom etape 5"}/>
@@ -93,7 +93,7 @@ const Etape_5 = () => {
     )
 }
 
-const Etape_6 = () => {
+const Etape6 = () => {
     return (
         <Etape nbQrCode={6} mot={"la"}>
             <Image src={"/images/parcours/etape_6/1204A17A-684D-4872-A324-9A122BB4A0E3_1_105_c.jpeg"} alt={"zoom etape 6"}/>
@@ -103,7 +103,7 @@ const Etape_6 = () => {
     )
 }
 
-const Etape_7 = () => {
+const Etape7 = () => {
     return (
         <Etape nbQrCode={7} mot={"soiree"}>
             <Image src={"/images/parcours/etape_7/58B6E235-13F8-4106-AE90-1DFF8ECA2620_1_105_c.jpeg"} alt={"zoom etape 7"}/>
@@ -113,7 +113,7 @@ const Etape_7 = () => {
     )
 }
 
-const Etape_8 = () => {
+const Etape8 = () => {
     return (
         <Etape nbQrCode={8} mot={"aux"}>
             <Image src={"/images/parcours/etape_8/F49F93D0-1093-4CDF-BE21-5236A1F09DD7_1_105_c.jpeg"} alt={"zoom etape 8"}/>
@@ -123,7 +123,7 @@ const Etape_8 = () => {
     )
 }
 
-const Etape_9 = () => {
+const Etape9 = () => {
     return (
         <Etape nbQrCode={9} mot={"Gayeulles"}>
             <Image src={"/images/parcours/etape_9/9CE83EF6-9770-4194-9C81-81D5A8B9056C_1_105_c.jpeg"} alt={"zoom etape 9"}/>
@@ -134,7 +134,7 @@ const Etape_9 = () => {
     )
 }
 
-const Etape_10 = () => {
+const Etape10 = () => {
     return (
         <Etape nbQrCode={10} mot={"en"}>
             <Image src={"/images/parcours/etape_10/1BA39F21-41B1-4584-A397-70ED6B71D064_1_105_c.jpeg"} alt={"zoom etape 10"}/>
@@ -144,7 +144,7 @@ const Etape_10 = () => {
     )
 }
 
-const Etape_11 = () => {
+const Etape11 = () => {
     return (
         <Etape nbQrCode={11} mot={"chantant."}>
             <Image src={"/images/parcours/etape_11/EE5743D6-B37F-4902-89A9-98922FF892B1_1_105_c.jpeg"} alt={"zoom etape 11"}/>
@@ -155,16 +155,16 @@ const Etape_11 = () => {
 }
 
 export {
-    Etape_0,
-    Etape_1,
-    Etape_2,
-    Etape_3,
-    Etape_4,
-    Etape_5,
-    Etape_6,
-    Etape_7,
-    Etape_8,
-    Etape_9,
-    Etape_10,
-    Etape_11,
+    Etape0,
+    Etape1,
+    Etape2,
+    Etape3,
+    Etape4,
+    Etape5,
+    Etape6,
+    Etape7,
+    Etape8,
+    Etape9,
+    Etape10,
+    Etape11,
 }

@@ -29,13 +29,13 @@ const NavBar = (props) => {
             <Cookie></Cookie>
             <ul id="nav" className="nav">
                 <Li href="/" page={props.page}>
-                    Présentation
+                    Accueil
                 </Li>
                 <Li href="/etape_0" page={props.page}>
-                    Premier point
+                    1er point
                 </Li>
                 <Li href="/QrCodeResult" page={props.page}>
-                    QrCode Scannés
+                    Avancée
                 </Li>
             </ul>
         </div>

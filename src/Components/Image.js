@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types"
 
 function doesFileExist(urlToFile) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('HEAD', urlToFile, false);
     xhr.send();
     return xhr.status !== 404;

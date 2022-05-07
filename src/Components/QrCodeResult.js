@@ -3,22 +3,10 @@ import NavBar from "./Navbar";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes from "prop-types";
+import {getCookie, deleteCookie} from "../Functions/CookieFunction"
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faRotate} from "@fortawesome/free-solid-svg-icons";
 
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
 
 const BaliseAIfHref = (props) => {
     if (props.href !== "") {
@@ -52,15 +40,15 @@ const ResultScan = () => {
         }
         resultScanTab.push(resultScanJson)
     }
+    console.log(resultScanTab)
     return (
         <tbody>
         {resultScanTab.map(resultScan =>
-                <tr key={resultScan["nbQrCode"]}>
-                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["nbQrCode"]}</BaliseAIfHref></td>
-                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["mot"]}</BaliseAIfHref></td>
-                    {/*<td><a href={resultScan["url"]}>{resultScan["url"] !== "" && (URL)}</a></td>*/}
-                    <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["timestamp"]}</BaliseAIfHref></td>
-                </tr>
+            <tr key={resultScan["nbQrCode"]}>
+                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["nbQrCode"]}</BaliseAIfHref></td>
+                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["mot"]}</BaliseAIfHref></td>
+                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["timestamp"]}</BaliseAIfHref></td>
+            </tr>
         )}
         </tbody>
     )
@@ -94,7 +82,8 @@ const TableResult = () => {
 const QrCodeResult = (props) => {
     return (<div>
             <NavBar page="/QrCodeResult"/>
-            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée:</h3>
+            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
+                icon={faRotate} onClick={deleteCookie}/></h3>
             <TableResult/>
             {props.children}
             <Footer/>
