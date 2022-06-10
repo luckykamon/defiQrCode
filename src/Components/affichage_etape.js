@@ -23,7 +23,11 @@ import {getCookie} from "../Functions/CookieFunction"
 
 const Etape = (props) => {
     if (getCookieConsentValue("cookieConsent") && getCookie("QrCode-" + props.nbQrCode) === "") {
-        document.cookie = "QrCode-" + props.nbQrCode + "=" + JSON.stringify({"mot": props.mot.toString(), "url": window.location.href, "timestamp": Date.now()})
+        //cookie expire in one month
+        let date = new Date();
+        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + date.toUTCString();
+        document.cookie = "QrCode-" + props.nbQrCode + "=" + JSON.stringify({"mot": props.mot.toString(), "url": window.location.href, "timestamp": Date.now()}) + ";" + expires
     }
     return (<div>
             <NavBar page="/etape_0"/>
