@@ -34,7 +34,7 @@ const About = () => {
                             <p>Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger
                                 ci-dessous.</p>
                             <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/QrCodeResult">votre avancée (cliquez ici)</a> qui se complètera automatiquement.</p>
-                            <p>Cet évènement à eu lieu le 10 juin 2022 avec le groupe facebook <a href={"https://www.facebook.com/events/1711141272566796/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"} target={"_blank"}>Courir à Plusieurs</a></p>
+                            <p>Cet évènement à eu lieu le 10 juin 2022 avec le groupe facebook <a href={"https://www.facebook.com/events/1711141272566796/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"} target={"_blank"} rel={"noreferrer"}>Courir à Plusieurs</a></p>
                             <div className="row">
                                 <div className="columns download" style={{width: "100%"}}>
                                     <span className="button" onClick={openGpxDownload} style={{margin: "20px"}}>
