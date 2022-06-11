@@ -5,7 +5,6 @@ export function setLocalStorage(key, value) {
 
 //créer une fonction qui récupérère une valeur de localStorage en js
 export function getLocalStorage(key) {
-    console.log(localStorage.getItem(key) == null)
     return localStorage.getItem(key);
 }
 

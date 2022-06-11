@@ -3,6 +3,7 @@ import NavBar from "./Navbar";
 import Footer from "./Footer";
 
 const About = () => {
+
     const openGpxDownload = () => {
         window.open('/gpx/chien_gayeulles.gpx')
     }

@@ -40,7 +40,7 @@ const ResultScan = () => {
         }
         resultScanTab.push(resultScanJson)
     }
-    console.log(resultScanTab)
+
     return (
         <tbody>
         {resultScanTab.map(resultScan =>
