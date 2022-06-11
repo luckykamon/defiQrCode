@@ -9,7 +9,11 @@ export default function Cookie() {
             cookieName="cookieConsent"
             style={{background: "black"}}
             buttonStyle={{color: "#4e503b", fontSize: "13px"}}
-            expires={150}>
+            expires={365}
+            onAccept={() => {
+                //Redémarrer une page en js
+                window.location.reload();
+            }}>
             Pour enregistrer vos QrCode, veuillez accepter les cookies 🍪
         </CookieConsent>
     )

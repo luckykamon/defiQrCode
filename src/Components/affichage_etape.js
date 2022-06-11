@@ -3,31 +3,12 @@ import NavBar from "./Navbar";
 import PropTypes from "prop-types";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
-import {getCookie} from "../Functions/CookieFunction"
+import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorageFunction";
 
-// function getCookie(cname) {
-//     let name = cname + "=";
-//     let decodedCookie = decodeURIComponent(document.cookie);
-//     let ca = decodedCookie.split(';');
-//     for(let i = 0; i <ca.length; i++) {
-//         let c = ca[i];
-//         while (c.charAt(0) == ' ') {
-//             c = c.substring(1);
-//         }
-//         if (c.indexOf(name) == 0) {
-//             return c.substring(name.length, c.length);
-//         }
-//     }
-//     return "";
-// }
 
 const Etape = (props) => {
-    if (getCookieConsentValue("cookieConsent") && getCookie("QrCode-" + props.nbQrCode) === "") {
-        //cookie expire in one month
-        let date = new Date();
-        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-        let expires = "expires=" + date.toUTCString();
-        document.cookie = "QrCode-" + props.nbQrCode + "=" + JSON.stringify({"mot": props.mot.toString(), "url": window.location.href, "timestamp": Date.now()}) + ";" + expires
+    if (getCookieConsentValue("cookieConsent") && getLocalStorage("QrCode-" + props.nbQrCode) === null) {
+        setLocalStorage("QrCode-" + props.nbQrCode, JSON.stringify({"mot": props.mot.toString(), "url": window.location.href, "timestamp": Date.now()}));
     }
     return (<div>
             <NavBar page="/etape_0"/>

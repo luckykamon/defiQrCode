@@ -3,9 +3,9 @@ import NavBar from "./Navbar";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes from "prop-types";
-import {getCookie, deleteCookie} from "../Functions/CookieFunction"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
+import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorageFunction";
 
 
 const BaliseAIfHref = (props) => {
@@ -25,10 +25,10 @@ const ResultScan = () => {
     let resultScanTab = []
 
     for (let i = 0; i <= 11; i++) {
-        let cookie = getCookie("QrCode-" + i)
+        let cookie = getLocalStorage("QrCode-" + i)
         let resultScanJson = {}
         resultScanJson["nbQrCode"] = i
-        if (cookie === "") {
+        if (cookie === null) {
             resultScanJson["mot"] = ""
             resultScanJson["url"] = ""
             resultScanJson["timestamp"] = ""
@@ -57,8 +57,7 @@ const ResultScan = () => {
 const TableResult = () => {
     if (!getCookieConsentValue("cookieConsent")) {
         return (<div style={{textAlign: "center"}}>
-            <p>Le site sauvegarde les QrCode scannés dans les Cookies, veuillez les acceptez 🍪 ci-dessous puis
-                actualiser la page.</p>
+            <p>Le site sauvegarde les QrCode scannés dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
         </div>)
     }
 
@@ -83,7 +82,7 @@ const QrCodeResult = (props) => {
     return (<div>
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
-                icon={faRotate} onClick={deleteCookie}/></h3>
+                icon={faRotate} onClick={deleteLocalStorage}/></h3>
             <TableResult/>
             {props.children}
             <Footer/>
