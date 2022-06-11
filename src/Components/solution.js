@@ -1,11 +1,7 @@
 import React from 'react';
 import NavBar from "./Navbar";
 import Footer from "./Footer";
-import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes from "prop-types";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faRotate} from "@fortawesome/free-solid-svg-icons";
-import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorageFunction";
 
 
 const BaliseAIfHref = (props) => {
