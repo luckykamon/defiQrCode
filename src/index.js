@@ -19,6 +19,7 @@ import {
 import About from "./Components/About";
 import NavBar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import QrCodeSoluce from "./Components/solution";
 
 
 const Confidentialite = () => {
@@ -27,7 +28,7 @@ const Confidentialite = () => {
         <div>
             <NavBar page="/"/>
             <div style={{textAlign: "center", margin: "20px"}}>
-                <h1 style={{color: "white"}}>Politique de Confidentialité:</h1>
+                <h3 style={{color: "white", marginTop: "40px"}}>Politique de Confidentialité:</h3>
                 <p>Ce site enregistre dans localStorage les numéros des QrCodes scannés ainsi que la date du premier accès à l'url, le mot associé au QrCode et l'url du du QrCode.</p>
                 <p>Les données enregistrés dans localStorage ont pour unique but d'aider l'utilisateur dans son parcours de course d'orientation.</p>
                 <p>Pour toutes questions/remarques/autres vous pouvez me contacter par mail: <a href="mailto:lucas.bodin.contacter@gmail.com">lucas.bodin.contacter@gmail.com</a></p>
@@ -43,6 +44,7 @@ ReactDOM.render(
             <Route path="/" element={<About/>}/>
             <Route path="confidentialite" element={<Confidentialite/>}/>
             <Route path="QrCodeResult" element={<QrCodeResult/>}/>
+            <Route path="solution" element={<QrCodeSoluce/>}/>
             <Route path="etape_0" element={<Etape0/>}/>
             <Route path="nq20CjprDksS" element={<Etape1/>}/>
             <Route path="U6BeT2kldxeY" element={<Etape2/>}/>

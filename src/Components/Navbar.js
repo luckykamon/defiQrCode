@@ -37,6 +37,9 @@ const NavBar = (props) => {
                 <Li href="/QrCodeResult" page={props.page}>
                     Avancée
                 </Li>
+                <Li href="/solution" page={props.page}>
+                    Solution
+                </Li>
             </ul>
         </div>
     )
