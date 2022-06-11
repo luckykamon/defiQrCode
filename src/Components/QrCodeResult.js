@@ -25,18 +25,18 @@ const ResultScan = () => {
     let resultScanTab = []
 
     for (let i = 0; i <= 11; i++) {
-        let cookie = getLocalStorage("QrCode-" + i)
+        let localStorage = getLocalStorage("QrCode-" + i)
         let resultScanJson = {}
         resultScanJson["nbQrCode"] = i
-        if (cookie === null) {
+        if (localStorage === null) {
             resultScanJson["mot"] = ""
             resultScanJson["url"] = ""
             resultScanJson["timestamp"] = ""
         } else {
-            let parseCookie = JSON.parse(cookie)
-            resultScanJson["mot"] = parseCookie["mot"]
-            resultScanJson["url"] = parseCookie["url"]
-            resultScanJson["timestamp"] = (new Date(parseInt(parseCookie["timestamp"]))).toLocaleString()
+            let parseLocalStorage = JSON.parse(localStorage)
+            resultScanJson["mot"] = parseLocalStorage["mot"]
+            resultScanJson["url"] = parseLocalStorage["url"]
+            resultScanJson["timestamp"] = (new Date(parseInt(parseLocalStorage["timestamp"]))).toLocaleString()
         }
         resultScanTab.push(resultScanJson)
     }

@@ -28,9 +28,8 @@ const Confidentialite = () => {
             <NavBar page="/"/>
             <div style={{textAlign: "center", margin: "20px"}}>
                 <h1 style={{color: "white"}}>Politique de Confidentialité:</h1>
-                <p>Ce site enregistre dans les cookies les numéros des QrCodes scannés ainsi que la date du premier accès à l'url, le mot associé au QrCode et l'url du du QrCode.</p>
-                <p>Les cookies sont uniquement accessible par ce site web qui ne les récupèrera pas.</p>
-                <p>Ils servent uniquement de stockage local et ont pour unique but d'aider l'utilisateur dans son parcours de course d'orientation.</p>
+                <p>Ce site enregistre dans localStorage les numéros des QrCodes scannés ainsi que la date du premier accès à l'url, le mot associé au QrCode et l'url du du QrCode.</p>
+                <p>Les données enregistrés dans localStorage ont pour unique but d'aider l'utilisateur dans son parcours de course d'orientation.</p>
                 <p>Pour toutes questions/remarques/autres vous pouvez me contacter par mail: <a href="mailto:lucas.bodin.contacter@gmail.com">lucas.bodin.contacter@gmail.com</a></p>
             </div>
             <Footer/>
