@@ -4,7 +4,7 @@ import Etape from "./affichage_etape"
 import Image from "./Image";
 
 // require('dotenv').config()
-
+//
 // const MapWithAMarker = withScriptjs(withGoogleMap(props =>
 //     <GoogleMap
 //         defaultZoom={15}
@@ -21,8 +21,8 @@ import Image from "./Image";
 //         />
 //     </GoogleMap>
 // ));
-
-
+//
+//
 // const StartMap = () => {
 //     return (
 //         <MapWithAMarker
