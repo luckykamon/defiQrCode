@@ -1,38 +1,6 @@
 import React from 'react';
 import Etape from "./affichage_etape"
-// import {GoogleMap, Marker, withGoogleMap, withScriptjs} from "react-google-maps";
 import Image from "./Image";
-
-// require('dotenv').config()
-//
-// const MapWithAMarker = withScriptjs(withGoogleMap(props =>
-//     <GoogleMap
-//         defaultZoom={15}
-//         defaultCenter={{
-//             lat: 48.135328, lng: -1.646004
-//
-//         }}
-//     >
-//         <Marker
-//             position={{
-//                 lat: 48.130923,
-//                 lng: -1.643998
-//             }}
-//         />
-//     </GoogleMap>
-// ));
-//
-//
-// const StartMap = () => {
-//     return (
-//         <MapWithAMarker
-//             googleMapURL={"https://maps.googleapis.com/maps/api/js?key=" + process.env.GOOGLE_API_KEY + "&v=3.exp&libraries=geometry,drawing,places"}
-//             loadingElement={<div style={{height: `100%`}}/>}
-//             containerElement={<div style={{height: `400px`}}/>}
-//             mapElement={<div style={{height: `90vh`}}/>}
-//         />
-//     );
-// }
 
 const Etape0 = () => {
     return (
@@ -54,9 +22,9 @@ const Etape1 = () => {
             <Image src={"/images/parcours/etape_1/80BE8BBD-031E-4065-83BB-EB480D3C2E5F_1_105_c.jpeg"}
                    alt={"zoom etape 1"}/>
             <Image src={"/images/parcours/etape_1/FB2AC173-6E2F-4C48-8312-DD413F1B26C8_1_105_c.jpeg"}
-                   alt={"dezoom etape 2"}/>
+                   alt={"dezoom etape 1"}/>
             <Image src={"/images/parcours/etape_1/7FFDB2E3-04F6-4C44-B79D-0C744C419F3C_1_102_o.jpeg"}
-                   alt={"panorama etape 2"}/>
+                   alt={"panorama etape 1"}/>
         </Etape>
     )
 }
