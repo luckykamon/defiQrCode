@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import QrCodeResult from "./Components/QrCodeResult"
 import {
@@ -21,8 +21,6 @@ import NavBar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import QrCodeSoluce from "./Components/solution";
 
-console.log(process.env.REACT_APP_ETAPE_1)
-
 const Confidentialite = () => {
 
     return (
@@ -39,7 +37,8 @@ const Confidentialite = () => {
     )
 }
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<About/>}/>
@@ -60,7 +59,6 @@ ReactDOM.render(
             <Route path="6M0xLTp5fp9q" element={<Etape11/>}/>
             <Route path="*" element={<About/>}/>
         </Routes>
-    </BrowserRouter>,
-    document.getElementById('root')
+    </BrowserRouter>
 );
 
