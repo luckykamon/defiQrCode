@@ -20,17 +20,17 @@ BaliseAIfHref.propTypes =
 const ResultScan = () => {
     let resultScanTab = [
         {nbQrCode: 0, mot: "Les", url: "/etape_0"},
-        {nbQrCode: 1, mot: "capains", url: "/nq20CjprDksS"},
-        {nbQrCode: 2, mot: "font", url: "/U6BeT2kldxeY"},
-        {nbQrCode: 3, mot: "la", url: "/ZFw1bKuekyNl"},
-        {nbQrCode: 4, mot: "fete", url: "/lBVt7ypM5oPa"},
-        {nbQrCode: 5, mot: "toute", url: "/Gnbo5WHSB20C"},
-        {nbQrCode: 6, mot: "la", url: "/qQdbfyALH9Nz"},
-        {nbQrCode: 7, mot: "soiree", url: "/q7ZqAEY7nqYQ"},
-        {nbQrCode: 8, mot: "aux", url: "/96vSXCMPHfVZ"},
-        {nbQrCode: 9, mot: "Gayeulles", url: "/e8EP7hPTDgYT"},
-        {nbQrCode: 10, mot: "en", url: "/2dntPyEx7Et9"},
-        {nbQrCode: 11, mot: "chantant.", url: "/ezMyOYo0X2De"}
+        {nbQrCode: 1, mot: "capains", url: "/LYUpKr6Jwp5J"},
+        {nbQrCode: 2, mot: "font", url: "/MFCJd5deG2LZ"},
+        {nbQrCode: 3, mot: "la", url: "/PLb8tfxH6Ngj"},
+        {nbQrCode: 4, mot: "fete", url: "/4HIQ7L8B1Ppx"},
+        {nbQrCode: 5, mot: "toute", url: "/DcB423kQ8MW2"},
+        {nbQrCode: 6, mot: "la", url: "/Z2pkN69lkPTC"},
+        {nbQrCode: 7, mot: "soiree", url: "/lB3JBiZ1Q8Pc"},
+        {nbQrCode: 8, mot: "aux", url: "/p8KDBcYKZq1d"},
+        {nbQrCode: 9, mot: "Gayeulles", url: "/Nl6z6sfAU4qW"},
+        {nbQrCode: 10, mot: "en", url: "/Aztd2XY5Tx7C"},
+        {nbQrCode: 11, mot: "chantant.", url: "/6M0xLTp5fp9q"}
     ]
 
     return (

@@ -21,6 +21,7 @@ import NavBar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import QrCodeSoluce from "./Components/solution";
 
+console.log(process.env.REACT_APP_ETAPE_1)
 
 const Confidentialite = () => {
 
@@ -46,17 +47,17 @@ ReactDOM.render(
             <Route path="QrCodeResult" element={<QrCodeResult/>}/>
             <Route path="solution" element={<QrCodeSoluce/>}/>
             <Route path="etape_0" element={<Etape0/>}/>
-            <Route path="nq20CjprDksS" element={<Etape1/>}/>
-            <Route path="U6BeT2kldxeY" element={<Etape2/>}/>
-            <Route path="ZFw1bKuekyNl" element={<Etape3/>}/>
-            <Route path="lBVt7ypM5oPa" element={<Etape4/>}/>
-            <Route path="Gnbo5WHSB20C" element={<Etape5/>}/>
-            <Route path="qQdbfyALH9Nz" element={<Etape6/>}/>
-            <Route path="q7ZqAEY7nqYQ" element={<Etape7/>}/>
-            <Route path="96vSXCMPHfVZ" element={<Etape8/>}/>
-            <Route path="e8EP7hPTDgYT" element={<Etape9/>}/>
-            <Route path="2dntPyEx7Et9" element={<Etape10/>}/>
-            <Route path="ezMyOYo0X2De" element={<Etape11/>}/>
+            <Route path="LYUpKr6Jwp5J" element={<Etape1/>}/>
+            <Route path="MFCJd5deG2LZ" element={<Etape2/>}/>
+            <Route path="PLb8tfxH6Ngj" element={<Etape3/>}/>
+            <Route path="4HIQ7L8B1Ppx" element={<Etape4/>}/>
+            <Route path="DcB423kQ8MW2" element={<Etape5/>}/>
+            <Route path="Z2pkN69lkPTC" element={<Etape6/>}/>
+            <Route path="lB3JBiZ1Q8Pc" element={<Etape7/>}/>
+            <Route path="p8KDBcYKZq1d" element={<Etape8/>}/>
+            <Route path="Nl6z6sfAU4qW" element={<Etape9/>}/>
+            <Route path="Aztd2XY5Tx7C" element={<Etape10/>}/>
+            <Route path="6M0xLTp5fp9q" element={<Etape11/>}/>
             <Route path="*" element={<About/>}/>
         </Routes>
     </BrowserRouter>,
