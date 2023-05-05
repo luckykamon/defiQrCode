@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorageFunction";
-
+import Confetti from 'react-confetti'
+import useWindowSize from 'react-use/lib/useWindowSize'
 
 const BaliseAIfHref = (props) => {
     if (props.href !== "") {
@@ -168,20 +169,25 @@ const TempsParcours = () => {
 }
 
 const InputMot = () => {
+    const [confetti, setConfetti] = useState(false);
+    const { width, height } = useWindowSize();
+
     const checkMot = () => {
         let mot = document.getElementById("mot").value;
         if (mot === "rouge") {
-            alert("Bravo, vous avez trouvé le mot !");
+            setConfetti(true);
         } else {
-            alert("Dommage, ce n'est pas le bon mot");
+            alert("Bravo, vous avez trouvé le mot !");
         }
     }
 
     return (
+
         <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
             <input type="text" id="mot" name="mot" placeholder="Mot" style={{height: "40px", borderRadius: "10px"}}/>
             <div style={{width: "20px"}}/>
             <button type="button" onClick={checkMot} style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier</button>
+            {confetti && <Confetti width={width} height={height}/>}
         </div>
     )
 }
