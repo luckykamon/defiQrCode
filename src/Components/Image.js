@@ -5,7 +5,10 @@ function doesFileExist(urlToFile) {
     let xhr = new XMLHttpRequest();
     xhr.open('HEAD', urlToFile, false);
     xhr.send();
-    return xhr.status !== 404;
+    // Récupère le mime type
+    let mimeType = xhr.getResponseHeader('Content-Type');
+    console.log(mimeType.split("/")[0]);
+    return xhr.status !== 404 && mimeType.split("/")[0] === "image";
 }
 
 const AttenteImage = (props) => {
@@ -13,7 +16,7 @@ const AttenteImage = (props) => {
         <div>
             <h4 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>L'image arrive bientôt 😉, voici un
                 petit indice en attendant:</h4>
-            <p>{props.alt}</p>
+            <p style={{textAlign: "center", fontWeight: "bold", fontSize: "18px"}}>{props.alt}</p>
         </div>
     )
 }
@@ -32,6 +35,7 @@ AttenteImage.defaultProps =
     }
 
 const Image = (props) => {
+
     let fileExist = doesFileExist(props.src)
     return (
         <div>
