@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import NavBar from "./Navbar";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
@@ -72,21 +72,133 @@ const TableResult = () => {
                 <th style={{width: "25%"}}>Date</th>
             </tr>
             </thead>
-            <ResultScan></ResultScan>
+            <ResultScan/>
         </table>
     )
 }
 
+/**
+ * Affiche une durée sans les ms au format humain
+ * @param ms
+ * @returns {string}
+ */
+function afficherDuree(ms) {
+    if (ms === 0) {
+        return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour démarrer le chrono</span>)
+    }
+    const duree = new Date(ms);
+    const heures = duree.getUTCHours();
+    const minutes = duree.getUTCMinutes();
+    const secondes = duree.getUTCSeconds();
 
-const QrCodeResult = (props) => {
-    return (<div>
-            <NavBar page="/QrCodeResult"/>
-            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
-                icon={faRotate} onClick={deleteLocalStorage}/></h3>
-            <TableResult/> {props.children} <Footer/>
+    let dureeString = '';
+    if (heures > 0) {
+        dureeString += heures + 'h ';
+    }
+    if (minutes > 0) {
+        dureeString += minutes + 'm ';
+    }
+    if (secondes > 0) {
+        dureeString += secondes + 's ';
+    }
+    return (dureeString);
+}
+
+const TempsParcours = () => {
+    const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
+    const [allQrCodeFind, setAllQrCodeFind] = useState(false);
+
+    useEffect(() => {
+        let timer = null;
+
+        const checkTime = () => {
+            let timestampMin = null;
+            let timestampMax = null;
+            let allFound = true;
+
+            for (let i = 0; i <= 6; i++) {
+                let localStorage = getLocalStorage("QrCode-" + i)
+                if (localStorage !== null) {
+                    let parseLocalStorage = JSON.parse(localStorage);
+                    if (timestampMin === null) {
+                        timestampMin = parseInt(parseLocalStorage["timestamp"]);
+                    } else if (timestampMin > parseInt(parseLocalStorage["timestamp"])) {
+                        timestampMin = parseInt(parseLocalStorage["timestamp"]);
+                    }
+
+                    if (timestampMax === null) {
+                        timestampMax = parseInt(parseLocalStorage["timestamp"]);
+                    } else if (timestampMax < parseInt(parseLocalStorage["timestamp"])) {
+                        timestampMax = parseInt(parseLocalStorage["timestamp"]);
+                    }
+                } else {
+                    allFound = false;
+                }
+            }
+
+            if (allFound) {
+                setTempsParcoursTimeStamp(timestampMax - timestampMin);
+                setAllQrCodeFind(true);
+            } else if (timestampMin === null && timestampMax === null) {
+                setTempsParcoursTimeStamp(0);
+            } else {
+                setTempsParcoursTimeStamp(Date.now() - timestampMin);
+            }
+        }
+
+        checkTime();
+
+        timer = setInterval(() => {
+            if (!allQrCodeFind) {
+                checkTime();
+            } else {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [allQrCodeFind]);
+
+    let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
+    return (
+        <h3 style={{textAlign: "Center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+    )
+}
+
+const InputMot = () => {
+    const checkMot = () => {
+        let mot = document.getElementById("mot").value;
+        if (mot === "rouge") {
+            alert("Bravo, vous avez trouvé le mot !");
+        } else {
+            alert("Dommage, ce n'est pas le bon mot");
+        }
+    }
+
+    return (
+        <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+            <input type="text" id="mot" name="mot" placeholder="Mot" style={{height: "40px", borderRadius: "10px"}}/>
+            <div style={{width: "20px"}}/>
+            <button type="button" onClick={checkMot} style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier</button>
         </div>
     )
 }
 
-// GUITARE / VERBAL / MINEUR / PRINCIPE / VERBE / SIGNATURE
+const TempsMot = () => {
+
+}
+
+
+const QrCodeResult = () => {
+    return (<div>
+            <NavBar page="/QrCodeResult"/>
+            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
+                icon={faRotate} onClick={deleteLocalStorage}/></h3>
+            <TableResult/> <InputMot/> <TempsMot/> <TempsParcours/> <Footer/>
+        </div>
+    )
+}
+
 export default QrCodeResult
