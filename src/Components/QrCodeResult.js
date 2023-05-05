@@ -24,7 +24,7 @@ BaliseAIfHref.propTypes =
 const ResultScan = () => {
     let resultScanTab = []
 
-    for (let i = 0; i <= 11; i++) {
+    for (let i = 0; i <= 6; i++) {
         let localStorage = getLocalStorage("QrCode-" + i)
         let resultScanJson = {}
         resultScanJson["nbQrCode"] = i
@@ -83,12 +83,10 @@ const QrCodeResult = (props) => {
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
-            <TableResult/>
-            {props.children}
-            <Footer/>
+            <TableResult/> {props.children} <Footer/>
         </div>
     )
 }
 
-
+// GUITARE / VERBAL / MINEUR / PRINCIPE / VERBE / SIGNATURE
 export default QrCodeResult

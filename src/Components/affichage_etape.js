@@ -18,7 +18,7 @@ const Etape = (props) => {
                 marginTop: "40px"
             }}>QrCode {props.nbQrCode}: {props.mot}</h3>
             {props.children}
-            {!props.hideFooter && (<Footer></Footer>)}
+            <Footer/>
         </div>
     )
 }

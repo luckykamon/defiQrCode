@@ -3,12 +3,12 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <footer style={{position: 'absolute', width: '100%', bottom: 0}}>
+        <footer className={"footer"} style={{position: 'relative', width: '100%', marginTop: 'auto'}}>
             <div className="row">
                 {/*<Fade bottom>*/}
                 <div className="twelve columns">
                     <ul className="copyright">
-                        <li>Copyright &copy; 2022 Lucas Bodin &bull; <a href="/confidentialite">Politique de
+                        <li>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique de
                             confidentialité</a></li>
                     </ul>
                 </div>

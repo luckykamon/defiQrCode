@@ -11,8 +11,8 @@ function doesFileExist(urlToFile) {
 const AttenteImage = (props) => {
     return (
         <div>
-        <h4 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>L'image arrive
-            bientôt 😉, voici un petit indice en attendant:</h4>
+            <h4 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>L'image arrive bientôt 😉, voici un
+                petit indice en attendant:</h4>
             <p>{props.alt}</p>
         </div>
     )
@@ -37,13 +37,11 @@ const Image = (props) => {
         <div>
             {fileExist && (
                 <div style={{textAlign: "center"}}>
-                    {/*<p>{props.alt}</p>*/}
-                    <img src={props.src} alt={props.alt}/>
+                    <a href={props.src} download> <img src={props.src} alt={props.alt}/> </a>
                 </div>
-            )}
-            {!fileExist && (
-                <AttenteImage alt={props.alt}/>
-            )}
+            )} {!fileExist && (
+            <AttenteImage alt={props.alt}/>
+        )}
 
         </div>
     )
