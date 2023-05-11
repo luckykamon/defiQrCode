@@ -160,7 +160,7 @@ const TempsParcours = () => {
         checkTime();
 
         timer = setInterval(() => {
-            if (!allQrCodeFind && !motTrouve) {
+            if (!allQrCodeFind || !motTrouve) {
                 checkTime();
             } else {
                 clearInterval(timer);
