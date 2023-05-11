@@ -27,11 +27,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Copy files to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_LWS_SERVER }}
+          username: ${{ secrets.USERNAME_LWS_SERVER }}
+          password: ${{ secrets.PASSWORD_LWS_SERVER }}
+          source: "."
+          target: "/srv/defiQrCode"
 
-      - name: Build
-        run: npm run build  # Remove this line if you don't have a build script
+#      - name: Install Dependencies
+#        run: npm ci
+#
+#      - name: Build
+#        run: npm run build  # Remove this line if you don't have a build script
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -41,5 +50,6 @@ jobs:
           password: ${{ secrets.PASSWORD_LWS_SERVER }}
           script: |
             cd /srv/defiQrCode  # Set the path to your app
+            npm i
             pm2 delete all  # Use caution with this command. It will delete all PM2 processes
             pm2 start npm -- start  # Or the script you use to start your app
