@@ -19,7 +19,7 @@ import {
 import About from "./Components/About";
 import NavBar from "./Components/Navbar";
 import Footer from "./Components/Footer";
-import QrCodeSoluce from "./Components/solution";
+// import QrCodeSoluce from "./Components/solution";
 
 const Confidentialite = () => {
 
