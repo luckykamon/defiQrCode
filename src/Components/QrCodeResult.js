@@ -170,20 +170,26 @@ const TempsParcours = () => {
 
 const InputMot = () => {
     const [confetti, setConfetti] = useState(false);
+    const [mauvaiseReponse, setMauvaiseReponse] = useState(false);
     const { width, height } = useWindowSize();
 
     const checkMot = () => {
         let mot = document.getElementById("mot").value;
         if (mot === "rouge") {
             setConfetti(true);
+            setMauvaiseReponse(false);
         } else {
-            alert("Bravo, vous avez trouvé le mot !");
+            setMauvaiseReponse(true);
+            setConfetti(false);
+            setTimeout(() => {
+                setMauvaiseReponse(false);
+            }, 500);
         }
     }
 
     return (
 
-        <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+        <div className={mauvaiseReponse ? "shake" : ""} style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
             <input type="text" id="mot" name="mot" placeholder="Mot" style={{height: "40px", borderRadius: "10px"}}/>
             <div style={{width: "20px"}}/>
             <button type="button" onClick={checkMot} style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier</button>
