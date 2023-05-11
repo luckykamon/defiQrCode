@@ -30,4 +30,4 @@ jobs:
           ftp-server: ftp://${{ secrets.FTP_SERVER_LWS }}/${{ secrets.FTP_DIRECTORY_LWS }}
           ftp-username: ${{ secrets.FTP_USERNAME_LWS }}
           ftp-password: ${{ secrets.FTP_PASSWORD_LWS }}
-          local-dir: "./build"
+          local-dir: ./build
