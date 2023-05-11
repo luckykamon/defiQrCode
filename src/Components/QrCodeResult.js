@@ -120,7 +120,7 @@ function afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp) {
     if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
     }
-    return parseInt(7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp)));
+    return parseInt(7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))) + " points";
 }
 
 const TempsParcours = () => {
