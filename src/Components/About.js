@@ -36,7 +36,7 @@ const About = () => {
                             <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/QrCodeResult">votre avancée (cliquez ici)</a> qui se complètera automatiquement.</p>
                             <p>Cet évènement à eu lieu le 3 juin 2023 avec le groupe facebook <a href={"https://fb.me/e/5xzzDJfAp"} target={"_blank"} rel={"noreferrer"}>Courir à Plusieurs</a></p>
                             <div className="row">
-                                <div className="columns download" style={{width: "100%"}}>
+                                <div className="columns download" style={{width: "100%", textAlign: "center"}}>
                                     <span className="button" onClick={openGpxDownload} style={{margin: "20px"}}>
                                         Télécharger le GPX
                                     </span>
