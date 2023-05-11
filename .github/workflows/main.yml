@@ -1,36 +1,45 @@
-name: Deploy to FTP Server
+name: Deploy Node.js app to server
 
 on:
   push:
     branches:
-      - main
+      - main  # Set a branch to trigger deployment
 
 jobs:
-  build-and-deploy:
+  deploy:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: 16  # Set a Node.js version
 
-      - name: Install dependencies
-        run: npm i
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install react-script global
-        run: npm install -g react-scripts
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build  # Remove this line if you don't have a build script
 
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
         with:
-          ftp-server: ftp://${{ secrets.FTP_SERVER_LWS }}/${{ secrets.FTP_DIRECTORY_LWS }}
-          ftp-username: ${{ secrets.FTP_USERNAME_LWS }}
-          ftp-password: ${{ secrets.FTP_PASSWORD_LWS }}
-          local-dir: build
+          host: ${{ secrets.HOST_LWS_SERVER }}
+          username: ${{ secrets.USERNAME_LWS_SERVER }}
+          password: ${{ secrets.PASSWORD_LWS_SERVER }}
+          script: |
+            cd /srv/defiQrCode  # Set the path to your app
+            pm2 delete all  # Use caution with this command. It will delete all PM2 processes
+            pm2 start npm -- start  # Or the script you use to start your app
