@@ -27,10 +27,10 @@ const About = () => {
 
                             <p>Le défi QrCode est une course d'orientation se situant dans le parc des Gayeulles à
                                 Rennes.</p>
-                            <p>L'objectif est de réussir à trouver la phrase cachée en partant du <a href="/etape_0">point
+                            <p>L'objectif est de réussir à trouver le mot caché en partant du <a href="/etape_0">point
                                 de départ (cliquez ici)</a>. Point de départ où il faudra scanner le QrCode permettant
-                                d'accéder à un mot de la phrase cachée et contenant plusieurs indices vers le prochain QrCode.
-                                Et ainsi de suite... jusqu'à ce que la phrase cachée soit révélée 🎁</p>
+                                d'accéder à un indice du mot caché et contenant plusieurs indices vers le prochain QrCode.
+                                Et ainsi de suite... afin de trouver le mot 🎁</p>
                             <p>Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger
                                 ci-dessous.</p>
                             <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/QrCodeResult">votre avancée (cliquez ici)</a> qui se complètera automatiquement.</p>
