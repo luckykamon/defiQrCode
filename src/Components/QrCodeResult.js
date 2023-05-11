@@ -5,7 +5,7 @@ import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
-import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorageFunction";
+import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorageFunction";
 import Confetti from 'react-confetti'
 import useWindowSize from 'react-use/lib/useWindowSize'
 
@@ -107,7 +107,9 @@ function afficherDuree(ms) {
 
 const TempsParcours = () => {
     const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
+    const [tempsMotTimeStamp, setTempsMotTimeStamp] = useState(0);
     const [allQrCodeFind, setAllQrCodeFind] = useState(false);
+    const [motTrouve, setMotTrouve] = useState(false);
 
     useEffect(() => {
         let timer = null;
@@ -137,6 +139,14 @@ const TempsParcours = () => {
                 }
             }
 
+            let localStorageMot = getLocalStorage("temps-mot");
+            if (localStorageMot !== null) {
+                setMotTrouve(true);
+                setTempsMotTimeStamp(parseInt( parseInt(localStorageMot) - timestampMin));
+            } else if (timestampMin !== null) {
+                setTempsMotTimeStamp(parseInt(Date.now() - timestampMin));
+            }
+
             if (allFound) {
                 setTempsParcoursTimeStamp(timestampMax - timestampMin);
                 setAllQrCodeFind(true);
@@ -150,7 +160,7 @@ const TempsParcours = () => {
         checkTime();
 
         timer = setInterval(() => {
-            if (!allQrCodeFind) {
+            if (!allQrCodeFind && !motTrouve) {
                 checkTime();
             } else {
                 clearInterval(timer);
@@ -162,22 +172,27 @@ const TempsParcours = () => {
         };
     }, [allQrCodeFind]);
 
+    let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
     let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
     return (
-        <h3 style={{textAlign: "Center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+        <>
+            <h3 style={{textAlign: "Center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
+            <h3 style={{textAlign: "Center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+        </>
     )
 }
 
 const InputMot = () => {
     const [confetti, setConfetti] = useState(false);
     const [mauvaiseReponse, setMauvaiseReponse] = useState(false);
-    const { width, height } = useWindowSize();
+    const {width, height} = useWindowSize();
 
     const checkMot = () => {
         let mot = document.getElementById("mot").value;
         if (mot.toLowerCase() === "accord") {
             setConfetti(true);
             setMauvaiseReponse(false);
+            setLocalStorage("temps-mot", Date.now());
         } else {
             setMauvaiseReponse(true);
             setConfetti(false);
@@ -189,10 +204,13 @@ const InputMot = () => {
 
     return (
 
-        <div className={mauvaiseReponse ? "shake" : ""} style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+        <div className={mauvaiseReponse ? "shake" : ""}
+             style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
             <input type="text" id="mot" name="mot" placeholder="Mot" style={{height: "40px", borderRadius: "10px"}}/>
             <div style={{width: "20px"}}/>
-            <button type="button" onClick={checkMot} style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier</button>
+            <button type="button" onClick={checkMot}
+                    style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier
+            </button>
             {confetti && <Confetti width={width} height={height}/>}
         </div>
     )
