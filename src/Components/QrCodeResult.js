@@ -202,6 +202,17 @@ const InputMot = () => {
         }
     }
 
+    let defiQrCodeBegin = false;
+    for (let i = 0; i <= 6; i++) {
+        let localStorage = getLocalStorage("QrCode-" + i);
+        if (localStorage !== null) {
+            defiQrCodeBegin = true;
+        }
+    }
+    if (!defiQrCodeBegin) {
+        return (<></>)
+    }
+
     return (
 
         <div className={mauvaiseReponse ? "shake" : ""}
