@@ -3,7 +3,7 @@ name: Deploy Node.js app to server
 on:
   push:
     branches:
-      - main  # Set a branch to trigger deployment
+      - main
 
 jobs:
   deploy:
@@ -12,20 +12,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16  # Set a Node.js version
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Copy files to Server
         uses: appleboy/scp-action@master
@@ -36,12 +28,6 @@ jobs:
           source: "."
           target: "/srv/defiQrCode"
 
-#      - name: Install Dependencies
-#        run: npm ci
-#
-#      - name: Build
-#        run: npm run build  # Remove this line if you don't have a build script
-
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
@@ -51,5 +37,5 @@ jobs:
           script: |
             cd /srv/defiQrCode  # Set the path to your app
             npm i
-            pm2 delete all  # Use caution with this command. It will delete all PM2 processes
-            pm2 start npm -- start  # Or the script you use to start your app
+            pm2 delete defiQrCode  # Use caution with this command. It will delete all PM2 processes
+            pm2 --name defiQrCode start npm -- start  # Or the script you use to start your app
