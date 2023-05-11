@@ -56,6 +56,17 @@ const ResultScan = () => {
 }
 
 const TableResult = () => {
+    const [refresh, setRefresh] = useState(0);
+
+    // On actualise l'avancée toutes les 10 secondes afin que lorsque l'on scan un QrCode sur une autre page alors que l'on est sur la page des résultats, on voit le résultat s'actualiser
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRefresh(refresh + 1);
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [refresh]);
+
     if (!getCookieConsentValue("cookieConsent")) {
         return (<div style={{textAlign: "center"}}>
             <p>Le site sauvegarde les QrCode scannés dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
@@ -73,7 +84,7 @@ const TableResult = () => {
                 <th style={{width: "25%"}}>Date</th>
             </tr>
             </thead>
-            <ResultScan/>
+            <ResultScan key={refresh}/>
         </table>
     )
 }
@@ -142,7 +153,7 @@ const TempsParcours = () => {
             let localStorageMot = getLocalStorage("temps-mot");
             if (localStorageMot !== null) {
                 setMotTrouve(true);
-                setTempsMotTimeStamp(parseInt( parseInt(localStorageMot) - timestampMin));
+                setTempsMotTimeStamp(parseInt(parseInt(localStorageMot) - timestampMin));
             } else if (timestampMin !== null) {
                 setTempsMotTimeStamp(parseInt(Date.now() - timestampMin));
             }
@@ -174,10 +185,13 @@ const TempsParcours = () => {
 
     let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
     let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
+    let score = parseInt(1 + 7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp)));
+
     return (
         <>
             <h3 style={{textAlign: "Center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
             <h3 style={{textAlign: "Center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+            <h3 style={{textAlign: "Center", color: "white"}}>Score: {score}</h3>
         </>
     )
 }
@@ -216,9 +230,10 @@ const InputMot = () => {
     return (
 
         <div className={mauvaiseReponse ? "shake" : ""}
-             style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
-            <input type="text" id="mot" name="mot" placeholder="Mot" style={{height: "40px", borderRadius: "10px"}}/>
-            <div style={{width: "20px"}}/>
+             style={{display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap"}}>
+            <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici"
+                   style={{height: "40px", borderRadius: "10px"}}/>
+            <div style={{width: "100vw"}}></div>
             <button type="button" onClick={checkMot}
                     style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier
             </button>
@@ -227,17 +242,13 @@ const InputMot = () => {
     )
 }
 
-const TempsMot = () => {
-
-}
-
 
 const QrCodeResult = () => {
     return (<div>
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
-            <TableResult/> <InputMot/> <TempsMot/> <TempsParcours/> <Footer/>
+            <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
         </div>
     )
 }
