@@ -303,7 +303,7 @@ hr { border: solid #E3E3E3; border-width: 1px 0 0; clear: both; margin: 11px 0 3
 a, a:visited {
    text-decoration: none;
    outline: 0;
-   color: #11ABB0;
+   color: #fe6928;
 
    -webkit-transition: color .3s ease-in-out;
    -moz-transition: color .3s ease-in-out;
@@ -364,7 +364,7 @@ li p { }
    color: #313131;
 }
 .stats-tabs li a:hover {
-   color:#11ABB0;
+   color:#fe6928;
 }
 .stats-tabs li a b {
 	display: block;
@@ -376,7 +376,7 @@ li p { }
 
 /* definition list */
 dl { margin: 12px 0; }
-dt { margin: 0; color:#11ABB0; }
+dt { margin: 0; color:#fe6928; }
 dd { margin: 0 0 0 20px; }
 
 /* Lining Definition Style Markup */
@@ -451,7 +451,7 @@ dd { margin: 0 0 0 20px; }
 }
 .pagination .current,
 .pagination .current:hover {
-   background-color: #11ABB0;
+   background-color: #fe6928;
    color: #fff;
 }
 .pagination .inactive,
@@ -479,7 +479,7 @@ input[type="submit"],
 input[type="reset"],
 input[type="button"] {
    font: 16px/30px 'opensans-bold', sans-serif;
-   background: #11ABB0;
+   background: #fe6928;
    display: inline-block;
 	text-decoration: none;
    letter-spacing: 0;

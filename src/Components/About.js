@@ -38,7 +38,7 @@ const About = () => {
                             <div className="row">
                                 <div className="columns download" style={{width: "100%"}}>
                                     <span className="button" onClick={openGpxDownload} style={{margin: "20px"}}>
-                                        <i className="fa fa-download"/>Télécharger le GPX
+                                        Télécharger le GPX
                                     </span>
                                 </div>
                             </div>

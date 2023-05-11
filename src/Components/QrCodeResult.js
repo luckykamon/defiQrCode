@@ -175,7 +175,7 @@ const InputMot = () => {
 
     const checkMot = () => {
         let mot = document.getElementById("mot").value;
-        if (mot === "rouge") {
+        if (mot.toLowerCase() === "accord") {
             setConfetti(true);
             setMauvaiseReponse(false);
         } else {
