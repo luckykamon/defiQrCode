@@ -170,7 +170,7 @@ const TempsParcours = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [allQrCodeFind]);
+    }, [allQrCodeFind, motTrouve]);
 
     let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
     let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
