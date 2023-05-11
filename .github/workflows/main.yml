@@ -18,14 +18,8 @@ jobs:
         with:
           node-version: '14'
 
-#      - name: Install dependencies 1
-#        run: npm i --save @fortawesome/fontawesome-svg-core
-#
-#      - name: Install dependencies 2
-#        run: npm i --save @fortawesome/free-solid-svg-icons
-
-      - name: Install dependencies 3
-        run: npm i
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build
         run: npm run build
