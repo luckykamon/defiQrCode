@@ -62,7 +62,7 @@ const TableResult = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setRefresh(refresh + 1);
-        }, 10000);
+        }, 1000);
 
         return () => clearInterval(interval);
     }, [refresh]);
@@ -117,7 +117,7 @@ function afficherDuree(ms) {
 }
 
 function afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp) {
-    if ( tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
+    if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
     }
     return parseInt(7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp)));
@@ -253,12 +253,21 @@ const InputMot = () => {
 
 
 const QrCodeResult = () => {
+    const [refresh, setRefresh] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRefresh(refresh + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [refresh]);
+
     return (
         <div>
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
-            <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
+            <TableResult/> <InputMot key={refresh}/> <TempsParcours/> <Footer/>
         </div>
     )
 }
