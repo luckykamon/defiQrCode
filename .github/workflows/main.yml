@@ -25,7 +25,7 @@ jobs:
         run: npm i --save @fortawesome/free-solid-svg-icons
 
       - name: Install dependencies 3
-        run: npm ci
+        run: npm i
 
       - name: Build
         run: npm run build
