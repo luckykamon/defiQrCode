@@ -116,6 +116,13 @@ function afficherDuree(ms) {
     return (dureeString);
 }
 
+function afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp) {
+    if ( tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
+        return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
+    }
+    return parseInt(7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp)));
+}
+
 const TempsParcours = () => {
     const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
     const [tempsMotTimeStamp, setTempsMotTimeStamp] = useState(0);
@@ -156,6 +163,8 @@ const TempsParcours = () => {
                 setTempsMotTimeStamp(parseInt(parseInt(localStorageMot) - timestampMin));
             } else if (timestampMin !== null) {
                 setTempsMotTimeStamp(parseInt(Date.now() - timestampMin));
+            } else {
+                setTempsMotTimeStamp(0);
             }
 
             if (allFound) {
@@ -185,7 +194,7 @@ const TempsParcours = () => {
 
     let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
     let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
-    let score = parseInt(1 + 7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp)));
+    let score = afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp);
 
     return (
         <>
@@ -244,7 +253,8 @@ const InputMot = () => {
 
 
 const QrCodeResult = () => {
-    return (<div>
+    return (
+        <div>
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
