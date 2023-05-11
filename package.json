@@ -13,7 +13,6 @@
     "react-cookie-consent": "^8.0.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
-    "react-scripts": "^5.0.1",
     "react-use": "^17.4.0"
   },
   "scripts": {
@@ -40,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "chokidar": "^3.5.1"
+    "chokidar": "^3.5.1",
+    "react-scripts": "^5.0.1"
   }
 }
