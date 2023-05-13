@@ -99,11 +99,15 @@ function afficherDuree(ms) {
         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour démarrer le chrono</span>)
     }
     const duree = new Date(ms);
+    const jours = Math.floor(duree / (1000 * 60 * 60 * 24));
     const heures = duree.getUTCHours();
     const minutes = duree.getUTCMinutes();
     const secondes = duree.getUTCSeconds();
 
     let dureeString = '';
+    if (jours > 0) {
+        dureeString += jours + 'j ';
+    }
     if (heures > 0) {
         dureeString += heures + 'h ';
     }
