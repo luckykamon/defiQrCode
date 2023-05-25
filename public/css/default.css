@@ -1,3 +1,7 @@
+@import url("fonts.css");
+@import url("fontello/css/fontello.css");
+@import url("font-awesome/css/font-awesome.min.css");
+
 .shake {
     animation: shake 0.5s;
 }
@@ -38,10 +42,6 @@ e. Others
 /* ------------------------------------------------------------------ */
 /* a. Webfonts and Icon fonts
  ------------------------------------------------------------------ */
-
-@import url("fonts.css");
-@import url("fontello/css/fontello.css");
-@import url("font-awesome/css/font-awesome.min.css");
 
 /* ------------------------------------------------------------------
 /* b. Reset
@@ -95,7 +95,6 @@ code, kbd, pre, samp {
 }
 
 pre {
-   white-space: pre;
    white-space: pre-wrap;
    word-wrap: break-word;
 }
@@ -104,7 +103,6 @@ pre {
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-   content: '';
    content: none;
 }
 
@@ -201,7 +199,7 @@ small { font-size: 11px; line-height: inherit; }
 
 /*	Blockquotes */
 blockquote {
-   margin: 30px 0px;
+   margin: 30px 0;
    padding-left: 40px;
    position: relative;
 }
@@ -209,7 +207,7 @@ blockquote:before {
    content: "\201C";
    opacity: 0.45;
    font-size: 80px;
-   line-height: 0px;
+   line-height: 0;
    margin: 0;
    font-family: arial, sans-serif;
 
@@ -245,7 +243,7 @@ blockquote cite a:visited { color: #8B9798; border: none }
 /* --------------------------------------------------------------------- */
 .pull-quote {
    position: relative;
-	padding: 18px 30px 18px 0px;
+	padding: 18px 30px 18px 0;
 }
 .pull-quote:before,
 .pull-quote:after {
@@ -253,7 +251,7 @@ blockquote cite a:visited { color: #8B9798; border: none }
 	opacity: 0.45;
 	position: absolute;
 	font-size: 80px;
-   font-family: Arial, Sans-Serif;
+    font-family: Arial, sans-serif;
 }
 .pull-quote:before {
 	content: "\201C";
@@ -440,10 +438,9 @@ dd { margin: 0 0 0 20px; }
 	-ms-transition: all 200ms ease-in-out;
 	transition: all 200ms ease-in-out;
 
-   -moz-border-radius: 0px;
-   -webkit-border-radius: 0px;
-   -khtml-border-radius: 0px;
-	border-radius: 0px;
+   -moz-border-radius: 0;
+   -webkit-border-radius: 0;
+	border-radius: 0;
 }
 .pagination .page-numbers:hover {
    background: #838A91;
@@ -465,10 +462,11 @@ dd { margin: 0 0 0 20px; }
 
 img {
    max-width: 100%;
+    max-height: 100vh;
    height: auto;
 }
-img.pull-right { margin: 12px 0px 0px 18px; }
-img.pull-left { margin: 12px 18px 0px 0px; }
+img.pull-right { margin: 12px 0 0 18px; }
+img.pull-left { margin: 12px 18px 0 0; }
 
 /*  6. Buttons  --------------------------------------------------------- */
 
@@ -496,10 +494,9 @@ input[type="button"] {
 	-ms-transition: all .2s ease-in-out;
 	transition: all .2s ease-in-out;
 
-   -moz-border-radius: 0px;
-   -webkit-border-radius: 0px;
-   -khtml-border-radius: 0px;
-   border-radius: 0px;
+   -moz-border-radius: 0;
+   -webkit-border-radius: 0;
+   border-radius: 0;
 }
 
 .button:hover,
@@ -753,17 +750,17 @@ properly.
    [class*="bgrid"] [class*="column"] + [class*="column"]:last-child { float: none; }
 
    /* Offsets */
-   .row .offset-1    { margin-left: 0%; }
-   .row .offset-2    { margin-left: 0%; }
-   .row .offset-3    { margin-left: 0%; }
-   .row .offset-4    { margin-left: 0%; }
-   .row .offset-5    { margin-left: 0%; }
-   .row .offset-6    { margin-left: 0%; }
-   .row .offset-7    { margin-left: 0%; }
-   .row .offset-8    { margin-left: 0%; }
-   .row .offset-9    { margin-left: 0%; }
-   .row .offset-10   { margin-left: 0%; }
-   .row .offset-11   { margin-left: 0%; }
+   .row .offset-1    { margin-left: 0; }
+   .row .offset-2    { margin-left: 0; }
+   .row .offset-3    { margin-left: 0; }
+   .row .offset-4    { margin-left: 0; }
+   .row .offset-5    { margin-left: 0; }
+   .row .offset-6    { margin-left: 0; }
+   .row .offset-7    { margin-left: 0; }
+   .row .offset-8    { margin-left: 0; }
+   .row .offset-9    { margin-left: 0; }
+   .row .offset-10   { margin-left: 0; }
+   .row .offset-11   { margin-left: 0; }
 }
 
 /* mobile narrow

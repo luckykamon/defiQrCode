@@ -5,13 +5,12 @@ import Image from "./Image";
 const Etape0 = () => {
     return (
         <Etape nbQrCode={0} mot={"Exemple"} hideFooter>
-            <Image src={"/images/parcours/etape_0/FDE5DFA0-60BA-450C-820F-EC43F440848B_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_0/8he0pIy27Wk8t09nLD0AfhKGaAqdLcM20.jpeg"}
                    alt={"zoom etape 0"}/>
-            <Image src={"/images/parcours/etape_0/E3A426AF-358D-4F7A-842E-7662E5D8B0FA_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_0/Gp63JrQctB1mz1jZ6AQ52v5e0u0IiaRZ4.jpeg"}
                    alt={"dezoom etape 0"}/>
-            <Image src={"/images/parcours/etape_0/22E4D739-56E2-4BC6-A03B-CDADFB1DACEA_1_105_c.jpeg"}
-                   alt={"panorama etape 0"}/>
-            {/*<StartMap style={{margin: "300px"}}/>*/}
+            <Image src={"/images/parcours/etape_0/aV5s2kNrDZ6Q4KWx0RrrHg0Y8NBA9whxm.jpeg"}
+                   alt={"panorama etape 0"} lazy={true}/>
         </Etape>
     )
 }
@@ -21,11 +20,11 @@ const Etape0 = () => {
 const Etape1 = () => {
     return (
         <Etape nbQrCode={1} mot={"Guitare"}>
-            <Image src={"/images/parcours/etape_1/80BE8BBD-031E-4065-83BB-EB480D3C2E5F_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_1/rLuIvhEcQY4GzYQns9n87Kq4epjQ8eVwT.jpeg"}
                    alt={"zoom etape 1"}/>
-            <Image src={"/images/parcours/etape_1/FB2AC173-6E2F-4C48-8312-DD413F1B26C8_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_1/c9eg10VSecPncoIhqtpg0QvK096XSVOGs.jpeg"}
                    alt={"dezoom etape 1"}/>
-            <Image src={"/images/parcours/etape_1/7FFDB2E3-04F6-4C44-B79D-0C744C419F3C_1_102_o.jpeg"}
+            <Image src={"/images/parcours/etape_1/87lHF6XcGqSzBPmMeTu3Vk0ApfAjTmUVC.jpeg"}
                    alt={"panorama etape 1"}/>
         </Etape>
     )
@@ -34,14 +33,12 @@ const Etape1 = () => {
 const Etape2 = () => {
     return (
         <Etape nbQrCode={2} mot={"Verbal"}>
-            <Image src={"/images/parcours/etape_2/4B44CCB1-061F-4168-902F-680E62584DAF_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_2/2J283o0Dgp461m8Zb21yjR46KOyVNfT6I.jpeg"}
                    alt={"zoom etape 2"}/>
-            <Image src={"/images/parcours/etape_2/1916CCE0-FD56-42FB-9C77-DDBA969B90BC_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_2/UKPt7g791xNdUV3KVLbCOm59g8imn5j3l.jpeg"}
                    alt={"dezoom etape 2"}/>
-            <Image src={"/images/parcours/etape_2/D36F9E81-712D-4D56-9E41-7A588FDFD8D5_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_2/27FBv4ZwZ3VkG8h25caDfbXAlUBc1G7qg.jpeg"}
                    alt={"panorama etape 2"}/>
-            <Image src={"/images/parcours/etape_2/1ED7E006-AD41-422A-A64A-A3774E3A0E30_1_105_c.jpeg"}
-                   alt={"Image Bonus"}/>
         </Etape>
     )
 }
@@ -49,8 +46,12 @@ const Etape2 = () => {
 const Etape3 = () => {
     return (
         <Etape nbQrCode={3} mot={"Mineur"}>
-            <Image src={"/images/parcours/etape_3/15D01B24-AFC9-46DE-A2BD-7B22617B1B37_1_105_c.jpeg"}
-                   alt={"Arbre"}></Image>
+            <Image src={"/images/parcours/etape_3/2EnrwH34pwNpF9voxKZB6KJQ372Uu0e3W.jpeg"}
+                   alt={"zoom etape 3"}/>
+            <Image src={"/images/parcours/etape_3/dscQH17YAvHi2CeS8UkoFgK7OmnJzkj0x.jpeg"}
+                   alt={"dezoom etape 3"}/>
+            <Image src={"/images/parcours/etape_3/35DQ8V7M52x78ZFRg5pPqPrQtDVK2ylea.jpeg"}
+                   alt={"panorama etape 3"}/>
         </Etape>
     )
 }
@@ -58,14 +59,12 @@ const Etape3 = () => {
 const Etape4 = () => {
     return (
         <Etape nbQrCode={4} mot={"Principe"}>
-            <Image src={"/images/parcours/etape_4/8B4E6207-46D8-4F6A-95E7-39A7E5B6B9CA_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_4/DpCT5WjB3UhzgvONVwgZ5xn0Z5Qg1kDlV.jpeg"}
                    alt={"zoom etape 4"}/>
-            <Image src={"/images/parcours/etape_4/C33809CA-232C-405F-B9DB-15E1E6BEFEC4_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_4/kYC24VzS6MdQ6lTsFTM9fRBzQrwFlwQGa.jpeg"}
                    alt={"dezoom etape 4"}/>
-            <Image src={"/images/parcours/etape_4/173FBFA8-DC33-42C1-9D94-573A50810A30_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_4/12jC69SZImHLm5oCM9I4vL6Fe8Gw6Cum6.jpeg"}
                    alt={"panorama etape 4"}/>
-            <Image src={"/images/parcours/etape_4/1B5A35D6-BDC4-42ED-B35F-70D2AFF9407B_1_105_c.jpeg"}
-                   alt={"Image Bonus"}/>
         </Etape>
     )
 }
@@ -73,11 +72,11 @@ const Etape4 = () => {
 const Etape5 = () => {
     return (
         <Etape nbQrCode={5} mot={"Verbe"}>
-            <Image src={"/images/parcours/etape_5/5D4D49E8-112E-4364-BB8A-4C2849DA96ED_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_5/9ztRxxO4p2ZA6HlopUwxSCXcmqCAg8mC5.jpeg"}
                    alt={"zoom etape 5"}/>
-            <Image src={"/images/parcours/etape_5/008CFB4E-704C-47A9-AD61-EA8D51BCE951_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_5/BNKepz49Bj4swM1z8vbpX2tZDhCB2a0VH.jpeg"}
                    alt={"dezoom etape 5"}/>
-            <Image src={"/images/parcours/etape_5/362A1544-DB4F-4C17-ABE9-72F4C799B898_1_102_o.jpeg"}
+            <Image src={"/images/parcours/etape_5/tbuu0WaWcMAjv6D8PmkJcBsN3U1hLUC1b.jpeg"}
                    alt={"panorama etape 5"}/>
         </Etape>
     )
@@ -86,11 +85,11 @@ const Etape5 = () => {
 const Etape6 = () => {
     return (
         <Etape nbQrCode={6} mot={"Signature"}>
-            <Image src={"/images/parcours/etape_6/1204A17A-684D-4872-A324-9A122BB4A0E3_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_6/YGr3zcYG9zVUM6R3eOER16yF16UeYIfqb.jpeg"}
                    alt={"zoom etape 6"}/>
-            <Image src={"/images/parcours/etape_6/4E330359-A744-40B4-9124-E8552D6C8D91_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_6/7HHfeOkhDgsX8uL2jgSLIswklJ4YG8jwT.jpeg"}
                    alt={"dezoom etape 6"}/>
-            <Image src={"/images/parcours/etape_6/86D9126E-1F15-4EC3-818C-A779AD493728_1_105_c.jpeg"}
+            <Image src={"/images/parcours/etape_6/BzM67Nxr12g82n5DWLHrEwC3UKotE2zj2.jpeg"}
                    alt={"panorama etape 6"}/>
         </Etape>
     )

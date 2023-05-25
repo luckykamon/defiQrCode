@@ -37,11 +37,12 @@ AttenteImage.defaultProps =
 const Image = (props) => {
 
     let fileExist = doesFileExist(props.src)
+    let src_original = props.src.split(".")[0] + "_original." + props.src.split(".")[1]
     return (
         <div>
             {fileExist && (
                 <div style={{textAlign: "center"}}>
-                    <a href={props.src} download> <img src={props.src} alt={props.alt}/> </a>
+                    <a href={src_original} download> <img src={props.src} alt={props.alt}/> </a>
                 </div>
             )} {!fileExist && (
             <AttenteImage alt={props.alt}/>
@@ -60,7 +61,11 @@ Image.propTypes =
         /**
          * La description de l'image
          */
-        alt: PropTypes.string.isRequired
+        alt: PropTypes.string.isRequired,
+        /**
+         * La priorité de l'image
+         */
+        lazy: PropTypes.bool
     }
 
 Image.defaultProps =

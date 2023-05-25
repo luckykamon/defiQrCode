@@ -22,7 +22,7 @@ const About = () => {
                                 alt="Lucas Bodin Profile Pic"
                             />
                         </div>
-                        <div className="nine columns main-col">
+                        <div className="nine columns main-col" style={{textAlign: "justify"}}>
                             <h2>Le défi QrCode</h2>
 
                             <p>Le défi QrCode est une course d'orientation se situant dans le parc des Gayeulles à
