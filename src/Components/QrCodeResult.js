@@ -257,21 +257,13 @@ const InputMot = () => {
 
 
 const QrCodeResult = () => {
-    const [refresh, setRefresh] = useState(0);
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setRefresh(refresh + 1);
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [refresh]);
 
     return (
         <div>
             <NavBar page="/QrCodeResult"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
-            <TableResult/> <InputMot key={refresh}/> <TempsParcours/> <Footer/>
+            <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
         </div>
     )
 }
