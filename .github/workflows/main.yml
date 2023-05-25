@@ -32,5 +32,4 @@ jobs:
           script: |
             cd /srv/defiQrCode
             npm i
-            pm2 delete defiQrCode
-            pm2 --name defiQrCode start npm -- start
+            npm run build
