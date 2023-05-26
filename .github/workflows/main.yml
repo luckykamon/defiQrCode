@@ -24,6 +24,7 @@ jobs:
           path: "."
           remote_path: "/srv/defiQrCode"
 
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
