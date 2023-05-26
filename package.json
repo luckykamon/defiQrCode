@@ -13,8 +13,7 @@
     "react-cookie-consent": "^8.0.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
-    "react-use": "^17.4.0",
-    "terser-webpack-plugin": "^5.3.9"
+    "react-use": "^17.4.0"
   },
   "scripts": {
     "start": "PORT=4010 react-scripts start",
