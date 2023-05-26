@@ -18,10 +18,10 @@ jobs:
         uses: pantharshit00/rsync-deploy@v1.0.1
         with:
           switches: -avz --delete
-          server_ip: ${{ secrets.HOST_LWS_SERVER }}
-          username: ${{ secrets.USERNAME_LWS_SERVER }}
-          password: ${{ secrets.PASSWORD_LWS_SERVER }}
-          source: "."
+          remote_host: ${{ secrets.HOST_LWS_SERVER }}
+          remote_user: ${{ secrets.USERNAME_LWS_SERVER }}
+          remote_key: ${{ secrets.SSH_KEY_LWS_SERVER }}
+          path: "."
           remote_path: "/srv/defiQrCode"
 
       - name: Deploy to Server
