@@ -1,24 +1,28 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import NavBar from "./Navbar";
 import Footer from "./Footer";
-import PropTypes from "prop-types";
 
+interface BaliseAIfHrefProps {
+    href: string,
+    children: ReactNode
+}
 
-const BaliseAIfHref = (props) => {
-    if (props.href !== "") {
-        return <a href={props.href}>{props.children}</a>
+const BaliseAIfHref: React.FC<BaliseAIfHrefProps> = ({href, children}) => {
+    if (href !== "") {
+        return <a href={href}>{children}</a>
     } else {
-        return (props.children)
+        return <>{children}</>
     }
 }
 
-BaliseAIfHref.propTypes =
-    {
-        href: PropTypes.string
-    }
+interface ResultScanProps {
+    nbQrCode: number,
+    mot: string,
+    url: string
+}
 
-const ResultScan = () => {
-    let resultScanTab = [
+const ResultScan: React.FC = () => {
+    let resultScanTab: ResultScanProps[] = [
         {nbQrCode: 0, mot: "Les", url: "/etape_0"},
         {nbQrCode: 1, mot: "capains", url: "/LYUpKr6Jwp5J"},
         {nbQrCode: 2, mot: "font", url: "/MFCJd5deG2LZ"},
@@ -36,17 +40,17 @@ const ResultScan = () => {
     return (
         <tbody>
         {resultScanTab.map(resultScan =>
-            <tr key={resultScan["nbQrCode"]}>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["nbQrCode"]}</BaliseAIfHref></td>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["mot"]}</BaliseAIfHref></td>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["url"]}</BaliseAIfHref></td>
+            <tr key={resultScan.nbQrCode}>
+                <td><BaliseAIfHref href={resultScan.url}>{resultScan.nbQrCode}</BaliseAIfHref></td>
+                <td><BaliseAIfHref href={resultScan.url}>{resultScan.mot}</BaliseAIfHref></td>
+                <td><BaliseAIfHref href={resultScan.url}>{resultScan.url}</BaliseAIfHref></td>
             </tr>
         )}
         </tbody>
     )
 }
 
-const TableResult = () => {
+const TableResult: React.FC = () => {
     return (
         <table style={{textAlign: "center", width: "100%"}} id="ex1-grid" role="grid" aria-labelledby="grid1Label"
                className="data">
@@ -63,18 +67,18 @@ const TableResult = () => {
     )
 }
 
+interface QrCodeSoluceProps {
+    children: ReactNode
+}
 
-const QrCodeSoluce = (props) => {
+const QrCodeSoluce: React.FC<QrCodeSoluceProps> = ({children}) => {
     return (
         <div>
             <NavBar page="/solution"/>
             <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Solution:</h3>
-            <TableResult/>
-            {props.children}
-            <Footer/>
+            <TableResult/> {children} <Footer/>
         </div>
     )
 }
-
 
 export default QrCodeSoluce

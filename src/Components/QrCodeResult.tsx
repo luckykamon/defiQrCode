@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useState} from 'react';
 import NavBar from "./Navbar";
 import Footer from "./Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
@@ -9,11 +9,16 @@ import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions
 import Confetti from 'react-confetti'
 import useWindowSize from 'react-use/lib/useWindowSize'
 
-const BaliseAIfHref = (props) => {
+type BaliseAIfHrefProps = {
+    href: string,
+    children: ReactNode
+}
+
+const BaliseAIfHref: FC<BaliseAIfHrefProps> = (props) => {
     if (props.href !== "") {
         return <a href={props.href}>{props.children}</a>
     } else {
-        return (props.children)
+        return <>{props.children}</>
     }
 }
 
@@ -22,12 +27,12 @@ BaliseAIfHref.propTypes =
         href: PropTypes.string
     }
 
-const ResultScan = () => {
-    let resultScanTab = []
+const ResultScan: FC = () => {
+    let resultScanTab: Array<any> = []
 
     for (let i = 0; i <= 6; i++) {
         let localStorage = getLocalStorage("QrCode-" + i)
-        let resultScanJson = {}
+        let resultScanJson: { [k: string]: any } = {}
         resultScanJson["nbQrCode"] = i
         if (localStorage === null) {
             resultScanJson["mot"] = ""
@@ -55,7 +60,7 @@ const ResultScan = () => {
     )
 }
 
-const TableResult = () => {
+const TableResult: FC = () => {
     const [refresh, setRefresh] = useState(0);
 
     // On actualise l'avancée toutes les 10 secondes afin que lorsque l'on scan un QrCode sur une autre page alors que l'on est sur la page des résultats, on voit le résultat s'actualiser
@@ -94,12 +99,12 @@ const TableResult = () => {
  * @param ms
  * @returns {string}
  */
-function afficherDuree(ms) {
+function afficherDuree(ms: number) {
     if (ms === 0) {
         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour démarrer le chrono</span>)
     }
     const duree = new Date(ms);
-    const jours = Math.floor(duree / (1000 * 60 * 60 * 24));
+    const jours = Math.floor(duree.getTime() / (1000 * 60 * 60 * 24));
     const heures = duree.getUTCHours();
     const minutes = duree.getUTCMinutes();
     const secondes = duree.getUTCSeconds();
@@ -120,14 +125,14 @@ function afficherDuree(ms) {
     return (dureeString);
 }
 
-function afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp) {
+function afficherScore(tempsParcoursTimeStamp: number, tempsMotTimeStamp: number) {
     if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
     }
-    return parseInt(7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))) + " points";
+    return parseInt((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))).toString()) + " points";
 }
 
-const TempsParcours = () => {
+const TempsParcours: FC = () => {
     const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
     const [tempsMotTimeStamp, setTempsMotTimeStamp] = useState(0);
     const [allQrCodeFind, setAllQrCodeFind] = useState(false);
@@ -137,8 +142,8 @@ const TempsParcours = () => {
         let timer = null;
 
         const checkTime = () => {
-            let timestampMin = null;
-            let timestampMax = null;
+            let timestampMin: number | null = null;
+            let timestampMax: number | null = null;
             let allFound = true;
 
             for (let i = 0; i <= 6; i++) {
@@ -164,20 +169,20 @@ const TempsParcours = () => {
             let localStorageMot = getLocalStorage("temps-mot");
             if (localStorageMot !== null) {
                 setMotTrouve(true);
-                setTempsMotTimeStamp(parseInt(parseInt(localStorageMot) - timestampMin));
+                setTempsMotTimeStamp(parseInt(localStorageMot) - (timestampMin ? timestampMin : 0));
             } else if (timestampMin !== null) {
-                setTempsMotTimeStamp(parseInt(Date.now() - timestampMin));
+                setTempsMotTimeStamp(Date.now() - timestampMin);
             } else {
                 setTempsMotTimeStamp(0);
             }
 
             if (allFound) {
-                setTempsParcoursTimeStamp(timestampMax - timestampMin);
+                setTempsParcoursTimeStamp((timestampMax ? timestampMax : 0) - (timestampMin ? timestampMin : 0));
                 setAllQrCodeFind(true);
             } else if (timestampMin === null && timestampMax === null) {
                 setTempsParcoursTimeStamp(0);
             } else {
-                setTempsParcoursTimeStamp(Date.now() - timestampMin);
+                setTempsParcoursTimeStamp(Date.now() - (timestampMin ? timestampMin : 0));
             }
         }
 
@@ -187,12 +192,12 @@ const TempsParcours = () => {
             if (!allQrCodeFind || !motTrouve) {
                 checkTime();
             } else {
-                clearInterval(timer);
+                clearInterval(timer as NodeJS.Timeout);
             }
         }, 1000);
 
         return () => {
-            clearInterval(timer);
+            clearInterval(timer as NodeJS.Timeout);
         };
     }, [allQrCodeFind, motTrouve]);
 
@@ -209,17 +214,17 @@ const TempsParcours = () => {
     )
 }
 
-const InputMot = () => {
+const InputMot: FC = () => {
     const [confetti, setConfetti] = useState(false);
     const [mauvaiseReponse, setMauvaiseReponse] = useState(false);
     const {width, height} = useWindowSize();
 
     const checkMot = () => {
-        let mot = document.getElementById("mot").value;
+        let mot = (document.getElementById("mot") as HTMLInputElement).value;
         if (mot.toLowerCase() === "accord") {
             setConfetti(true);
             setMauvaiseReponse(false);
-            setLocalStorage("temps-mot", Date.now());
+            setLocalStorage("temps-mot", Date.now().toString());
         } else {
             setMauvaiseReponse(true);
             setConfetti(false);
@@ -256,7 +261,7 @@ const InputMot = () => {
 }
 
 
-const QrCodeResult = () => {
+const QrCodeResult: FC = () => {
 
     return (
         <div>

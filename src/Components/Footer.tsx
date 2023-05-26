@@ -1,18 +1,15 @@
-import React from "react";
-// import Fade from "react-reveal";
+import React, {FC} from "react";
 
-const Footer = () => {
+const Footer: FC = () => {
     return (
         <footer className={"footer"} style={{position: 'relative', width: '100%', marginTop: 'auto'}}>
             <div className="row">
-                {/*<Fade bottom>*/}
                 <div className="twelve columns">
                     <ul className="copyright">
-                        <li>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique de
-                            confidentialité</a></li>
+                        <li>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique
+                            de confidentialité</a></li>
                     </ul>
                 </div>
-                {/*</Fade>*/}
             </div>
         </footer>
     );
