@@ -41,6 +41,6 @@
   "devDependencies": {
     "chokidar": "^3.5.1",
     "react-scripts": "^5.0.1",
-    "typescript": "^5.0.4"
+    "typescript": "^4"
   }
 }

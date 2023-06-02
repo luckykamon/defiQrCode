@@ -216,12 +216,12 @@ const TempsParcours: FC = () => {
 
 const InputMot: FC = () => {
     const [confetti, setConfetti] = useState(false);
-    const [mauvaiseReponse, setMauvaiseReponse] = useState(false);
+    const [mauvaiseReponse, setMauvaiseReponse] = useState(null);
     const {width, height} = useWindowSize();
 
     const checkMot = () => {
         let mot = (document.getElementById("mot") as HTMLInputElement).value;
-        if (mot.toLowerCase() === "accord") {
+        if (mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === "accord") {
             setConfetti(true);
             setMauvaiseReponse(false);
             setLocalStorage("temps-mot", Date.now().toString());
