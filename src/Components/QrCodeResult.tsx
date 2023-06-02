@@ -7,7 +7,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorageFunction";
 import Confetti from 'react-confetti'
-import useWindowSize from 'react-use/lib/useWindowSize'
 
 type BaliseAIfHrefProps = {
     href: string,
@@ -217,7 +216,14 @@ const TempsParcours: FC = () => {
 const InputMot: FC = () => {
     const [confetti, setConfetti] = useState(false);
     const [mauvaiseReponse, setMauvaiseReponse] = useState(false); // null -> en attente, true -> mauvaise réponse, false -> bonne réponse
-    const {width, height} = useWindowSize();
+    const width = Math.max(
+        document.documentElement.scrollWidth,
+        document.body.scrollWidth
+    );
+    const height = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+    );
 
     const checkMot = () => {
         let mot = (document.getElementById("mot") as HTMLInputElement).value;
@@ -236,7 +242,7 @@ const InputMot: FC = () => {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            if (!confetti && !mauvaiseReponse){
+            if (!confetti && !mauvaiseReponse) {
                 checkMot();
             }
         }
@@ -254,7 +260,6 @@ const InputMot: FC = () => {
     }
 
     return (
-
         <div className={mauvaiseReponse ? "shake" : ""}
              style={{display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap"}}>
             <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici"
