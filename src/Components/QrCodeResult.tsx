@@ -216,7 +216,7 @@ const TempsParcours: FC = () => {
 
 const InputMot: FC = () => {
     const [confetti, setConfetti] = useState(false);
-    const [mauvaiseReponse, setMauvaiseReponse] = useState(null);
+    const [mauvaiseReponse, setMauvaiseReponse] = useState(false); // null -> en attente, true -> mauvaise réponse, false -> bonne réponse
     const {width, height} = useWindowSize();
 
     const checkMot = () => {
