@@ -1,11 +1,14 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 
-function doesFileExist(urlToFile: string): boolean {
-    let xhr = new XMLHttpRequest();
-    xhr.open('HEAD', urlToFile, false);
-    xhr.send();
-    let mimeType = xhr.getResponseHeader('Content-Type') || '';
-    return xhr.status !== 404 && mimeType.split("/")[0] === "image";
+async function doesFileExist(urlToFile: string): Promise<boolean> {
+    try {
+        const response = await fetch(urlToFile, {method: 'HEAD'});
+        const contentType = response.headers.get('Content-Type') || '';
+        return response.ok && contentType.split("/")[0] === "image";
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
 }
 
 interface AttenteImageProps {
@@ -45,7 +48,16 @@ interface ImageProps {
 }
 
 const Image: FC<ImageProps> = ({src, alt}) => {
-    let fileExist = doesFileExist(src);
+    const [fileExist, setFileExist] = useState(true)
+    doesFileExist(src)
+        .then((result) => {
+            if (!result) {
+                setFileExist(false)
+            }
+        })
+        .catch((error) => {
+            setFileExist(false)
+        })
     let src_original = src.split(".")[0] + "_original." + src.split(".")[1];
     return (
         <div>
