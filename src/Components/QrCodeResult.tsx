@@ -234,6 +234,14 @@ const InputMot: FC = () => {
         }
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            if (!confetti && !mauvaiseReponse){
+                checkMot();
+            }
+        }
+    };
+
     let defiQrCodeBegin = false;
     for (let i = 0; i <= 6; i++) {
         let localStorage = getLocalStorage("QrCode-" + i);
@@ -250,11 +258,13 @@ const InputMot: FC = () => {
         <div className={mauvaiseReponse ? "shake" : ""}
              style={{display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap"}}>
             <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici"
-                   style={{height: "40px", borderRadius: "10px"}}/>
+                   style={{height: "40px", borderRadius: "10px"}} onKeyDown={handleKeyDown}/>
             <div style={{width: "100vw"}}></div>
-            <button type="button" onClick={checkMot}
-                    style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier
-            </button>
+            <div style={mauvaiseReponse || confetti ? {display: "none"} : {}}>
+                <button type="button" onClick={checkMot}
+                        style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier
+                </button>
+            </div>
             {confetti && <Confetti width={width} height={height}/>}
         </div>
     )
