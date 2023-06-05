@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  REMOTE_PATH: ''
+
 jobs:
   deploy:
 
@@ -14,6 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set remote_path based on branch
+        run: |
+            if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "REMOTE_PATH=/srv/defiQrCode" >> $GITHUB_ENV
+            elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+              echo "REMOTE_PATH=/srv/defiQrCodeDev" >> $GITHUB_ENV
+            fi
+
       - name: Sync files to Server
         uses: burnett01/rsync-deployments@5.2.1
         with:
@@ -22,7 +33,7 @@ jobs:
           remote_user: ${{ secrets.USERNAME_LWS_SERVER }}
           remote_key: ${{ secrets.SSH_KEY_LWS_SERVER }}
           path: "."
-          remote_path: "/srv/defiQrCode"
+          remote_path: ${{ env.REMOTE_PATH }}
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -31,6 +42,6 @@ jobs:
           username: ${{ secrets.USERNAME_LWS_SERVER }}
           password: ${{ secrets.PASSWORD_LWS_SERVER }}
           script: |
-            cd /srv/defiQrCode
+            cd ${{ env.REMOTE_PATH }}
             npm i
             npm run build
