@@ -47,3 +47,8 @@ jobs:
             cd front
             npm i
             npm run build
+            cd ..
+            cd back
+            npm i
+            pm2 delete defiQrCodeBack
+            pm2 --name defiQrCodeBack start npm -- start
