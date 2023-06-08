@@ -75,7 +75,7 @@ const QrCodeSoluce: React.FC<QrCodeSoluceProps> = ({children}) => {
     return (
         <div>
             <NavBar page="/solution"/>
-            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Solution:</h3>
+            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Solution:</h3>
             <TableResult/> {children} <Footer/>
         </div>
     )

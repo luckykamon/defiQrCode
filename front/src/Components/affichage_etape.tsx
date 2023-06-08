@@ -23,7 +23,7 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "càpains", children}) => {
         <div>
             <NavBar page="/etape_0"/>
             <h3 style={{
-                textAlign: "Center",
+                textAlign: "center",
                 color: "white",
                 marginTop: "40px"
             }}>QrCode {nbQrCode}: {mot}</h3>{children} <Footer/>

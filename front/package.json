@@ -1,6 +1,7 @@
 {
-  "name": "reactniceresume",
-  "version": "0.1.0",
+  "name": "defiqrcode",
+  "author": "Lucas Bodin",
+  "version": "1.0.0",
   "private": true,
   "homepage": "./",
   "dependencies": {

@@ -206,9 +206,9 @@ const TempsParcours: FC = () => {
 
     return (
         <>
-            <h3 style={{textAlign: "Center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
-            <h3 style={{textAlign: "Center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
-            <h3 style={{textAlign: "Center", color: "white"}}>Score: {score}</h3>
+            <h3 style={{textAlign: "center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
+            <h3 style={{textAlign: "center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+            <h3 style={{textAlign: "center", color: "white"}}>Score: {score}</h3>
         </>
     )
 }
@@ -281,7 +281,7 @@ const QrCodeResult: FC = () => {
     return (
         <div>
             <NavBar page="/QrCodeResult"/>
-            <h3 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
+            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
             <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
         </div>

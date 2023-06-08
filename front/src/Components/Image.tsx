@@ -21,7 +21,7 @@ interface AttenteImageProps {
 const AttenteImage: FC<AttenteImageProps> = ({alt}) => {
     return (
         <div>
-            <h4 style={{textAlign: "Center", color: "white", marginTop: "40px"}}>L'image arrive bientôt 😉, voici un
+            <h4 style={{textAlign: "center", color: "white", marginTop: "40px"}}>L'image arrive bientôt 😉, voici un
                 petit indice en attendant:</h4>
             <p style={{textAlign: "center", fontWeight: "bold", fontSize: "18px"}}>{alt}</p>
         </div>

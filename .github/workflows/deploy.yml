@@ -44,5 +44,6 @@ jobs:
           password: ${{ secrets.PASSWORD_LWS_SERVER }}
           script: |
             cd ${{ env.REMOTE_PATH }}
+            cd front
             npm i
             npm run build
