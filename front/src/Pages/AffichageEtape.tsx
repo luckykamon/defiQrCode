@@ -1,8 +1,8 @@
 import React, {FC, ReactNode} from 'react';
-import NavBar from "./Navbar";
-import Footer from "./Footer";
+import NavBar from "../Layout/Navbar";
+import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
-import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorageFunction";
+import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 
 interface EtapeProps {
     nbQrCode: number,

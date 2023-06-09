@@ -1,6 +1,6 @@
 import React, {FC, MouseEventHandler} from "react";
-import NavBar from "./Navbar";
-import Footer from "./Footer";
+import NavBar from "../Layout/Navbar";
+import Footer from "../Layout/Footer";
 
 const About: FC = () => {
 

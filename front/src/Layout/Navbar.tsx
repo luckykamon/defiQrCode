@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from 'react';
-import Cookie from "./cookie";
+import Cookie from "../Components/Cookie";
 
 interface LiProps {
     href: string;

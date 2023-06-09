@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
-import NavBar from "./Navbar";
-import Footer from "./Footer";
+import NavBar from "../Layout/Navbar";
+import Footer from "../Layout/Footer";
 
 interface BaliseAIfHrefProps {
     href: string,

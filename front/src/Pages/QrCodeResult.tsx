@@ -1,11 +1,11 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import NavBar from "./Navbar";
-import Footer from "./Footer";
+import NavBar from "../Layout/Navbar";
+import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
-import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorageFunction";
+import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 import Confetti from 'react-confetti'
 
 type BaliseAIfHrefProps = {

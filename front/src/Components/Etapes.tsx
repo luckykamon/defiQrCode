@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import Etape from "./affichage_etape"
+import Etape from "../Pages/AffichageEtape"
 import Image from "./Image";
 
 const Etape0: FC = () => {

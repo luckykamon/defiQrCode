@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import QrCodeResult from "./Components/QrCodeResult"
+import QrCodeResult from "./Pages/QrCodeResult"
 import {
     Etape0,
     Etape1,
@@ -16,9 +16,9 @@ import {
     // Etape10,
     // Etape11
 } from "./Components/Etapes"
-import About from "./Components/About";
-import NavBar from "./Components/Navbar";
-import Footer from "./Components/Footer";
+import About from "./Pages/About";
+import NavBar from "./Layout/Navbar";
+import Footer from "./Layout/Footer";
 // import QrCodeSoluce from "./Components/solution";
 
 const Confidentialite = () => {
