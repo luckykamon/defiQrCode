@@ -22,8 +22,10 @@ jobs:
         run: |
             if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
               echo "REMOTE_PATH=/srv/defiQrCode" >> $GITHUB_ENV
+              echo "PM2_APP_NAME=defiQrCodeBack" >> $GITHUB_ENV
             elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
               echo "REMOTE_PATH=/srv/defiQrCodeDev" >> $GITHUB_ENV
+              echo "PM2_APP_NAME=defiQrCodeBackDev" >> $GITHUB_ENV
             fi
 
       - name: Sync files to Server
@@ -50,5 +52,5 @@ jobs:
             cd ..
             cd back
             npm i
-            pm2 delete defiQrCodeBack
-            pm2 --name defiQrCodeBack start npm -- start
+            pm2 delete ${{ env.PM2_APP_NAME }}
+            pm2 --name ${{ env.PM2_APP_NAME }} start npm -- start
