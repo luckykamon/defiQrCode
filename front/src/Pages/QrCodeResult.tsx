@@ -84,11 +84,11 @@ const TableResult: FC = () => {
             <tr>
                 <th style={{width: "25%"}}>Numéro QrCode</th>
                 <th style={{width: "25%"}}>Mot trouvé</th>
-                {/*<th style={{width: "25%"}}>URL</th>*/}
                 <th style={{width: "25%"}}>Date</th>
             </tr>
             </thead>
-            <ResultScan key={refresh}/>
+            <ResultScan/>
+            {/*<ResultScan key={refresh}/>*/}
         </table>
     )
 }
@@ -145,7 +145,7 @@ const TempsParcours: FC = () => {
             let timestampMax: number | null = null;
             let allFound = true;
 
-            for (let i = 0; i <= 6; i++) {
+            for (let i = 1; i <= 6; i++) {
                 let localStorage = getLocalStorage("QrCode-" + i)
                 if (localStorage !== null) {
                     let parseLocalStorage = JSON.parse(localStorage);
@@ -249,7 +249,7 @@ const InputMot: FC = () => {
     };
 
     let defiQrCodeBegin = false;
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 1; i <= 6; i++) {
         let localStorage = getLocalStorage("QrCode-" + i);
         if (localStorage !== null) {
             defiQrCodeBegin = true;
@@ -281,7 +281,7 @@ const QrCodeResult: FC = () => {
     return (
         <div>
             <NavBar page="/QrCodeResult"/>
-            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Avancée: <FontAwesomeIcon
+            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span> <u>et</u> trouver le <span style={{color: "#fe6928"}}>mot caché</span>.<br/><br/>Avancée: <FontAwesomeIcon
                 icon={faRotate} onClick={deleteLocalStorage}/></h3>
             <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
         </div>
