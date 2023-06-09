@@ -6,7 +6,11 @@ const Footer: FC = () => {
             <div className="row">
                 <div className="twelve columns">
                     <ul className="copyright">
-                        <li>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique
+                        <li style={{
+                            background: 'linear-gradient(to right, #fe6928, white, #fe6928)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent'
+                        }}>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique
                             de confidentialité</a></li>
                     </ul>
                 </div>
