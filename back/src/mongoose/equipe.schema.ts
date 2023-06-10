@@ -14,16 +14,16 @@ let equipeSchema = MongooseRequire.model(collectionName, CollectionSchema);
 
 exports.getAll = async () => {
     await db.connect();
-    console.log("equipe.schema.ts getAll");
-    let result = await equipeSchema.find();
-    console.log(result);
-    return result;
+    return await equipeSchema.find();
 }
+
+exports.getById = async (id: string) => {
+    await db.connect();
+    return await equipeSchema.findById(id);
+}
+
 
 exports.create = async (equipe: object) => {
     await db.connect();
-    console.log("equipe.schema.ts create");
-    let result = await equipeSchema.create(equipe);
-    console.log(result);
-    return result;
+    return await equipeSchema.create(equipe);
 }

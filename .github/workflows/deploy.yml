@@ -31,7 +31,7 @@ jobs:
       - name: Sync files to Server
         uses: burnett01/rsync-deployments@5.2.1
         with:
-          switches: -avz --delete --exclude=back/.env --exclude=front/node_modules --exclude=back/node_modules
+          switches: -avz --delete --exclude=back/node_modules --exclude=back/.env --exclude=front/node_modules --exclude=front/.env
           remote_host: ${{ secrets.HOST_LWS_SERVER }}
           remote_user: ${{ secrets.USERNAME_LWS_SERVER }}
           remote_key: ${{ secrets.SSH_KEY_LWS_SERVER }}

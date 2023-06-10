@@ -8,6 +8,10 @@ equipeRouter.get('', async (req: Request, res: Response) => {
     res.send(await equipeService.getAll())
 })
 
+equipeRouter.get('/:id', async (req: Request, res: Response) => {
+    res.send(await equipeService.getById(req.params.id))
+})
+
 equipeRouter.post('', async (req: Request, res: Response) => {
     res.send(await equipeService.create(req.body))
 })

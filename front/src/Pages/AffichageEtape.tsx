@@ -28,7 +28,6 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "càpains", children}) => {
                 marginTop: "40px",
                 marginBottom: "20px",
             }}><p>Bravo ! Vous avez scanné le QrCode <span style={{color: "#fe6928"}}>{nbQrCode}</span>. L'indice <span style={{color: "#fe6928"}}>{mot}</span> dans l'onglet <a href="/QrCodeResult">AVANCÉE</a> vous aidera à découvrir le mot cachée.</p>
-                <p></p>
                 <p style={{marginTop: "6px"}}>Les images ci-dessous indiquent où se trouve le prochain QrCode:</p>
             </h4>{children} <Footer/>
         </div>

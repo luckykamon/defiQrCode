@@ -6,7 +6,7 @@ const SUCCESS_MESSAGE = "Connected to database → OK";
 
 let isConnected = false;
 
-exports.connect = async () => {
+const connect = async () => {
     try {
         if (isConnected) return SUCCESS_MESSAGE;
 
@@ -19,4 +19,8 @@ exports.connect = async () => {
         console.log('Error while trying to connect to database =>' + error);
         return null;
     }
+}
+
+module.exports = {
+    connect
 }
