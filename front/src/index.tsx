@@ -48,9 +48,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="confidentialite" element={<Confidentialite/>}/>
             <Route path="QrCodeResult" element={<QrCodeResult/>}/>
             {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/}
-            <Route path="etape_0" element={<Etape0/>}/>
             <Route path="equipe" element={<Equipe/>}/>
             <Route path="equipe/:id" element={<Equipe/>}/>
+            <Route path="etape_0" element={<Etape0/>}/>
             <Route path="LYUpKr6Jwp5J" element={<Etape1/>}/>
             <Route path="MFCJd5deG2LZ" element={<Etape2/>}/>
             <Route path="PLb8tfxH6Ngj" element={<Etape3/>}/>

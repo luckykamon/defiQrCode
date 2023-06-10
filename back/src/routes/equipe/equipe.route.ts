@@ -1,5 +1,3 @@
-// equipe.route.ts
-
 import { Request, Response, Router } from 'express';
 import * as equipeService from './equipe.service';
 
