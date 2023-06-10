@@ -121,6 +121,12 @@ const Equipe = () => {
                     alert("Une erreur est survenue lors de la récupération de votre équipe.")
                 }
             })
+            return (
+                <Layout>
+                    <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Chargement de votre équipe en
+                        cours...</h3>
+                </Layout>
+            )
         }
         return (
             <Layout>
@@ -147,8 +153,8 @@ const Equipe = () => {
                         <p>Vous êtes l'équipe: {equipeName}</p>
                         <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p>
-                        <div style={{textAlign: "center", margin: "auto"}} onClick={() => shareLink(equipeURL)}>
-                            <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}/>
+                        <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
+                            <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL} style={{marginTop: "25px"}}/>
                         </div>
 
                     </h3>
