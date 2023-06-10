@@ -31,7 +31,7 @@ jobs:
       - name: Sync files to Server
         uses: burnett01/rsync-deployments@5.2.1
         with:
-          switches: -avz --delete --exclude=back/node_modules --exclude=back/.env --exclude=front/node_modules --exclude=front/.env
+          switches: -avz --delete --exclude=back/.env --exclude=front/.env
           remote_host: ${{ secrets.HOST_LWS_SERVER }}
           remote_user: ${{ secrets.USERNAME_LWS_SERVER }}
           remote_key: ${{ secrets.SSH_KEY_LWS_SERVER }}
@@ -51,6 +51,6 @@ jobs:
             npm run build
             cd ..
             cd back
-            npm i
+            npm i --production
             pm2 delete ${{ env.PM2_APP_NAME }}
             pm2 --name ${{ env.PM2_APP_NAME }} start npm -- start

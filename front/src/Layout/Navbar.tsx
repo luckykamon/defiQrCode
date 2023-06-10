@@ -37,7 +37,7 @@ const NavBar: FC<NavBarProps> = ({page}) => {
             <Cookie/>
             <ul id="nav" className="nav">
                 <Li href="/" page={page}> Accueil </Li> <Li href="/etape_0" page={page}> 1er point </Li> <Li
-                href="/QrCodeResult" page={page}> Avancée </Li> <Li href="/equipe"
+                href="/avancee" page={page}> Avancée </Li> <Li href="/equipe"
                                                                     page={page}> Équipe </Li> {/*<Li href="/solution" page={page}> Solution </Li>*/}
             </ul>
         </div>

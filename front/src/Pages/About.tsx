@@ -28,7 +28,7 @@ const About: FC = () => {
                             Et ainsi de suite... afin de trouver le mot 🎁</p>
                         <p>Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger
                             ci-dessous.</p>
-                        <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/QrCodeResult">votre avancée
+                        <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/avancee">votre avancée
                             (cliquez ici)</a> qui se complètera automatiquement.</p>
                         <p>Cet évènement à eu lieu le 3 juin 2023 avec le groupe facebook <a
                             href={"https://fb.me/e/5xzzDJfAp"} target={"_blank"} rel={"noreferrer"}>Courir à

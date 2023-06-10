@@ -275,7 +275,7 @@ const InputMot: FC = () => {
 }
 
 
-const QrCodeResult: FC = () => {
+const Avancee: FC = () => {
     // Synchronisation des cookies avec l'API de l'équipe
     useEffect(() => {
         let equipeId = getLocalStorage("equipeId");
@@ -300,7 +300,7 @@ const QrCodeResult: FC = () => {
 
     return (
         <div>
-            <NavBar page="/QrCodeResult"/>
+            <NavBar page="/avancee"/>
             <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir
                 votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span>&nbsp;
                 <u>et</u> trouver le <span
@@ -313,4 +313,4 @@ const QrCodeResult: FC = () => {
     )
 }
 
-export default QrCodeResult
+export default Avancee
