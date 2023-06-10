@@ -1,6 +1,10 @@
-const rootRouterEquipe = require('express').Router();
+import express from "express";
+import indexRouter from './index.router';
+import equipeRoute from './equipe/equipe.route';
 
-rootRouterEquipe.use('/', require('./index.router'));
-rootRouterEquipe.use('/api/equipe', require('./equipe/equipe.route'));
+const rootRouter = express.Router();
 
-module.exports = rootRouterEquipe;
+rootRouter.use('/', indexRouter);
+rootRouter.use('/api/equipe', equipeRoute);
+
+export default rootRouter;

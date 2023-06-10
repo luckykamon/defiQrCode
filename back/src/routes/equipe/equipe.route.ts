@@ -1,19 +1,20 @@
-import {Request, Response} from 'express';
+// equipe.route.ts
 
-const equipeRouter = require('express').Router()
-const equipeService = require('./equipe.service')
+import { Request, Response, Router } from 'express';
+import * as equipeService from './equipe.service';
+
+const equipeRouter: Router = Router();
 
 equipeRouter.get('', async (req: Request, res: Response) => {
-    console.log("router")
-    res.send(await equipeService.getAll())
-})
+    res.send(await equipeService.getAll());
+});
 
-equipeRouter.get('/:id', async (req: Request, res: Response) => {
-    res.send(await equipeService.getById(req.params.id))
-})
+equipeRouter.get('/:_id', async (req: Request, res: Response) => {
+    res.send(await equipeService.getById(req.params._id));
+});
 
 equipeRouter.post('', async (req: Request, res: Response) => {
-    res.send(await equipeService.create(req.body))
-})
+    res.send(await equipeService.create(req.body));
+});
 
-module.exports = equipeRouter;
+export default equipeRouter;

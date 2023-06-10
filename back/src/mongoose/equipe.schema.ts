@@ -1,29 +1,42 @@
-const db = require('./db');
-const MongooseRequire = require('mongoose');
+import * as db from './db';
+import Mongoose, {Types} from 'mongoose';
+import {Equipe} from "../routes/equipe/equipe.types";
 
 const collectionName = "equipe";
 
-const CollectionSchema = new MongooseRequire.Schema({
-    name: {
-        type: String,
-        required: true
+const CollectionSchema = new Mongoose.Schema({
+        name: {
+            type: String,
+            required: true
+        }
+    }, {
+        toObject: {
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret._id;
+            }
+        }
     }
-});
+);
 
-let equipeSchema = MongooseRequire.model(collectionName, CollectionSchema);
+let equipeSchema = Mongoose.model<Equipe>(collectionName, CollectionSchema);
 
-exports.getAll = async () => {
+
+export const getAll = async () => {
     await db.connect();
-    return await equipeSchema.find();
+    return equipeSchema.find();
 }
 
-exports.getById = async (id: string) => {
+export const getById = async (_id: string) => {
+    if (!Types.ObjectId.isValid(_id)) {
+        return null;
+    }
+
     await db.connect();
-    return await equipeSchema.findById(id);
+    return equipeSchema.findById(_id);
 }
 
-
-exports.create = async (equipe: object) => {
+export const create = async (equipe: object) => {
     await db.connect();
     return await equipeSchema.create(equipe);
 }

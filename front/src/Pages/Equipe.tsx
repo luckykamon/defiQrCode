@@ -2,7 +2,8 @@ import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import {getLocalStorage} from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import {getCookieConsentValue} from "react-cookie-consent";
 
 const Layout = (props) => {
     return (
@@ -13,7 +14,7 @@ const Layout = (props) => {
 }
 
 const Equipe = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const createEquipe = () => {
         const equipeName = document.getElementById("equipeName") as HTMLInputElement
         const equipeNameValue = equipeName.value
@@ -81,7 +82,7 @@ const Equipe = () => {
 
         shareNavigator()
             .then((result) => {
-              console.log(result)
+                console.log(result)
             })
             .catch(() => {
                 shareClipbopard()
@@ -94,11 +95,22 @@ const Equipe = () => {
             })
     }
 
+    if (!getCookieConsentValue("cookieConsent")) {
+        return (
+            <Layout>
+                <div style={{textAlign: "center", marginTop: "30px"}}>
+                    <p>Le site sauvegarde les données d'Équipes dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
+                </div>
+            </Layout>
+        )
+    }
+
     let equipeId = getLocalStorage("equipeId")
     let equipeName = getLocalStorage("equipeName")
     let equipeURL = localStorage.getItem("equipeURL")
     if (equipeId === null || equipeName === null || equipeURL === null) {
         if (id !== undefined) {
+            const messageErreurGetEquipe = "<div>Une erreur est survenue lors de la récupération de votre équipe. Assurez-vous d'être sur la bonne url. Sinon je vous invite à créer une nouvelle équipe en cliquant sur l'onglet  <a href=\"/equipe\">ÉQUIPE</a>.</div>"
             fetch(process.env.REACT_APP_URL_BACK + "/api/equipe/" + id, {
                 method: "GET",
                 headers: {
@@ -108,7 +120,7 @@ const Equipe = () => {
                 if (response.status === 200) {
                     return response.json()
                 } else {
-                    alert("Une erreur est survenue lors de la récupération de votre équipe.")
+                    document.getElementById("messageGetEquipe").innerHTML = messageErreurGetEquipe
                 }
             }).then((data) => {
                 if (data !== undefined) {
@@ -118,13 +130,15 @@ const Equipe = () => {
                     localStorage.setItem("equipeURL", textQrCode)
                     window.location.href = "/equipe"
                 } else {
-                    alert("Une erreur est survenue lors de la récupération de votre équipe.")
+                    document.getElementById("messageGetEquipe").innerHTML = messageErreurGetEquipe
                 }
+            }).catch((error) => {
+                console.log(error)
+                document.getElementById("messageGetEquipe").innerHTML = messageErreurGetEquipe
             })
             return (
                 <Layout>
-                    <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Chargement de votre équipe en
-                        cours...</h3>
+                    <h3 id={"messageGetEquipe"} style={{textAlign: "center", color: "white", marginTop: "40px"}}>"Chargement de votre équipe en cours..."</h3>
                 </Layout>
             )
         }
@@ -154,7 +168,8 @@ const Equipe = () => {
                         <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p>
                         <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
-                            <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL} style={{marginTop: "25px"}}/>
+                            <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}
+                                                                              style={{marginTop: "25px"}}/>
                         </div>
 
                     </h3>

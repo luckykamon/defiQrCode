@@ -1,12 +1,14 @@
-const Mongoose = require('mongoose');
-require('dotenv').config();
+import Mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const mongoUri = process.env.MONGO_URI;
+dotenv.config();
+
+const mongoUri = process.env.MONGO_URI as string;
 const SUCCESS_MESSAGE = "Connected to database → OK";
 
 let isConnected = false;
 
-const connect = async () => {
+export const connect = async () => {
     try {
         if (isConnected) return SUCCESS_MESSAGE;
 
@@ -19,8 +21,4 @@ const connect = async () => {
         console.log('Error while trying to connect to database =>' + error);
         return null;
     }
-}
-
-module.exports = {
-    connect
 }

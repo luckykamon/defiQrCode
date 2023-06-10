@@ -1,9 +1,9 @@
-import {Request, Response} from 'express';
+import { Request, Response, Router } from 'express';
 
-const indexRouter = require('express').Router()
+const indexRouter: Router = Router();
 
 indexRouter.get('', async (req: Request, res: Response) => {
-    res.send("Api defiQrCode is running")
-})
+    res.send("Api defiQrCode is running");
+});
 
-module.exports = indexRouter;
+export default indexRouter;

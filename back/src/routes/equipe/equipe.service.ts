@@ -1,13 +1,16 @@
-const equipeFunction = require('../../mongoose/equipe.schema');
+// equipe.service.ts
 
-exports.getAll = async () => {
-    return await equipeFunction.getAll();
+import {Equipe} from './equipe.types';
+import * as equipeSchema from '../../mongoose/equipe.schema';
+
+export const getAll = async (): Promise<Array<Equipe>> => {
+    return await equipeSchema.getAll();
 }
 
-exports.getById = async (id: string) => {
-    return await equipeFunction.getById(id);
+export const getById = async (_id: string): Promise<Equipe | null> => {
+    return await equipeSchema.getById(_id);
 }
 
-exports.create = async (equipe: object) => {
-    return await equipeFunction.create(equipe);
+export const create = async (equipe: Equipe): Promise<Equipe> => {
+    return await equipeSchema.create(equipe);
 }
