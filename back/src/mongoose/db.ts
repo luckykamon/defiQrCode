@@ -37,7 +37,7 @@ const insertDefaultData = () => {
             isSolution: true
         },
         {
-            idQrCode: 'MFCJd5deG2LZ',
+            idQrCode: 'PLb8tfxH6Ngj',
             number: 3,
             indice: 'Mineur',
             date: null,
@@ -45,7 +45,7 @@ const insertDefaultData = () => {
             isSolution: true
         },
         {
-            idQrCode: 'MFCJd5deG2LZ',
+            idQrCode: '4HIQ7L8B1Ppx',
             number: 4,
             indice: 'Principe',
             date: null,
@@ -53,7 +53,7 @@ const insertDefaultData = () => {
             isSolution: true
         },
         {
-            idQrCode: 'MFCJd5deG2LZ',
+            idQrCode: 'DcB423kQ8MW2',
             number: 5,
             indice: 'Verbe',
             date: null,
@@ -61,7 +61,7 @@ const insertDefaultData = () => {
             isSolution: true
         },
         {
-            idQrCode: 'MFCJd5deG2LZ',
+            idQrCode: 'Z2pkN69lkPTC',
             number: 6,
             indice: 'Signature',
             date: null,

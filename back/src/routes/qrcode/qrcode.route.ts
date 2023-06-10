@@ -8,7 +8,9 @@ qrcodeRouter.get('/:equipeId', async (req: Request, res: Response) => {
 })
 
 qrcodeRouter.post('', async (req: Request, res: Response) => {
+    console.log(req.body.idQrCode)
     let qrcodeSoluce = await qrcodeService.getByIdQrCodeSolution(req.body.idQrCode);
+    console.log(qrcodeSoluce)
     if (qrcodeSoluce != null) {
         let qrcodeEquipe = await qrcodeService.getByIdQrCodeEquipe(req.body.idQrCode, req.body.equipeId);
         if (qrcodeEquipe != null) {

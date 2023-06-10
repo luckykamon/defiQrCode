@@ -2,20 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import QrCodeResult from "./Pages/QrCodeResult"
-import {
-    Etape0,
-    Etape1,
-    Etape2,
-    Etape3,
-    Etape4,
-    Etape5,
-    Etape6,
-    // Etape7,
-    // Etape8,
-    // Etape9,
-    // Etape10,
-    // Etape11
-} from "./Components/Etapes"
+import {Etape0, Etape1, Etape2, Etape3, Etape4, Etape5, Etape6,} from "./Components/Etapes"
 import About from "./Pages/About";
 import NavBar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
@@ -42,28 +29,15 @@ const Confidentialite = () => {
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<About/>}/>
-            <Route path="confidentialite" element={<Confidentialite/>}/>
-            <Route path="QrCodeResult" element={<QrCodeResult/>}/>
-            {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/}
-            <Route path="equipe" element={<Equipe/>}/>
-            <Route path="equipe/:id" element={<Equipe/>}/>
-            <Route path="etape_0" element={<Etape0/>}/>
-            <Route path="LYUpKr6Jwp5J" element={<Etape1/>}/>
-            <Route path="MFCJd5deG2LZ" element={<Etape2/>}/>
-            <Route path="PLb8tfxH6Ngj" element={<Etape3/>}/>
-            <Route path="4HIQ7L8B1Ppx" element={<Etape4/>}/>
-            <Route path="DcB423kQ8MW2" element={<Etape5/>}/>
-            <Route path="Z2pkN69lkPTC" element={<Etape6/>}/>
-            {/*<Route path="lB3JBiZ1Q8Pc" element={<Etape7/>}/>*/}
-            {/*<Route path="p8KDBcYKZq1d" element={<Etape8/>}/>*/}
-            {/*<Route path="Nl6z6sfAU4qW" element={<Etape9/>}/>*/}
-            {/*<Route path="Aztd2XY5Tx7C" element={<Etape10/>}/>*/}
-            {/*<Route path="6M0xLTp5fp9q" element={<Etape11/>}/>*/}
-            <Route path="*" element={<About/>}/>
-        </Routes>
-    </BrowserRouter>
+    <BrowserRouter> <Routes> <Route path="/" element={<About/>}/> <Route path="confidentialite"
+                                                                         element={<Confidentialite/>}/> <Route
+        path="QrCodeResult" element={<QrCodeResult/>}/> {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/} <Route
+        path="equipe" element={<Equipe/>}/> <Route path="equipe/:id" element={<Equipe/>}/> <Route path="etape_0"
+                                                                                                  element={<Etape0/>}/>
+        <Route path="LYUpKr6Jwp5J" element={<Etape1/>}/> <Route path="MFCJd5deG2LZ" element={<Etape2/>}/> <Route
+            path="PLb8tfxH6Ngj" element={<Etape3/>}/> <Route path="4HIQ7L8B1Ppx" element={<Etape4/>}/> <Route
+            path="DcB423kQ8MW2" element={<Etape5/>}/> <Route path="Z2pkN69lkPTC" element={
+            <Etape6/>}/> {/*<Route path="lB3JBiZ1Q8Pc" element={<Etape7/>}/>*/} {/*<Route path="p8KDBcYKZq1d" element={<Etape8/>}/>*/} {/*<Route path="Nl6z6sfAU4qW" element={<Etape9/>}/>*/} {/*<Route path="Aztd2XY5Tx7C" element={<Etape10/>}/>*/} {/*<Route path="6M0xLTp5fp9q" element={<Etape11/>}/>*/}
+        <Route path="*" element={<About/>}/> </Routes> </BrowserRouter>
 );
 

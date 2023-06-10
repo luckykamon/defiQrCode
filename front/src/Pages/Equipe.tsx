@@ -138,7 +138,9 @@ const Equipe = () => {
             })
             return (
                 <Layout>
-                    <h3 id={"messageGetEquipe"} style={{textAlign: "center", color: "white", marginTop: "40px"}}>"Chargement de votre équipe en cours..."</h3>
+                    <h3 id={"messageGetEquipe"}
+                        style={{textAlign: "center", color: "white", marginTop: "40px"}}>"Chargement de votre équipe en
+                        cours..."</h3>
                 </Layout>
             )
         }

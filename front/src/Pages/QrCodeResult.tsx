@@ -87,8 +87,7 @@ const TableResult: FC = () => {
                 <th style={{width: "25%"}}>Date</th>
             </tr>
             </thead>
-            <ResultScan/>
-            {/*<ResultScan key={refresh}/>*/}
+            <ResultScan key={refresh}/>
         </table>
     )
 }
@@ -277,13 +276,39 @@ const InputMot: FC = () => {
 
 
 const QrCodeResult: FC = () => {
+    // Synchronisation des cookies avec l'API de l'équipe
+    useEffect(() => {
+        let equipeId = getLocalStorage("equipeId");
+        if (getCookieConsentValue("cookieConsent") && equipeId !== null) {
+            fetch(process.env.REACT_APP_URL_BACK + "/api/qrcode/" + equipeId, {
+                method: 'GET',
+                redirect: 'follow'
+            })
+                .then(response => response.json())
+                .then(qrCodes => {
+                    qrCodes.forEach((qrCode) => {
+                        setLocalStorage("QrCode-" + qrCode.number, JSON.stringify({
+                            "mot": qrCode.indice,
+                            "url": window.location.origin + "/" + qrCode.idQrCode,
+                            "timestamp": Date.parse(qrCode.date)
+                        }))
+                    })
+                })
+                .catch(error => console.log('error', error));
+        }
+    }, [])
 
     return (
         <div>
             <NavBar page="/QrCodeResult"/>
-            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span> <u>et</u> trouver le <span style={{color: "#fe6928"}}>mot caché</span>.<br/><br/>Avancée: <FontAwesomeIcon
-                icon={faRotate} onClick={deleteLocalStorage} style={{cursor: "pointer"}}/></h3>
-            <TableResult/> <InputMot/> <TempsParcours/> <Footer/>
+            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir
+                votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span>&nbsp;
+                <u>et</u> trouver le <span
+                    style={{color: "#fe6928"}}>mot caché</span>.<br/><br/>Avancée: <FontAwesomeIcon icon={faRotate}
+                                                                                                    onClick={deleteLocalStorage}
+                                                                                                    style={{cursor: "pointer"}}/>
+            </h3>
+            <TableResult/><InputMot/><TempsParcours/><Footer/>
         </div>
     )
 }

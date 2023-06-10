@@ -3,6 +3,7 @@ require('dotenv').config();
 import express from 'express';
 // const rootRouter = require("./routes/router");
 import rootRouter from './routes/router';
+
 const cors = require('cors');
 
 const app = express();

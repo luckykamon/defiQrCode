@@ -8,7 +8,7 @@ export const getAll = async (equipeId: String): Promise<Array<QrCode>> => {
 }
 
 export const getByIdQrCodeSolution = async (idQrCode: string): Promise<QrCode | null> => {
-        await db.connect();
+    await db.connect();
     return qrcodeSchema.findOne({idQrCode: idQrCode, isSolution: true});
 }
 

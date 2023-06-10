@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import {Request, Response, Router} from 'express';
 import * as equipeService from './equipe.service';
 
 const equipeRouter: Router = Router();
