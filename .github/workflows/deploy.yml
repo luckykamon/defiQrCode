@@ -47,10 +47,10 @@ jobs:
           script: |
             cd ${{ env.REMOTE_PATH }}
             cd front
-            npm i
+            npm ci
             npm run build
             cd ..
             cd back
-            npm i --production
+            npm ci
             pm2 delete ${{ env.PM2_APP_NAME }}
             pm2 --name ${{ env.PM2_APP_NAME }} start npm -- start
