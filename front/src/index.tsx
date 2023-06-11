@@ -44,6 +44,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="4HIQ7L8B1Ppx" element={<Etape4/>}/>
             <Route path="DcB423kQ8MW2" element={<Etape5/>}/>
             <Route path="Z2pkN69lkPTC" element={<Etape6/>}/>
-        <Route path="*" element={<About/>}/> </Routes> </BrowserRouter>
+            <Route path="*" element={<About/>}/>
+        </Routes>
+    </BrowserRouter>
 );
-
