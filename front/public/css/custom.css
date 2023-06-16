@@ -1,3 +1,7 @@
 table tbody tr:nth-child(1) {
     border-bottom: 1px solid #838C95;
 }
+
+.isMyEquipe {
+    background-color: #fe6928;
+}

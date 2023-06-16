@@ -14,7 +14,7 @@ export function getLocalStorage(key: LocalStorageKey): string | null {
 
 // Créer une fonction qui supprime toutes les valeurs de localStorage
 export function deleteLocalStorage(): void {
-    if (window.confirm("Etes-vous sûre de vouloir réinitialiser votre progressions ?")) {
+    if (window.confirm("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Si vous faîtes parti d'une équipe, cela vous déconnectera de celle-ci et ne supprimera pas son avancement)")) {
         localStorage.clear();
         window.location.reload();
     }

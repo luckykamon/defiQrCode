@@ -4,6 +4,7 @@ import {getLocalStorage} from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
 import {useLocation} from 'react-router-dom';
 import {getCookieConsentValue} from "react-cookie-consent";
+import Classement from "../Components/Classement";
 
 const Layout = (props) => {
     return (
@@ -170,13 +171,12 @@ const Equipe = () => {
                     <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>
                         <p>Vous êtes l'équipe: {equipeName}</p>
                         <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
-                            faîtes-leurs scanner le QrCode:</p>
-                        <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
-                            <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}
-                                                                              style={{marginTop: "25px"}}/>
-                        </div>
-
-                    </h3>
+                            faîtes-leurs scanner le QrCode:</p></h3>
+                    <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
+                        <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}
+                                                                          style={{marginTop: "25px"}}/>
+                    </div>
+                    <Classement equipeId={equipeId}/>
                 </Layout>
             </div>
         )

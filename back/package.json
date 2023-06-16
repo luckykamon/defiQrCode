@@ -4,6 +4,7 @@
   "description": "API pour le defiQrCode",
   "main": "index.js",
   "scripts": {
+    "dev": "ts-node-dev src/index.ts",
     "start": "tsc && node dist/index.js"
   },
   "type": "commonjs",

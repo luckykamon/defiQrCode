@@ -1,4 +1,9 @@
 ### Start en dev
 ```bash
-ts-node-dev src/index.ts
+npm run dev
+```
+
+### Start en prod
+```bash
+npm start
 ```

@@ -7,6 +7,14 @@ const CollectionSchema = new Mongoose.Schema({
         name: {
             type: String,
             required: true
+        },
+        motTrouve: {
+            type: Boolean,
+            default: false
+        },
+        dateMot: {
+            type: Date,
+            default: null
         }
     }
 );
