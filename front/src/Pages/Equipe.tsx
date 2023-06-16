@@ -1,10 +1,12 @@
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
-import {getLocalStorage} from "../Functions/LocalStorage";
+import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
 import {useLocation} from 'react-router-dom';
 import {getCookieConsentValue} from "react-cookie-consent";
 import Classement from "../Components/Classement";
+import {faRotate} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Layout = (props) => {
     return (
@@ -169,7 +171,9 @@ const Equipe = () => {
             <div>
                 <Layout>
                     <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>
-                        <p>Vous êtes l'équipe: {equipeName}</p>
+                        <p>Vous êtes l'équipe: {equipeName} <FontAwesomeIcon icon={faRotate}
+                                                                             onClick={deleteLocalStorage}
+                                                                             style={{cursor: "pointer"}}/></p>
                         <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p></h3>
                     <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>

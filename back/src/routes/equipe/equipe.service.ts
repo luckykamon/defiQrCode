@@ -119,16 +119,11 @@ export const getClassement = async (_id: string): Promise<Array<{
 }
 
 export const mot = async (body: { equipeId: string, mot: string }): Promise<Boolean> => {
-    if (!Types.ObjectId.isValid(body.equipeId)) {
-        return false;
-    }
     await db.connect();
 
     let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === "accord";
 
-    if (motIsFound) {
-        console.log("mot trouvé")
-        console.log(body.equipeId)
+    if (motIsFound && Types.ObjectId.isValid(body.equipeId)) {
         await equipeSchema.updateOne({_id: body.equipeId}, {motTrouve: true, dateMot: new Date()});
     }
 

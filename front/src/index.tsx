@@ -7,10 +7,8 @@ import About from "./Pages/About";
 import NavBar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
 import Equipe from "./Pages/Equipe";
-// import QrCodeSoluce from "./Components/solution";
 
 const Confidentialite = () => {
-
     return (
         <div>
             <NavBar page=""/>
@@ -20,6 +18,7 @@ const Confidentialite = () => {
                     accès à l'url, le mot associé au QrCode et l'url du du QrCode.</p>
                 <p>Les données enregistrés dans localStorage ont pour unique but d'aider l'utilisateur dans son parcours
                     de course d'orientation.</p>
+                <p>Ce site enregistre l'avancée dans sa base de donnée afin de la synchroniser entre tout les utilisateurs d'une même équipe.</p>
                 <p>Pour toutes questions/remarques/autres vous pouvez me contacter par mail: <a
                     href="mailto:lucas.bodin.contacter@gmail.com">lucas.bodin.contacter@gmail.com</a></p>
             </div>
