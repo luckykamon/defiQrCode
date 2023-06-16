@@ -86,7 +86,7 @@ const ResultClassement: FC = () => {
             .catch((error) => {
                 console.log(error)
             })
-    }, [exempleDataClassement])
+    }, [])
 
     let nbEquipe = 0
 
