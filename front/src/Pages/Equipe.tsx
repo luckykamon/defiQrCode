@@ -43,6 +43,7 @@ const Equipe = () => {
             }
         }).then((data) => {
             if (data !== undefined) {
+                localStorage.clear()
                 localStorage.setItem("equipeId", data._id)
                 localStorage.setItem("equipeName", data.name)
                 let textQrCode = window.location.origin + "/equipe?id=" + data._id
@@ -172,7 +173,7 @@ const Equipe = () => {
                 <Layout>
                     <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>
                         <p>Vous êtes l'équipe: {equipeName} <FontAwesomeIcon icon={faRotate}
-                                                                             onClick={deleteLocalStorage}
+                                                                             onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Cela vous déconnectera de votre équipe et ne supprimera pas son avancement)")}
                                                                              style={{cursor: "pointer"}}/></p>
                         <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p></h3>
