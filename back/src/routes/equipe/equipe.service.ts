@@ -19,14 +19,15 @@ export const getById = async (_id: string): Promise<Equipe | null> => {
     return equipeSchema.findById(_id);
 }
 
-const calculScore = async (listQrCode: QrCode[]): Promise<number | null> => {
-    let nbQrCode = await qrcodeSchema.find({isSolution: true}).count();
+const calculScore = async (listQrCode: QrCode[], listEquipeMotTrouve: Equipe[]): Promise<number | null> => {
+    let nbQrCode = await qrcodeSchema.find({isSolution: true, number: {$ne: 0}}); // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
     let timeStampMin = null;
     let timeStampMax = null;
     let tempsParcoursTimeStamp = 0;
     let tempsMotTimeStamp = 0;
-    if (listQrCode.length === nbQrCode) {
-        let score = 0;
+    let equipeId = listQrCode[0]?.equipeId;
+    if (listQrCode.length === nbQrCode.length) { // Si l'équipe a trouvé tous les QrCodes
+        // let score = 0;
         for (let qrcode of listQrCode) {
             if (timeStampMin === null) {
                 timeStampMin = qrcode.date.getTime();
@@ -39,11 +40,19 @@ const calculScore = async (listQrCode: QrCode[]): Promise<number | null> => {
                 timeStampMax = qrcode.date.getTime();
             }
         }
-        if (timeStampMin !== null && timeStampMax !== null) {
-            tempsParcoursTimeStamp = timeStampMax - timeStampMin;
+        for (let equipe of listEquipeMotTrouve) {
+            if (equipe._id.toString() === equipeId) {
+                tempsMotTimeStamp = Math.abs((equipe.dateMot ? equipe.dateMot.getTime() : 0) - (timeStampMin ? timeStampMin : 0));
+                break;
+            }
         }
-        tempsMotTimeStamp = 0; //TODO: calculer le temps pour trouver le mot
-        return Math.round((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))));
+        if (tempsMotTimeStamp !== 0) { // Si l'équipe a trouvé le mot
+            if (timeStampMin !== null && timeStampMax !== null) {
+                tempsParcoursTimeStamp = timeStampMax - timeStampMin;
+            }
+            console.log(tempsParcoursTimeStamp, tempsMotTimeStamp)
+            return Math.round((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))));
+        }
     }
     return null
 }
@@ -61,8 +70,8 @@ export const getClassement = async (_id: string): Promise<Array<{
 
     await db.connect();
 
-    let listQrcode: Array<QrCode> = await qrcodeSchema.find({isSolution: false})
-    let listEquipe: Array<Equipe> = await equipeSchema.find({motTrouve: true});
+    let listQrcode: Array<QrCode> = await qrcodeSchema.find({isSolution: false, number: {$ne: 0}}) // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
+    let listEquipeMotTrouve: Array<Equipe> = await equipeSchema.find({motTrouve: true});
     // Créer un objet pour grouper les données par equipeId
     let grouped: { [key: string]: QrCode[] } = {};
 
@@ -80,21 +89,50 @@ export const getClassement = async (_id: string): Promise<Array<{
         id += 1;
         let nbQrCode = grouped[equipeId].length;
         let nameEquipe = (await equipeSchema.findById(equipeId))?.name;
-        let score = await calculScore(grouped[equipeId]);
+        let score = await calculScore(grouped[equipeId], listEquipeMotTrouve);
         let motTrouve = false;
-        for (let equipe of listEquipe) {
-            if (equipe._id === equipeId) {
+        for (let equipe of listEquipeMotTrouve) {
+            if (equipe._id.toString() === equipeId) {
                 motTrouve = true;
             }
         }
         if (equipeId === _id) {
-            result.push({nameEquipe: nameEquipe, nbQrCode: nbQrCode, score: score, isMyEquipe: true, motTrouve: motTrouve})
+            result.push({
+                nameEquipe: nameEquipe,
+                nbQrCode: nbQrCode,
+                score: score,
+                isMyEquipe: true,
+                motTrouve: motTrouve
+            })
         } else {
-            result.push({nameEquipe: nameEquipe, nbQrCode: nbQrCode, score: score, isMyEquipe: false, motTrouve: motTrouve})
+            result.push({
+                nameEquipe: nameEquipe,
+                nbQrCode: nbQrCode,
+                score: score,
+                isMyEquipe: false,
+                motTrouve: motTrouve
+            })
         }
     }
 
     return result
+}
+
+export const mot = async (body: { equipeId: string, mot: string }): Promise<Boolean> => {
+    if (!Types.ObjectId.isValid(body.equipeId)) {
+        return false;
+    }
+    await db.connect();
+
+    let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === "accord";
+
+    if (motIsFound) {
+        console.log("mot trouvé")
+        console.log(body.equipeId)
+        await equipeSchema.updateOne({_id: body.equipeId}, {motTrouve: true, dateMot: new Date()});
+    }
+
+    return motIsFound;
 }
 
 export const create = async (equipe: Equipe): Promise<Equipe> => {

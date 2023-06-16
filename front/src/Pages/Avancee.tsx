@@ -123,12 +123,12 @@ function afficherDuree(ms: number) {
     return (dureeString);
 }
 
-function afficherScore(tempsParcoursTimeStamp: number, tempsMotTimeStamp: number) {
-    if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
-        return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
-    }
-    return parseInt((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))).toString()) + " points";
-}
+// function afficherScore(tempsParcoursTimeStamp: number, tempsMotTimeStamp: number) {
+//     if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
+//         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
+//     }
+//     return parseInt((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))).toString()) + " points";
+// }
 
 const TempsParcours: FC = () => {
     const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
@@ -201,13 +201,12 @@ const TempsParcours: FC = () => {
 
     let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
     let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
-    let score = afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp);
+    // let score = afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp);
 
     return (
         <>
             <h3 style={{textAlign: "center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
             <h3 style={{textAlign: "center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
-            <h3 style={{textAlign: "center", color: "white"}}>Score: {score}</h3>
         </>
     )
 }
@@ -226,17 +225,40 @@ const InputMot: FC = () => {
 
     const checkMot = () => {
         let mot = (document.getElementById("mot") as HTMLInputElement).value;
-        if (mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === "accord") {
-            setConfetti(true);
-            setMauvaiseReponse(false);
-            setLocalStorage("temps-mot", Date.now().toString());
-        } else {
-            setMauvaiseReponse(true);
-            setConfetti(false);
-            setTimeout(() => {
-                setMauvaiseReponse(false);
-            }, 500);
-        }
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            "equipeId": getLocalStorage("equipeId"),
+            "mot": mot
+        });
+
+        fetch(process.env.REACT_APP_URL_BACK + "/api/equipe/mot", {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result) {
+                    setConfetti(true);
+                    setMauvaiseReponse(false);
+                    if (getLocalStorage("temps-mot") === null) {
+                        setLocalStorage("temps-mot", Date.now().toString());
+                    }
+                } else {
+                    setMauvaiseReponse(true);
+                    setConfetti(false);
+                    setTimeout(() => {
+                        setMauvaiseReponse(false);
+                    }, 500);
+                }
+            })
+            .catch(error => console.log('error', error));
+
+
     }
 
     const handleKeyDown = (event) => {

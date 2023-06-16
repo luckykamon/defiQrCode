@@ -15,6 +15,10 @@ equipeRouter.get('/classement/:_id', async (req: Request, res: Response) => {
     res.send(await equipeService.getClassement(req.params._id));
 });
 
+equipeRouter.post('/mot', async (req: Request, res: Response) => {
+    res.send(await equipeService.mot(req.body));
+});
+
 equipeRouter.post('', async (req: Request, res: Response) => {
     res.send(await equipeService.create(req.body));
 });
