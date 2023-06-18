@@ -2,7 +2,7 @@ import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
-import {useParams} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {getCookieConsentValue} from "react-cookie-consent";
 import Classement from "../Components/Classement";
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +17,9 @@ const Layout = (props) => {
 }
 
 const Equipe = () => {
-    const {id} = useParams();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get("id");
     const createEquipe = () => {
         const equipeName = document.getElementById("equipeName") as HTMLInputElement
         const equipeNameValue = equipeName.value
@@ -44,7 +46,7 @@ const Equipe = () => {
                 localStorage.clear()
                 localStorage.setItem("equipeId", data._id)
                 localStorage.setItem("equipeName", data.name)
-                let textQrCode = window.location.origin + "/equipe/" + data._id
+                let textQrCode = window.location.origin + "/equipe?id=" + data._id
                 localStorage.setItem("equipeURL", textQrCode)
                 window.location.reload()
             } else {
@@ -113,7 +115,7 @@ const Equipe = () => {
     let equipeName = getLocalStorage("equipeName")
     let equipeURL = localStorage.getItem("equipeURL")
     if (equipeId === null || equipeName === null || equipeURL === null) {
-        if (id !== undefined) {
+        if (id !== null) {
             const messageErreurGetEquipe = "<div>Une erreur est survenue lors de la récupération de votre équipe. Assurez-vous d'être sur la bonne url. Sinon je vous invite à créer une nouvelle équipe en cliquant sur l'onglet  <a href=\"/equipe\">ÉQUIPE</a>.</div>"
             fetch(process.env.REACT_APP_URL_BACK + "/api/equipe/" + id, {
                 method: "GET",
