@@ -45,6 +45,7 @@ jobs:
           ls
           wget http://localhost:4010
           ls
+          cat index.html
           
   
 
