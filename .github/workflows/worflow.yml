@@ -43,8 +43,7 @@ jobs:
           cd ..
           sleep 15
           ls
-          wget http://localhost:4010
-          ls
+          wget localhost:4011
           cat index.html
           
   
