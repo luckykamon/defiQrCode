@@ -40,6 +40,12 @@ jobs:
           cp .env.ci .env
           npm ci
           npm run start &
+          cd ..
+          sleep 15
+          ls
+          wget http://localhost:4010
+          ls
+          
   
 
   deploy:
