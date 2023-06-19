@@ -5,7 +5,6 @@ import {qrcodeSchema} from "../routes/qrcode/qrcode.schema";
 dotenv.config();
 
 const mongoUri = process.env.MONGO_URI as string;
-const SUCCESS_MESSAGE = "Connected to database → OK";
 
 let isConnected = false;
 
@@ -89,17 +88,17 @@ const insertDefaultData = () => {
 
 export const connect = async () => {
     try {
-        if (isConnected) return SUCCESS_MESSAGE;
+        if (isConnected) return true;
 
         console.log('Trying to connect to database...');
         await Mongoose.connect(mongoUri);
-        console.log(SUCCESS_MESSAGE)
+        console.log("Connected to database → OK")
 
         isConnected = true;
         insertDefaultData();
-        return SUCCESS_MESSAGE;
+        return true;
     } catch (error) {
         console.log('Error while trying to connect to database => ' + error);
-        return null;
+        return false;
     }
 }
