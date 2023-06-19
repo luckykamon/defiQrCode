@@ -7,9 +7,9 @@ indexRouter.get('', async (req: Request, res: Response) => {
     db.connect()
         .then((statusDB) => {
             if (statusDB) {
-                res.status(503).send("Api defiQrCode is running and database is connected");
+                res.status(200).send("Api defiQrCode is running and database is connected");
             } else {
-                res.status(200).send("Api defiQrCode is running but database is not connected");
+                res.status(503).send("Api defiQrCode is running but database is not connected");
             }
         })
 });
