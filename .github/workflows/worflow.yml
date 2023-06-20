@@ -34,17 +34,25 @@ jobs:
           cd front
           cp .env.ci .env
           npm ci
-          npm run start &
-          cd ..
-          cd back
+          cd ../back
           cp .env.ci .env
           npm ci
+          cd ..
+
+      - name: Run back and front
+        run: |
+          cd front
+          npm run start &
+          cd ../back
           npm run start &
           cd ..
-          sleep 15
-          ls
-          wget localhost:4011
-          cat index.html
+
+      - name: Cypress run
+        run: |
+          cd front
+          npm run cypress:run
+          cd ..
+          
           
   
 

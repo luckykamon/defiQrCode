@@ -50,7 +50,6 @@ const calculScore = async (listQrCode: QrCode[], listEquipeMotTrouve: Equipe[]):
             if (timeStampMin !== null && timeStampMax !== null) {
                 tempsParcoursTimeStamp = timeStampMax - timeStampMin;
             }
-            console.log(tempsParcoursTimeStamp, tempsMotTimeStamp)
             return Math.round((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))));
         }
     }

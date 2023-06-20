@@ -18,14 +18,14 @@ const getClassement = () => {
 }
 
 const ResultClassement: FC = () => {
-    const exempleDataClassement = [
+    const exempleDataClassement = useState([
         {
             "nameEquipe": "Exemple nom equipe",
             "nbQrCode": 2,
             "score": null,
             "isMyEquipe": false,
             "motTrouve": false
-        }]
+        }])[0]
 
     const [dataClassement, setDataClassement] = useState(exempleDataClassement);
 
@@ -86,7 +86,7 @@ const ResultClassement: FC = () => {
             .catch((error) => {
                 console.log(error)
             })
-    }, [])
+    }, [exempleDataClassement])
 
     let nbEquipe = 0
 
