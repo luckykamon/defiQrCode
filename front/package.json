@@ -19,7 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "cypress:run": "cypress run --spec cypress/e2e/front/front.cy.js"
   },
   "eslintConfig": {
     "extends": [

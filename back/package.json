@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "start": "tsc && node dist/index.js",
-    "cypress:run": "cypress run --spec cypress/e2e/front/front.cy.js"
+    "start": "tsc && node dist/index.js"
   },
   "type": "commonjs",
   "author": "Lucas Bodin",
