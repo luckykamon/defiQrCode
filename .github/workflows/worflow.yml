@@ -52,7 +52,7 @@ jobs:
       - name: Cypress run
         run: |
           cd front
-          cypress run --env FRONT_URL=localhost:$PORT
+          node_modules/cypress/bin/cypress run --env FRONT_URL=localhost:$PORT
           cd ..
   
 
@@ -132,5 +132,5 @@ jobs:
       - name: Cypress run
         run: |
           cd front
-          cypress run --spec cypress/e2e/front/access_front_page.cy.js --env FRONT_URL=$FRONT_URL
+          node_modules/cypress/bin/cypress run --spec cypress/e2e/front/access_front_page.cy.js --env FRONT_URL=$FRONT_URL
           cd ..
