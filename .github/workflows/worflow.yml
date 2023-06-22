@@ -35,6 +35,9 @@ jobs:
         run: |
           cd front
           cp .env.ci .env
+          set -a # permet d'exporter automatiquement toutes les variables définies ou modifiées par la suite
+          source .env
+          set +a # désactive l'exportation automatique
           npm ci
           cd ../back
           cp .env.ci .env
