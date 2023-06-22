@@ -4,13 +4,13 @@ import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 
-interface EtapeProps {
+interface AffichageEtapeProps {
     nbQrCode: number,
     mot: string,
     children?: ReactNode
 }
 
-const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
+const AffichageEtape: FC<AffichageEtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
     if (getCookieConsentValue("cookieConsent") && getLocalStorage("QrCode-" + nbQrCode) === null) {
         // Sauvegarde du QrCode scanné dans le localStorage
         setLocalStorage("QrCode-" + nbQrCode, JSON.stringify({
@@ -49,7 +49,7 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
                 marginTop: "40px",
                 marginBottom: "20px",
             }}><p>Bravo ! Vous avez scanné le QrCode <span style={{color: "#fe6928"}}>{nbQrCode}</span>. L&apos;indice <span
-                style={{color: "#fe6928"}}>{mot}</span> dans l&apos;onglet <a href="/avancee">AVANCÉE</a> vous aidera à
+                style={{color: "#fe6928"}}>{mot}</span> dans l&apos;onglet <a href="/front/src/Pages/Avancee">AVANCÉE</a> vous aidera à
                 découvrir le mot cachée.</p>
                 <p style={{marginTop: "6px"}}>Les images ci-dessous indiquent où se trouve le prochain QrCode:</p>
             </h4>
@@ -58,4 +58,4 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
     )
 }
 
-export default Etape
+export default AffichageEtape

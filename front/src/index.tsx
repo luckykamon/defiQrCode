@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Avancee from "./Pages/Avancee"
-import {Etape0, Etape1, Etape2, Etape3, Etape4, Etape5, Etape6,} from "./Components/Etapes"
+import Etapes from "./Pages/Etapes"
 import About from "./Pages/About";
 import NavBar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
@@ -36,14 +36,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/}
             <Route path="equipe" element={<Equipe/>}/>
             <Route path="equipe/:id" element={<Equipe/>}/>
-            <Route path="etape_0" element={<Etape0/>}/>
-            <Route path="LYUpKr6Jwp5J" element={<Etape1/>}/>
-            <Route path="MFCJd5deG2LZ" element={<Etape2/>}/>
-            <Route path="PLb8tfxH6Ngj" element={<Etape3/>}/>
-            <Route path="4HIQ7L8B1Ppx" element={<Etape4/>}/>
-            <Route path="DcB423kQ8MW2" element={<Etape5/>}/>
-            <Route path="Z2pkN69lkPTC" element={<Etape6/>}/>
-            <Route path="*" element={<About/>}/>
+            <Route path=":idQrCode" element={<Etapes/>}/>
         </Routes>
     </BrowserRouter>
 );
