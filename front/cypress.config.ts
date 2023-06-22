@@ -1,11 +1,9 @@
 import {defineConfig} from "cypress";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export default defineConfig({
-    e2e: {
-        setupNodeEvents(on, config) {
-            // implement node event listeners here
-        },
-    },
+    e2e: {},
 
     component: {
         devServer: {
@@ -14,5 +12,9 @@ export default defineConfig({
         },
     },
     video: false,
-    screenshotOnRunFailure: false
+    screenshotOnRunFailure: false,
+    env: {
+        PORT: process.env.PORT,
+        REACT_APP_URL_BACK: process.env.REACT_APP_URL_BACK
+    },
 });

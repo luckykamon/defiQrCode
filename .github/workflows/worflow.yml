@@ -9,9 +9,11 @@ on:
 
 env:
   REMOTE_PATH: ''
+  PM2_APP_NAME: ''
+  FRONT_URL: ''
 
 jobs:
-  tests:
+  tests-local:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -50,14 +52,13 @@ jobs:
       - name: Cypress run
         run: |
           cd front
-          npm run cypress:run
+          cypress run --env FRONT_URL=localhost:$PORT
           cd ..
-          
-          
   
 
   deploy:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [ tests-local ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -99,3 +100,37 @@ jobs:
             npm ci
             pm2 delete ${{ env.PM2_APP_NAME }}
             pm2 --name ${{ env.PM2_APP_NAME }} start npm -- start
+
+  tests-deploy:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [ tests-local, deploy ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set remote_path based on branch
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "FRONT_URL=https://courir-a-plusieurs.site" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "FRONT_URL=https://defiqrcodedev.lucasbodin.com" >> $GITHUB_ENV
+          fi
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.15.0'
+
+      - name: Install dependencies
+        run: |
+          cd front
+          cp .env.ci .env
+          npm ci
+          cd ..
+
+      - name: Cypress run
+        run: |
+          cd front
+          cypress run --spec cypress/e2e/front/access_front_page.cy.js --env FRONT_URL=$FRONT_URL
+          cd ..
