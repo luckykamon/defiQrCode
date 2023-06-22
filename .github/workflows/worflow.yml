@@ -1,11 +1,6 @@
 name: Deploy Node.js app to server
 
-on:
-  push:
-    branches:
-      - main
-      - dev
-      - cypress
+on: [push]
 
 env:
   REMOTE_PATH: ''
