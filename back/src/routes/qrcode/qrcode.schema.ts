@@ -30,6 +30,20 @@ const CollectionSchema = new Mongoose.Schema({
             type: Boolean,
             required: false,
             default: false
+        },
+        listImage: {
+            type: [{
+                path: {
+                    type: String,
+                    required: true
+                },
+                alt: {
+                    type: String,
+                    required: true
+                }
+            }],
+            required: false,
+            default: []
         }
     }
 );

@@ -3,6 +3,15 @@ import * as qrcodeService from './qrcode.service';
 
 const qrcodeRouter: Router = Router();
 
+qrcodeRouter.get('/getInfo/:idQrCode', async (req: Request, res: Response) => {
+    const result = await qrcodeService.get(req.params.idQrCode);
+    if (result === null) {
+        res.status(400).send(null);
+    } else {
+        res.status(200).send(result);
+    }
+})
+
 qrcodeRouter.get('/:equipeId', async (req: Request, res: Response) => {
     res.status(200).send(await qrcodeService.getAll(req.params.equipeId));
 })
