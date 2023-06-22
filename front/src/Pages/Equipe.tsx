@@ -44,7 +44,7 @@ const Equipe = () => {
                 localStorage.clear()
                 localStorage.setItem("equipeId", data._id)
                 localStorage.setItem("equipeName", data.name)
-                let textQrCode = window.location.origin + "/equipe/" + data._id
+                const textQrCode = window.location.origin + "/equipe/" + data._id
                 localStorage.setItem("equipeURL", textQrCode)
                 window.location.reload()
             } else {
@@ -103,15 +103,15 @@ const Equipe = () => {
         return (
             <Layout>
                 <div style={{textAlign: "center", marginTop: "30px"}}>
-                    <p>Le site sauvegarde les données d'Équipes dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
+                    <p>Le site sauvegarde les données d&apos;Équipes dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
                 </div>
             </Layout>
         )
     }
 
-    let equipeId = getLocalStorage("equipeId")
-    let equipeName = getLocalStorage("equipeName")
-    let equipeURL = localStorage.getItem("equipeURL")
+    const equipeId = getLocalStorage("equipeId")
+    const equipeName = getLocalStorage("equipeName")
+    const equipeURL = localStorage.getItem("equipeURL")
     if (equipeId === null || equipeName === null || equipeURL === null) {
         if (id !== undefined) {
             const messageErreurGetEquipe = "<div>Une erreur est survenue lors de la récupération de votre équipe. Assurez-vous d'être sur la bonne url. Sinon je vous invite à créer une nouvelle équipe en cliquant sur l'onglet  <a href=\"/equipe\">ÉQUIPE</a>.</div>"
@@ -130,7 +130,7 @@ const Equipe = () => {
                 if (data !== undefined) {
                     localStorage.setItem("equipeId", data._id)
                     localStorage.setItem("equipeName", data.name)
-                    let textQrCode = window.location.origin + "/equipe/" + data._id
+                    const textQrCode = window.location.origin + "/equipe/" + data._id
                     localStorage.setItem("equipeURL", textQrCode)
                     window.location.href = "/equipe"
                 } else {
@@ -143,15 +143,15 @@ const Equipe = () => {
             return (
                 <Layout>
                     <h3 id={"messageGetEquipe"}
-                        style={{textAlign: "center", color: "white", marginTop: "40px"}}>"Chargement de votre équipe en
-                        cours..."</h3>
+                        style={{textAlign: "center", color: "white", marginTop: "40px"}}>Chargement de votre équipe en
+                        cours...</h3>
                 </Layout>
             )
         }
         return (
             <Layout>
-                <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}><p>Scannez votre numéro d'équipe ou
-                    cliquez sur votre lien d'équipe pour en rejoindre une.</p>
+                <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}><p>Scannez votre numéro d&apos;équipe ou
+                    cliquez sur votre lien d&apos;équipe pour en rejoindre une.</p>
                     <p style={{marginTop: "6px"}}>Ou créez votre équipe ci-dessous:</p>
                 </h3>
                 <div style={{textAlign: "center", margin: "auto"}}>
@@ -170,10 +170,10 @@ const Equipe = () => {
             <div>
                 <Layout>
                     <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>
-                        <p>Vous êtes l'équipe: {equipeName} <FontAwesomeIcon icon={faRotate}
+                        <p>Vous êtes l&apos;équipe: {equipeName} <FontAwesomeIcon icon={faRotate}
                                                                              onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Cela vous déconnectera de votre équipe et ne supprimera pas son avancement)")}
                                                                              style={{cursor: "pointer"}}/></p>
-                        <p>Envoyez l'url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
+                        <p>Envoyez l&apos;url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p></h3>
                     <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
                         <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}

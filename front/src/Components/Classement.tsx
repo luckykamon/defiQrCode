@@ -32,7 +32,7 @@ const ResultClassement: FC = () => {
     useEffect(() => {
         getClassement()
             .then((result: Array<object>) => {
-                let newDataClassement = [...exempleDataClassement]; // Crée une copie du tableau original
+                const newDataClassement = [...exempleDataClassement]; // Crée une copie du tableau original
 
                 result.sort((a: {
                     nameEquipe: string,

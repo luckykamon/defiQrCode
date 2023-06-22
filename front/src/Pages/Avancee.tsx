@@ -2,7 +2,7 @@ import React, {FC, ReactNode, useEffect, useState} from 'react';
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
-import PropTypes from "prop-types";
+import PropTypes, {number, string} from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
@@ -27,18 +27,18 @@ BaliseAIfHref.propTypes =
     }
 
 const ResultScan: FC = () => {
-    let resultScanTab: Array<any> = []
+    const resultScanTab: Array<{ nbQrCode: number, mot: string, url: string, timestamp: string }> = []
 
     for (let i = 0; i <= 6; i++) {
-        let localStorage = getLocalStorage("QrCode-" + i)
-        let resultScanJson: { [k: string]: any } = {}
+        const localStorage = getLocalStorage("QrCode-" + i)
+        const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {nbQrCode: number, mot: string, url: string, timestamp: string}
         resultScanJson["nbQrCode"] = i
         if (localStorage === null) {
             resultScanJson["mot"] = ""
             resultScanJson["url"] = ""
             resultScanJson["timestamp"] = ""
         } else {
-            let parseLocalStorage = JSON.parse(localStorage)
+            const parseLocalStorage = JSON.parse(localStorage)
             resultScanJson["mot"] = parseLocalStorage["mot"]
             resultScanJson["url"] = parseLocalStorage["url"]
             resultScanJson["timestamp"] = (new Date(parseInt(parseLocalStorage["timestamp"]))).toLocaleString()
@@ -145,9 +145,9 @@ const TempsParcours: FC = () => {
             let allFound = true;
 
             for (let i = 1; i <= 6; i++) {
-                let localStorage = getLocalStorage("QrCode-" + i)
+                const localStorage = getLocalStorage("QrCode-" + i)
                 if (localStorage !== null) {
-                    let parseLocalStorage = JSON.parse(localStorage);
+                    const parseLocalStorage = JSON.parse(localStorage);
                     if (timestampMin === null) {
                         timestampMin = parseInt(parseLocalStorage["timestamp"]);
                     } else if (timestampMin > parseInt(parseLocalStorage["timestamp"])) {
@@ -164,7 +164,7 @@ const TempsParcours: FC = () => {
                 }
             }
 
-            let localStorageMot = getLocalStorage("temps-mot");
+            const localStorageMot = getLocalStorage("temps-mot");
             if (localStorageMot !== null) {
                 setMotTrouve(true);
                 setTempsMotTimeStamp(parseInt(localStorageMot) - (timestampMin ? timestampMin : 0));
@@ -199,8 +199,8 @@ const TempsParcours: FC = () => {
         };
     }, [allQrCodeFind, motTrouve]);
 
-    let tempsMotHuman = afficherDuree(tempsMotTimeStamp);
-    let tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
+    const tempsMotHuman = afficherDuree(tempsMotTimeStamp);
+    const tempsParcoursHuman = afficherDuree(tempsParcoursTimeStamp);
     // let score = afficherScore(tempsParcoursTimeStamp, tempsMotTimeStamp);
 
     return (
@@ -224,12 +224,12 @@ const InputMot: FC = () => {
     );
 
     const checkMot = () => {
-        let mot = (document.getElementById("mot") as HTMLInputElement).value;
+        const mot = (document.getElementById("mot") as HTMLInputElement).value;
 
-        var myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({
+        const raw = JSON.stringify({
             "equipeId": getLocalStorage("equipeId"),
             "mot": mot
         });
@@ -271,7 +271,7 @@ const InputMot: FC = () => {
 
     let defiQrCodeBegin = false;
     for (let i = 1; i <= 6; i++) {
-        let localStorage = getLocalStorage("QrCode-" + i);
+        const localStorage = getLocalStorage("QrCode-" + i);
         if (localStorage !== null) {
             defiQrCodeBegin = true;
         }
@@ -300,7 +300,7 @@ const InputMot: FC = () => {
 const Avancee: FC = () => {
     // Synchronisation des cookies avec l'API de l'équipe
     useEffect(() => {
-        let equipeId = getLocalStorage("equipeId");
+        const equipeId = getLocalStorage("equipeId");
         if (getCookieConsentValue("cookieConsent") && equipeId !== null) {
             fetch(process.env.REACT_APP_URL_BACK + "/api/qrcode/" + equipeId, {
                 method: 'GET',

@@ -21,7 +21,7 @@ interface AttenteImageProps {
 const AttenteImage: FC<AttenteImageProps> = ({alt}) => {
     return (
         <div>
-            <h4 style={{textAlign: "center", color: "white", marginTop: "40px"}}>L'image arrive bientôt 😉, voici un
+            <h4 style={{textAlign: "center", color: "white", marginTop: "40px"}}>L&apos;image arrive bientôt 😉, voici un
                 petit indice en attendant:</h4>
             <p style={{textAlign: "center", fontWeight: "bold", fontSize: "18px"}}>{alt}</p>
         </div>
@@ -55,10 +55,10 @@ const Image: FC<ImageProps> = ({src, alt}) => {
                 setFileExist(false)
             }
         })
-        .catch((error) => {
+        .catch(() => {
             setFileExist(false)
         })
-    let src_original = src.split(".")[0] + "_original." + src.split(".")[1];
+    const src_original = src.split(".")[0] + "_original." + src.split(".")[1];
     return (
         <div>
             {fileExist && (

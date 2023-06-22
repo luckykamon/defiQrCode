@@ -7,7 +7,6 @@ import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 interface EtapeProps {
     nbQrCode: number,
     mot: string,
-    hideFooter?: any,
     children?: ReactNode
 }
 
@@ -20,13 +19,13 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
             "timestamp": Date.now()
         }));
         // Envoie du QrCode scanné à l'API afin de le synchroniser avec l'équipe
-        let equipeId = getLocalStorage("equipeId");
-        let idQrCode = window.location.pathname.split("/")[1];
+        const equipeId = getLocalStorage("equipeId");
+        const idQrCode = window.location.pathname.split("/")[1];
         if (equipeId !== null && idQrCode !== null) {
-            let myHeaders = new Headers();
+            const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
-            let raw = JSON.stringify({
+            const raw = JSON.stringify({
                 "idQrCode": idQrCode,
                 "equipeId": equipeId
             });
@@ -49,8 +48,8 @@ const Etape: FC<EtapeProps> = ({nbQrCode = 0, mot = "Exemple", children}) => {
                 color: "white",
                 marginTop: "40px",
                 marginBottom: "20px",
-            }}><p>Bravo ! Vous avez scanné le QrCode <span style={{color: "#fe6928"}}>{nbQrCode}</span>. L'indice <span
-                style={{color: "#fe6928"}}>{mot}</span> dans l'onglet <a href="/avancee">AVANCÉE</a> vous aidera à
+            }}><p>Bravo ! Vous avez scanné le QrCode <span style={{color: "#fe6928"}}>{nbQrCode}</span>. L&apos;indice <span
+                style={{color: "#fe6928"}}>{mot}</span> dans l&apos;onglet <a href="/avancee">AVANCÉE</a> vous aidera à
                 découvrir le mot cachée.</p>
                 <p style={{marginTop: "6px"}}>Les images ci-dessous indiquent où se trouve le prochain QrCode:</p>
             </h4>
