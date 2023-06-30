@@ -5,4 +5,8 @@ export interface QrCode {
     date: Date; // La date à laquelle le QrCode a été scanné, null si il s'agit d'un QrCode de solution
     equipeId: string; // L'id de l'équipe qui a scanné le QrCode, null si il s'agit d'un QrCode de solution
     isSolution: boolean; // Si le QrCode est une solution ou non
+    listImage?: Array<{
+        path: string; // Le chemin vers l'image du QrCode
+        alt: string; // La description de l'image du QrCode
+    }>; // La liste des images du QrCode
 }

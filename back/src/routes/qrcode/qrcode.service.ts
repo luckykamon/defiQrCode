@@ -23,6 +23,7 @@ export const getByIdQrCodeEquipe = async (idQrCode: string, equipeId: string): P
 }
 
 export const create = async (qrcode: QrCode): Promise<QrCode> => {
+    console.log(qrcode)
     await db.connect();
     return await qrcodeSchema.create(qrcode);
 }

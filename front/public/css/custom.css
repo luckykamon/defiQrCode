@@ -5,3 +5,32 @@ table tbody tr:nth-child(1) {
 .isMyEquipe {
     background-color: #fe6928;
 }
+
+input[type="text"],
+input:not([type]) {
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    text-align: center;
+}
+
+input::placeholder {
+    text-align: center;
+}
+
+button {
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
+.center-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea:focus {
+    color: black;
+}

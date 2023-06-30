@@ -10,7 +10,7 @@ const Footer: FC = () => {
                             background: 'linear-gradient(to right, #fe6928, white, #fe6928)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
-                        }}>Copyright &copy; 2022 - 2023 &bull; Lucas Bodin &bull; <a href="/confidentialite">Politique
+                        }}>Copyright &copy; 2022 - 2023 &bull; <a href="https://www.linkedin.com/in/lucasbodin" target="_blank" rel="noreferrer">Lucas Bodin</a> &bull; <a href="/confidentialite">Politique
                             de confidentialité</a></li>
                     </ul>
                 </div>

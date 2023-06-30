@@ -21,6 +21,11 @@ const CollectionSchema = new Mongoose.Schema({
             required: false,
             default: null
         },
+        defiId: {
+            type: String,
+            required: false,
+            default: null
+        },
         equipeId: {
             type: String,
             required: false,

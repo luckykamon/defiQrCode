@@ -31,7 +31,12 @@ const ResultScan: FC = () => {
 
     for (let i = 0; i <= 6; i++) {
         const localStorage = getLocalStorage("QrCode-" + i)
-        const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {nbQrCode: number, mot: string, url: string, timestamp: string}
+        const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {
+            nbQrCode: number,
+            mot: string,
+            url: string,
+            timestamp: string
+        }
         resultScanJson["nbQrCode"] = i
         if (localStorage === null) {
             resultScanJson["mot"] = ""
@@ -283,8 +288,7 @@ const InputMot: FC = () => {
     return (
         <div className={mauvaiseReponse ? "shake" : ""}
              style={{display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap"}}>
-            <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici"
-                   style={{height: "40px", borderRadius: "10px"}} onKeyDown={handleKeyDown}/>
+            <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici" onKeyDown={handleKeyDown}/>
             <div style={{width: "100vw"}}></div>
             <div style={mauvaiseReponse || confetti ? {display: "none"} : {}}>
                 <button type="button" onClick={checkMot}

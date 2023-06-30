@@ -18,7 +18,7 @@ const About: FC = () => {
                              alt="Lucas Bodin Profile Pic"/>
                     </div>
                     <div className="nine columns main-col" style={{textAlign: "justify"}}>
-                        <h2>Le défi QrCode</h2>
+                        <h2 style={{textAlign: "center"}}>Le défi QrCode</h2>
 
                         <p>Le défi QrCode est une course d&apos;orientation se situant dans le parc des Gayeulles à
                             Rennes.</p>
@@ -36,7 +36,7 @@ const About: FC = () => {
                         <div className="row">
                             <div className="columns download" style={{width: "100%", textAlign: "center"}}>
                                 <span className="button" onClick={openGpxDownload} style={{margin: "20px"}}>
-                                    Télécharger le GPX
+                                    Télécharger le fichier lié au parcours
                                 </span>
                             </div>
                         </div>

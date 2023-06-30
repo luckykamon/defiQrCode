@@ -58,7 +58,11 @@ const Etapes: FC = () => {
     return (
         <AffichageEtape nbQrCode={qrCode.number} mot={qrCode.indice} hideFooter>
             {qrCode.listImage.map((imageInfo) => {
-                return <Image key={imageInfo.path} src={process.env.REACT_APP_URL_BACK + imageInfo.path}
+                let urlImage = process.env.REACT_APP_URL_BACK + imageInfo.path
+                if (imageInfo.path.startsWith("http")) {
+                    urlImage = imageInfo.path
+                }
+                return <Image key={imageInfo.path} src={urlImage}
                               alt={imageInfo.alt} lazy={true}/>
             })} </AffichageEtape>
     )

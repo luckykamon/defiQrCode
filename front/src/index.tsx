@@ -7,6 +7,7 @@ import About from "./Pages/About";
 import NavBar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
 import Equipe from "./Pages/Equipe";
+import CreateDefiQrCode from "./Pages/createDefiQrCode";
 
 const Confidentialite = () => {
     return (
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/}
             <Route path="equipe" element={<Equipe/>}/>
             <Route path="equipe/:id" element={<Equipe/>}/>
+            <Route path="create" element={<CreateDefiQrCode/>}/>
             <Route path=":idQrCode" element={<Etapes/>}/>
         </Routes>
     </BrowserRouter>
