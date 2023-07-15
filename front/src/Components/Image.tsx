@@ -1,16 +1,5 @@
 import React, {FC, useState} from 'react';
 
-async function doesFileExist(urlToFile: string): Promise<boolean> {
-    try {
-        const response = await fetch(urlToFile, {method: 'HEAD'});
-        const contentType = response.headers.get('Content-Type') || '';
-        return response.ok && contentType.split("/")[0] === "image";
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-}
-
 interface AttenteImageProps {
     /**
      * La description de l'image
@@ -48,24 +37,15 @@ interface ImageProps {
 }
 
 const Image: FC<ImageProps> = ({src, alt}) => {
-    const [fileExist, setFileExist] = useState(true)
-    doesFileExist(src)
-        .then((result) => {
-            if (!result) {
-                setFileExist(false)
-            }
-        })
-        .catch(() => {
-            setFileExist(false)
-        })
+    const [onError, setOnError] = useState(false)
     const src_original = src.split(".")[0] + "_original." + src.split(".")[1];
     return (
         <div>
-            {fileExist && (
+            {!onError && (
                 <div style={{textAlign: "center"}}>
-                    <a href={src_original} download> <img src={src} alt={alt}/> </a>
+                    <a href={src_original} download> <img src={src} alt={alt} onError={() => setOnError(true)}/> </a>
                 </div>
-            )} {!fileExist && (
+            )} {onError && (
             <AttenteImage alt={alt}/>
         )}
         </div>
