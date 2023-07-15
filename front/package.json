@@ -3,7 +3,7 @@
   "author": "Lucas Bodin",
   "version": "1.0.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "./front",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",

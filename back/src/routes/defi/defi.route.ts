@@ -1,127 +1,106 @@
-import {Response, Router} from 'express';
-import {upload} from "../../index";
-import * as defiService from "./defi.service";
-import * as qrcodeService from "../qrcode/qrcode.service";
+import {Request, Response, Router} from 'express';
+import * as defiService from './defi.service';
+import * as qrcodeService from '../qrcode/qrcode.service';
 
 const defiRouter: Router = Router();
 
-defiRouter.post('', upload.fields([{name: 'image', maxCount: 1}, {name: 'fichier', maxCount: 1}, {
-        name: 'image-0-0',
-        maxCount: 1
-    }, {name: 'image-0-1', maxCount: 1}, {name: 'image-0-2', maxCount: 1}, {
-        name: 'image-1-0',
-        maxCount: 1
-    }, {name: 'image-1-1', maxCount: 1}, {name: 'image-1-2', maxCount: 1}, {
-        name: 'image-2-0',
-        maxCount: 1
-    }, {name: 'image-2-1', maxCount: 1}, {name: 'image-2-2', maxCount: 1}, {
-        name: 'image-3-0',
-        maxCount: 1
-    }, {name: 'image-3-1', maxCount: 1}, {name: 'image-3-2', maxCount: 1}, {
-        name: 'image-4-0',
-        maxCount: 1
-    }, {name: 'image-4-1', maxCount: 1}, {name: 'image-4-2', maxCount: 1}, {
-        name: 'image-5-0',
-        maxCount: 1
-    }, {name: 'image-5-1', maxCount: 1}, {name: 'image-5-2', maxCount: 1}, {
-        name: 'image-6-0',
-        maxCount: 1
-    }, {name: 'image-6-1', maxCount: 1}, {name: 'image-6-2', maxCount: 1}, {
-        name: 'image-7-0',
-        maxCount: 1
-    }, {name: 'image-7-1', maxCount: 1}, {name: 'image-7-2', maxCount: 1}, {
-        name: 'image-8-0',
-        maxCount: 1
-    }, {name: 'image-8-1', maxCount: 1}, {name: 'image-8-2', maxCount: 1}, {
-        name: 'image-9-0',
-        maxCount: 1
-    }, {name: 'image-9-1', maxCount: 1}, {name: 'image-9-2', maxCount: 1}, {
-        name: 'image-10-0',
-        maxCount: 1
-    }, {name: 'image-10-1', maxCount: 1}, {name: 'image-10-2', maxCount: 1}, {
-        name: 'image-11-0',
-        maxCount: 1
-    }, {name: 'image-11-1', maxCount: 1}, {name: 'image-11-2', maxCount: 1}, {
-        name: 'image-12-0',
-        maxCount: 1
-    }, {name: 'image-12-1', maxCount: 1}, {name: 'image-12-2', maxCount: 1}, {
-        name: 'image-13-0',
-        maxCount: 1
-    }, {name: 'image-13-1', maxCount: 1}, {name: 'image-13-2', maxCount: 1}, {
-        name: 'image-14-0',
-        maxCount: 1
-    }, {name: 'image-14-1', maxCount: 1}, {name: 'image-14-2', maxCount: 1}, {
-        name: 'image-15-0',
-        maxCount: 1
-    }, {name: 'image-15-1', maxCount: 1}, {name: 'image-15-2', maxCount: 1}, {
-        name: 'image-16-0',
-        maxCount: 1
-    }, {name: 'image-16-1', maxCount: 1}, {name: 'image-16-2', maxCount: 1}, {
-        name: 'image-17-0',
-        maxCount: 1
-    }, {name: 'image-17-1', maxCount: 1}, {name: 'image-17-2', maxCount: 1}, {
-        name: 'image-18-0',
-        maxCount: 1
-    }, {name: 'image-18-1', maxCount: 1}, {name: 'image-18-2', maxCount: 1}, {
-        name: 'image-19-0',
-        maxCount: 1
-    }, {name: 'image-19-1', maxCount: 1}, {name: 'image-19-2', maxCount: 1}]),
-    async (req: any, res: Response) => {
+interface File {
+    name: string;
+    path: string;
+}
 
-        if (!req.files || !req.files['image'] || !req.files['fichier']) {
-            res.status(400).send("Bad request");
-            return;
+interface QrCode {
+    number: string;
+    indice: string;
+    listImage: File[];
+}
+
+interface Body {
+    name: string;
+    image: File;
+    description: string;
+    fichier: File;
+    qrcode: QrCode[];
+}
+
+function validateFile(file: any): file is File {
+    return typeof file === 'object' &&
+        file !== null &&
+        typeof file.name === 'string' &&
+        typeof file.path === 'string';
+}
+
+function validateQrCode(qrCode: any): qrCode is QrCode {
+    return typeof qrCode === 'object' &&
+        qrCode !== null &&
+        !isNaN(Number(qrCode.number)) &&
+        typeof qrCode.indice === 'string' &&
+        Array.isArray(qrCode.listImage) &&
+        qrCode.listImage.every(validateFile);
+}
+
+function validateBody(body: any): body is Body {
+    return typeof body === 'object' &&
+        body !== null &&
+        typeof body.name === 'string' &&
+        validateFile(body.image) &&
+        typeof body.description === 'string' &&
+        validateFile(body.fichier) &&
+        Array.isArray(body.qrcode) &&
+        body.qrcode.every(validateQrCode);
+}
+
+
+defiRouter.post('', async (req: Request, res: Response) => {
+
+    if (!validateBody(req.body)) {
+        res.status(400).send('Bad request');
+        return;
+    }
+
+
+    let defiNew = {
+        name: req.body.name,
+        description: req.body.description,
+        image: {
+            path: req.body.image.path,
+            alt: "Image représentatif du défi " + req.body.image.name
+        },
+        fichier: {
+            path: req.body.fichier.path,
+            alt: "Fichier d'aide du défi " + req.body.fichier.name
+        }
+    }
+
+    const resultNewDefi = await defiService.create(defiNew);
+
+    for (let qrCodeRequest of req.body.qrcode) {
+        let listImage = [];
+
+        for (let image of qrCodeRequest.listImage) {
+            listImage.push({
+                path: image.path,
+                alt: "Image du QRCode " + image.name
+            })
         }
 
-        let defiNew = {
-            name: req.body.name,
-            description: req.body.description,
-            image: {
-                path: req.files['image'][0].path,
-                alt: "Image représentatif du défi " + req.body.name
-            },
-            fichier: {
-                path: req.files['fichier'][0].path,
-                alt: "Fichier d'aide du défi " + req.body.name
-            }
+
+        let qrCode = {
+            idQrCode: "verification",  // Un humain doit avoir au préalable validé le QrCode afin qu'il n'y ai pas de problème (on pense à des conneries que pourraient uploader des utilisateurs)
+            number: parseInt(qrCodeRequest.number),
+            indice: qrCodeRequest.indice,
+            date: new Date(),
+            defiId: resultNewDefi._id,
+            equipeId: "random",
+            isSolution: true,
+            listImage: listImage
         }
 
-        const resultNewDefi = await defiService.create(defiNew);
+        await qrcodeService.create(qrCode)
 
-        for (let qrCodeId = 0; qrCodeId < 20; qrCodeId++) {
-            let indice = req.body['indice-' + qrCodeId]
-            let listImage = []
-            for (let indiceId = 0; indiceId < 3; indiceId++) {
-                if (req.files['image-' + qrCodeId + '-' + indiceId]) {
-                    listImage.push({
-                        path: req.files['image-' + qrCodeId + '-' + indiceId][0].path,
-                        alt: "Image " + indiceId + " du QR Code " + req.body['indice-' + qrCodeId]
-                    })
-                    // console.log(listImage)
-                } else {
-                    break;
-                }
-            }
-            if (indice && listImage.length > 0) {
-                let qrCode = {
-                    idQrCode: "random",
-                    number: qrCodeId,
-                    indice: req.body['indice-' + qrCodeId],
-                    date: new Date(),
-                    defiId: resultNewDefi._id,
-                    equipeId: "random",
-                    isSolution: true,
-                    listImage: listImage
-                }
+    }
 
-                await qrcodeService.create(qrCode);
-
-            } else {
-                break;
-            }
-        }
-
-        res.status(200).send(resultNewDefi)
-    });
+    res.status(200).send(resultNewDefi)
+});
 
 export default defiRouter;

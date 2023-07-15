@@ -174,7 +174,6 @@ const insertDefaultData = async () => {
     defaultData.forEach(defaultQrCode => {
         qrcodeSchema.findOneAndDelete({idQrCode: defaultQrCode.idQrCode, isSolution: true})
             .then(doc => {
-                console.log(defaultQrCode.listImage)
                 qrcodeSchema.create(defaultQrCode)
                     .then(() => {
                         if (doc) {
