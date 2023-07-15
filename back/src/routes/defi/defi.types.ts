@@ -1,12 +1,13 @@
 export interface Defi {
     name: string,
     image: {
-        path: string,
-        alt: string
+        path: string | null,
+        alt: string | null
     },
     description: string,
     fichier: {
-        path: string,
-        alt: string
-    }
+        path: string | null,
+        alt: string | null
+    },
+    password: string
 }

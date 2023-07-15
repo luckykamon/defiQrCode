@@ -26,8 +26,8 @@ interface Body {
 function validateFile(file: any): file is File {
     return typeof file === 'object' &&
         file !== null &&
-        typeof file.name === 'string' &&
-        typeof file.path === 'string';
+        (file.name == null || typeof file.name === 'string') &&
+        (file.path == null || typeof file.path === 'string');
 }
 
 function validateQrCode(qrCode: any): qrCode is QrCode {
@@ -43,11 +43,40 @@ function validateBody(body: any): body is Body {
     return typeof body === 'object' &&
         body !== null &&
         typeof body.name === 'string' &&
-        validateFile(body.image) &&
+        body.image === null || validateFile(body.image) &&
         typeof body.description === 'string' &&
-        validateFile(body.fichier) &&
+        body.fichier === null || validateFile(body.fichier) &&
         Array.isArray(body.qrcode) &&
         body.qrcode.every(validateQrCode);
+}
+
+function generatePassword() {
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const symbols = '-_,.;';
+
+    function generateRandomChars(length: number, possibleChars: string) {
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * possibleChars.length);
+            result += possibleChars[randomIndex];
+        }
+        return result;
+    }
+
+    const allChars = lower + upper + numbers + symbols;
+
+    let password = generateRandomChars(4, lower);
+    password += generateRandomChars(4, upper);
+    password += generateRandomChars(4, numbers);
+    password += generateRandomChars(4, symbols);
+    password += generateRandomChars(6 + Math.floor(Math.random() * 10), allChars);
+
+    // Shuffle password
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    return password;
 }
 
 
@@ -58,18 +87,20 @@ defiRouter.post('', async (req: Request, res: Response) => {
         return;
     }
 
+    const passwordDefi = generatePassword();
 
     let defiNew = {
         name: req.body.name,
         description: req.body.description,
         image: {
-            path: req.body.image.path,
-            alt: "Image représentatif du défi " + req.body.image.name
+            path: req.body?.image?.path ? req.body.image.path : null,
+            alt: req.body?.image?.name ? "Image représentatif du défi " + req.body?.image?.name : null
         },
         fichier: {
-            path: req.body.fichier.path,
-            alt: "Fichier d'aide du défi " + req.body.fichier.name
-        }
+            path: req.body?.fichier?.path ? req.body.fichier.path : null,
+            alt: req.body?.fichier?.name ? "Fichier d'aide du défi " + req.body.fichier.name : null
+        },
+        password: passwordDefi
     }
 
     const resultNewDefi = await defiService.create(defiNew);
@@ -100,7 +131,10 @@ defiRouter.post('', async (req: Request, res: Response) => {
 
     }
 
-    res.status(200).send(resultNewDefi)
+    const resultNewDefiWithPassword = resultNewDefi;
+    resultNewDefiWithPassword.password = passwordDefi;
+
+    res.status(200).send(resultNewDefiWithPassword)
 });
 
 export default defiRouter;

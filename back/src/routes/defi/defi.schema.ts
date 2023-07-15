@@ -11,15 +11,14 @@ const CollectionSchema = new Mongoose.Schema({
     image: {
         type: {
             path: {
-                type: String,
-                required: true
+                type: String
             },
             alt: {
-                type: String,
-                required: true
+                type: String
             }
         },
-        required: false
+        required: false,
+        default: null
     },
     description: {
         type: String,
@@ -28,16 +27,18 @@ const CollectionSchema = new Mongoose.Schema({
     fichier: {
         type: {
             path: {
-                type: String,
-                required: true
+                type: String
             },
             alt: {
-                type: String,
-                required: true
+                type: String
             }
         },
         required: false,
         default: null
+    },
+    password:{
+        type: String,
+        required: true
     }
 });
 
