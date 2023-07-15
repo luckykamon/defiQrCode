@@ -1,15 +1,46 @@
-import {Response, Router} from 'express';
-import {upload} from "../../index";
+import express, { Request, Response, NextFunction } from 'express';
+import path from 'path';
+import fs from 'fs';
+import sharp from 'sharp';
+import { upload } from "../../index";
 
-const imageRouter: Router = Router();
+const imageRouter = express.Router();
 
-imageRouter.post('', upload.single('image'), async (req: any, res: Response) => {
+const resizeAndCopyImage = (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file) {
+        return next();
+    }
+
+    const filename = req.file.filename;
+    const originalPath = path.join('public/uploads', filename);
+    const copyPath = path.join('public/uploads', filename.replace(path.extname(filename), '_original' + path.extname(filename)));
+
+    fs.promises.copyFile(originalPath, copyPath)
+        .then(() => {
+            return sharp(originalPath)
+                .resize({
+                    width: 500,
+                    withoutEnlargement: true
+                })
+                .toBuffer();
+        })
+        .then(buffer => fs.promises.writeFile(originalPath, buffer))
+        .then(() => {
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+            next(err);
+        });
+}
+
+imageRouter.post('', upload.single('image'), resizeAndCopyImage, async (req: any, res: Response) => {
     if (!req.file) {
         res.status(400).send("Bad request");
         return;
     }
 
-    res.status(200).send(req.file.path)
+    res.status(200).send(req.file.path);
 });
 
 export default imageRouter;

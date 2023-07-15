@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
         // Spécifiez l'emplacement où vous souhaitez enregistrer les fichiers téléchargés
         cb(null, 'public/uploads');
     },
-    filename: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
+    filename: async function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
         // Définissez le nom du fichier comme vous le souhaitez
         cb(null, Date.now() + '-' + file.originalname);
     }
