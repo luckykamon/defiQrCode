@@ -1,7 +1,9 @@
-import React, {FC, useState} from 'react';
+import React, {FC, InputHTMLAttributes, useState} from 'react';
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import Image from "../Components/Image";
+import {faFileImport} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const CreateDefiQrCode: FC = () => {
     const initialStep = {indice: '', images: null, message: ''};
@@ -34,73 +36,91 @@ const CreateDefiQrCode: FC = () => {
 
     }
 
-    const handleAddStep = () => {
-        setSteps([...steps, initialStep]);
-    };
-
-    const handleRemoveStep = (index: number) => {
-        if (steps.length === 1) return alert('Vous devez avoir au moins une étape.');
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
-        const updatedSteps = [...steps];
-        updatedSteps.splice(index, 1);
-        setSteps(updatedSteps);
-    };
-
-    const checkStep = (step: { indice: string, images: string | FileList }) => {
-        const messages = [];
-        if (step.indice === '') {
-            messages.push("Veuillez entrer un indice.");
+    const checkForm = () => {
+        const messages: string[] = [];
+        if (defiName.length === 0) {
+            messages.push('Vous devez saisir un nom de défi.');
         }
-        if (step.images instanceof FileList) {
-            if (step.images.length === 0) {
-                messages.push("Veuillez sélectionner au moins une image.");
-            }
-            if (step.images.length > 3) {
-                messages.push("Veuillez sélectionner au maximum 3 images.");
+        if (image === null) {
+            messages.push('Vous devez choisir une image.');
+        }
+        if (description.length === 0) {
+            messages.push('Vous devez saisir une description.');
+        }
+        if (file === null) {
+            messages.push('Vous devez choisir un fichier.');
+        }
+        for (let stepId = 0; stepId < steps.length; stepId++) {
+            if (messageStep(steps[stepId]).length > 0) {
+                messages.push("Vous avez des erreurs dans l'étape " + (stepId) + ".");
             }
         }
         return messages;
     }
 
+    const messageStep = (updatedStep) => {
+        const messages: string[] = [];
+        if (updatedStep.indice.length === 0) {
+            messages.push('Vous devez saisir un indice.');
+        }
+        if (updatedStep.images === null) {
+            messages.push('Vous devez choisir au moins une image.');
+        }
+        if (updatedStep.images.length > 3) {
+            messages.push('Vous ne pouvez pas ajouter plus de 3 images par étape.');
+        }
+        return messages;
+    }
+
     const handleStepChange = async (index: number, field: string, value: string | FileList) => {
-            const updatedSteps = [...steps];
-            const newValue: string[] = [];
-            if (field === 'images') {
+        const updatedSteps = [...steps];
+        let newValue: string[] | string;
+        let messages: string[] = [];
+
+        switch (field) {
+            case 'indice':
+                if (typeof value !== "string") {
+                    return;
+                } else {
+                    newValue = value;
+                }
+                break;
+            case 'images':
                 if (value instanceof FileList) {
-                    for (const image of value) {
-                        await uploadImage(image)
+                    if (value.length > 3) {
+                        messages.push('Seul les 3 premières images ont été prisent en compte.');
+                    }
+                    newValue = [];
+                    for (let nbImage = 0; nbImage < Math.min(3, value.length); nbImage++) {
+                        await uploadImage(value.item(nbImage))
                             .then((result) => {
-                                if (typeof result === "string") {
+                                if (typeof result === "string" && typeof newValue !== "string") {
                                     newValue.push(result);
                                 } else {
                                     throw new Error("La fonction d'upload d'image n'as pas renvoyé un string");
                                 }
-
                             })
                             .catch(() => {
                                 return;
                             })
                     }
-                } else { // Ce cas ne doit pas arriver
+                } else {
                     return;
                 }
-            }
-            if (newValue.length > 0) {
-                updatedSteps[index][field] = newValue;
-            } else {
-                updatedSteps[index][field] = value;
-            }
-            const messages: string[] = checkStep(updatedSteps[index]);
-            if (messages.length > 0) {
-                updatedSteps[index].message = messages.join(' ');
-            } else {
-                updatedSteps[index].message = '';
-            }
-            setSteps(updatedSteps);
+                break;
         }
-    ;
+        updatedSteps[index][field] = newValue;
+        messages = messages.concat(messageStep(updatedSteps[index]));
+        if (messages.length > 0) {
+            updatedSteps[index].message = messages.join(' ');
+        } else {
+            updatedSteps[index].message = '';
+        }
+        setSteps(updatedSteps);
+    }
 
-    const handleDefiCreation = () => {
+
+    const createDefi = () => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -134,7 +154,7 @@ const CreateDefiQrCode: FC = () => {
             "qrcode": qrcodes
         });
 
-        fetch("http://localhost:4011/api/defi", {
+        fetch(process.env.REACT_APP_URL_BACK + "/api/defi", {
             method: 'POST',
             headers: myHeaders,
             body: raw,
@@ -145,6 +165,28 @@ const CreateDefiQrCode: FC = () => {
                 console.log(result)
             })
             .catch(error => console.log('error', error));
+    }
+
+    const handleDefiCreation = () => {
+        const messages = checkForm();
+        if (messages.length > 0) {
+            alert(messages.join('\n'));
+            return;
+        } else {
+            createDefi()
+        }
+    };
+
+    const handleAddStep = () => {
+        setSteps([...steps, initialStep]);
+    };
+
+    const handleRemoveStep = (index: number) => {
+        if (steps.length === 1) return alert('Vous devez avoir au moins une étape.');
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
+        const updatedSteps = [...steps];
+        updatedSteps.splice(index, 1);
+        setSteps(updatedSteps);
     };
 
     const addImage = (file) => {
@@ -160,6 +202,19 @@ const CreateDefiQrCode: FC = () => {
                 setFile(result);
             })
     }
+
+    const InputAddFile: React.FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
+        return (
+            <div className="custom-file-upload">
+                <input type="file" id="file-upload" style={{display: 'none'}} {...props} /> <label
+                htmlFor="file-upload">
+                <div className="inner-content">
+                        <span><FontAwesomeIcon icon={faFileImport}/></span>
+                </div>
+            </label>
+            </div>
+        );
+    };
 
     return (
         <>
@@ -179,7 +234,11 @@ const CreateDefiQrCode: FC = () => {
                         <tr>
                             <td style={{margin: "10px", textAlign: "right"}}>Image:</td>
                             <td style={{textAlign: "center"}}>
-                                <input type="file" accept="image/*" onChange={e => addImage(e.target.files[0])}/>
+                                <InputAddFile type="file" accept="image/*" onChange={e => addImage(e.target.files[0])}/>
+                                <br/>
+                                <div className={"img-preview"}>
+                                    {image && <img src={process.env.REACT_APP_URL_BACK + image} alt=""/>}
+                                </div>
                                 <br/><br/>
                             </td>
                         </tr>
@@ -194,7 +253,7 @@ const CreateDefiQrCode: FC = () => {
                         <tr>
                             <td style={{margin: "10px", textAlign: "right"}}>Fichier:</td>
                             <td style={{textAlign: "center"}}>
-                                <input type="file" onChange={e => addFile(e.target.files[0])}/> <br/><br/>
+                                <InputAddFile type="file" onChange={e => addFile(e.target.files[0])}/> <br/><br/>
                             </td>
                         </tr>
                         </tbody>
@@ -206,11 +265,15 @@ const CreateDefiQrCode: FC = () => {
                         <h3>Étape {index}:</h3>
                         <input placeholder="Indice" value={step.indice}
                                onChange={(e) => handleStepChange(index, 'indice', e.target.value)}
-                               style={{margin: "20px"}}/> <input placeholder="Image" type="file" multiple
-                                                                 accept="image/*"
-                                                                 onChange={(e) => handleStepChange(index, 'images', e.target.files)}/> {step.images && step.images.map((image) => (
-                        <Image key={image} src={process.env.REACT_APP_URL_BACK + image} alt={process.env.REACT_APP_URL_BACK + image}/>
-                    ))}<p style={{color: "red"}}>{step.message}</p>
+                               style={{margin: "20px"}}/> <InputAddFile placeholder="Image" type="file" multiple
+                                                                        accept="image/*"
+                                                                        onChange={(e) => handleStepChange(index, 'images', e.target.files)}/>
+                        <div className={"img-preview"}> {step.images && step.images.map((image) => (
+                            <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
+                                   alt={process.env.REACT_APP_URL_BACK + image}/>
+
+                        ))}</div>
+                        <p style={{color: "red"}}>{step.message}</p>
                         <button onClick={() => handleRemoveStep(index)} style={{margin: "20px"}}>Supprimer cette étape
                         </button>
                     </div>
