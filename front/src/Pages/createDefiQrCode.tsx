@@ -185,7 +185,7 @@ const CreateDefiQrCode: FC = () => {
             const listImage = [];
             for (let imageId = 0; imageId < steps[stepId].images.length; imageId++) {
                 listImage.push({
-                    "name": steps[stepId].images[imageId].split('/')[-1],
+                    "name": steps[stepId].images[imageId].split('/').pop(),
                     "path": steps[stepId].images[imageId],
                 });
             }
@@ -212,20 +212,26 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const updateDefi = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        return new Promise((resolve, reject) => {
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
-        const raw = prepareDataDefi();
+            const raw = prepareDataDefi();
 
-        fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + idDefi + "?password=" + passwordDefi, {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        })
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + idDefi + "?password=" + passwordDefi, {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            })
+                .then(response => response.json())
+                .then(result => {
+                    resolve(result);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
     };
 
     const createDefi = () => {
@@ -256,7 +262,13 @@ const CreateDefiQrCode: FC = () => {
         } else if (isCreate()) {
             createDefi();
         } else if (isUpdate()) {
-            updateDefi();
+            updateDefi()
+                .then(() => {
+                    NotificationManager.success('Défi mis à jour avec succès');
+                })
+                .catch(() => {
+                    NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi');
+                })
         }
     };
 
@@ -364,23 +376,12 @@ const CreateDefiQrCode: FC = () => {
 
     };
 
-
     useEffect(() => {
         getStepFromDefi();
         if (notificationCreate === 'true') {
             NotificationManager.success('Il sera publié une fois validé par un administrateur', 'Défi Créé', 5000);
         }
-        if (isUpdate()) {
-            // generateQrCode({
-            //     color: '#000000',
-            //     text: "test1",
-            //     fileUrl: "http://localhost:4011/public/uploads/36582-1689518180173-profileluckykamonjeuxvideorogne650x650modified.png"
-            // });
-        }
-
     }, []);
-
-    console.log(steps);
 
     return (
         <>

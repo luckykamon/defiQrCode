@@ -21,15 +21,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_0/8he0pIy27Wk8t09nLD0AfhKGaAqdLcM20.jpeg",
-                    alt: "zoom etape 0"
+                    name: "zoom etape 0"
                 },
                 {
                     path: "/images/parcours/etape_0/Gp63JrQctB1mz1jZ6AQ52v5e0u0IiaRZ4.jpeg",
-                    alt: "dezoom etape 0"
+                    name: "dezoom etape 0"
                 },
                 {
                     path: "/images/parcours/etape_0/aV5s2kNrDZ6Q4KWx0RrrHg0Y8NBA9whxm.jpeg",
-                    alt: "panorama etape 0"
+                    name: "panorama etape 0"
                 }
             ]
         },
@@ -43,15 +43,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_1/rLuIvhEcQY4GzYQns9n87Kq4epjQ8eVwT.jpeg",
-                    alt: "zoom etape 1"
+                    name: "zoom etape 1"
                 },
                 {
                     path: "/images/parcours/etape_1/c9eg10VSecPncoIhqtpg0QvK096XSVOGs.jpeg",
-                    alt: "dezoom etape 1"
+                    name: "dezoom etape 1"
                 },
                 {
                     path: "/images/parcours/etape_1/87lHF6XcGqSzBPmMeTu3Vk0ApfAjTmUVC.jpeg",
-                    alt: "panorama etape 1"
+                    name: "panorama etape 1"
                 }
             ]
         },
@@ -65,15 +65,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_2/2J283o0Dgp461m8Zb21yjR46KOyVNfT6I.jpeg",
-                    alt: "zoom etape 2"
+                    name: "zoom etape 2"
                 },
                 {
                     path: "/images/parcours/etape_2/UKPt7g791xNdUV3KVLbCOm59g8imn5j3l.jpeg",
-                    alt: "dezoom etape 2"
+                    name: "dezoom etape 2"
                 },
                 {
                     path: "/images/parcours/etape_2/27FBv4ZwZ3VkG8h25caDfbXAlUBc1G7qg.jpeg",
-                    alt: "panorama etape 2"
+                    name: "panorama etape 2"
                 }
             ]
         },
@@ -87,15 +87,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_3/2EnrwH34pwNpF9voxKZB6KJQ372Uu0e3W.jpeg",
-                    alt: "zoom etape 3"
+                    name: "zoom etape 3"
                 },
                 {
                     path: "/images/parcours/etape_3/dscQH17YAvHi2CeS8UkoFgK7OmnJzkj0x.jpeg",
-                    alt: "dezoom etape 3"
+                    name: "dezoom etape 3"
                 },
                 {
                     path: "/images/parcours/etape_3/35DQ8V7M52x78ZFRg5pPqPrQtDVK2ylea.jpeg",
-                    alt: "panorama etape 3"
+                    name: "panorama etape 3"
                 }
             ]
         },
@@ -109,15 +109,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_4/DpCT5WjB3UhzgvONVwgZ5xn0Z5Qg1kDlV.jpeg",
-                    alt: "zoom etape 4"
+                    name: "zoom etape 4"
                 },
                 {
                     path: "/images/parcours/etape_4/kYC24VzS6MdQ6lTsFTM9fRBzQrwFlwQGa.jpeg",
-                    alt: "dezoom etape 4"
+                    name: "dezoom etape 4"
                 },
                 {
                     path: "/images/parcours/etape_4/12jC69SZImHLm5oCM9I4vL6Fe8Gw6Cum6.jpeg",
-                    alt: "panorama etape 4"
+                    name: "panorama etape 4"
                 }
             ]
         },
@@ -131,15 +131,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_5/9ztRxxO4p2ZA6HlopUwxSCXcmqCAg8mC5.jpeg",
-                    alt: "zoom etape 5"
+                    name: "zoom etape 5"
                 },
                 {
                     path: "/images/parcours/etape_5/BNKepz49Bj4swM1z8vbpX2tZDhCB2a0VH.jpeg",
-                    alt: "dezoom etape 5"
+                    name: "dezoom etape 5"
                 },
                 {
                     path: "/images/parcours/etape_5/tbuu0WaWcMAjv6D8PmkJcBsN3U1hLUC1b.jpeg",
-                    alt: "panorama etape 5"
+                    name: "panorama etape 5"
                 }
             ]
         },
@@ -153,15 +153,15 @@ const insertDefaultData = async () => {
             listImage: [
                 {
                     path: "/images/parcours/etape_6/YGr3zcYG9zVUM6R3eOER16yF16UeYIfqb.jpeg",
-                    alt: "zoom etape 6"
+                    name: "zoom etape 6"
                 },
                 {
                     path: "/images/parcours/etape_6/7HHfeOkhDgsX8uL2jgSLIswklJ4YG8jwT.jpeg",
-                    alt: "dezoom etape 6"
+                    name: "dezoom etape 6"
                 },
                 {
                     path: "/images/parcours/etape_6/BzM67Nxr12g82n5DWLHrEwC3UKotE2zj2.jpeg",
-                    alt: "panorama etape 6"
+                    name: "panorama etape 6"
                 }
             ]
         }

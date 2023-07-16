@@ -2,6 +2,7 @@ import {Request, Response, Router} from 'express';
 import * as defiService from './defi.service';
 import * as qrcodeService from '../qrcode/qrcode.service';
 import {Body, File, QrCode} from './defi.types';
+import mongoose from "mongoose";
 
 const defiRouter: Router = Router();
 
@@ -11,7 +12,7 @@ const validateFile = (file: any): file is File => {
         file !== null &&
         (file.name == null || typeof file.name === 'string') &&
         (file.path == null || typeof file.path === 'string');
-}
+};
 
 const validateQrCode = (qrCode: any): qrCode is QrCode => {
     return typeof qrCode === 'object' &&
@@ -20,7 +21,7 @@ const validateQrCode = (qrCode: any): qrCode is QrCode => {
         typeof qrCode.indice === 'string' &&
         Array.isArray(qrCode.listImage) &&
         qrCode.listImage.every(validateFile);
-}
+};
 
 const validateBody = (body: any): body is Body => {
     return typeof body === 'object' &&
@@ -31,7 +32,7 @@ const validateBody = (body: any): body is Body => {
         body.fichier === null || validateFile(body.fichier) &&
         Array.isArray(body.qrcode) &&
         body.qrcode.every(validateQrCode);
-}
+};
 
 const generatePassword = () => {
     const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -58,7 +59,7 @@ const generatePassword = () => {
     password = password.split('').sort(() => Math.random() - 0.5).join('');
 
     return password;
-}
+};
 
 defiRouter.get('/:defiId', async (req: Request, res: Response) => {
     const defi = await defiService.getById(req.params.defiId);
@@ -86,17 +87,37 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
             });
         }
     }
-})
+});
+
+const createQrCode = async (qrCode: QrCode, defiId: mongoose.Types.ObjectId) => {
+    let listImage = [];
+    if (qrCode.listImage) {
+        for (let image of qrCode.listImage) {
+            listImage.push({
+                path: image.path,
+                name: "Image du QRCode " + image.name
+            });
+        }
+    }
+    let newQrCode = {
+        idQrCode: "verification",  // Un humain doit avoir au préalable validé le QrCode afin qu'il n'y ai pas de problème (on pense à des conneries que pourraient uploader des utilisateurs)
+        number: qrCode.number,
+        indice: qrCode.indice,
+        date: new Date(),
+        defiId: defiId,
+        equipeId: null,
+        isSolution: true,
+        listImage: listImage
+    };
+    await qrcodeService.create(newQrCode);
+};
 
 defiRouter.post('', async (req: Request, res: Response) => {
-
     if (!validateBody(req.body)) {
         res.status(400).send('Bad request');
         return;
     }
-
     const passwordDefi = generatePassword();
-
     let defiNew = {
         name: req.body.name,
         description: req.body.description,
@@ -109,42 +130,41 @@ defiRouter.post('', async (req: Request, res: Response) => {
             alt: req.body?.fichier?.name ? "Fichier d'aide du défi " + req.body.fichier.name : null
         },
         password: passwordDefi
-    }
-
+    };
     const resultNewDefi = await defiService.create(defiNew);
-
     for (let qrCodeRequest of req.body.qrcode) {
-        let listImage = [];
-
-        if (qrCodeRequest.listImage) {
-            for (let image of qrCodeRequest.listImage) {
-                listImage.push({
-                    path: image.path,
-                    name: "Image du QRCode " + image.name
-                })
-            }
-        }
-
-
-        let qrCode = {
-            idQrCode: "verification",  // Un humain doit avoir au préalable validé le QrCode afin qu'il n'y ai pas de problème (on pense à des conneries que pourraient uploader des utilisateurs)
-            number: qrCodeRequest.number,
-            indice: qrCodeRequest.indice,
-            date: new Date(),
-            defiId: resultNewDefi._id,
-            equipeId: null,
-            isSolution: true,
-            listImage: listImage
-        }
-
-        await qrcodeService.create(qrCode)
-
+        await createQrCode(qrCodeRequest, resultNewDefi._id);
     }
-
     const resultNewDefiWithPassword = resultNewDefi;
     resultNewDefiWithPassword.password = passwordDefi;
 
-    res.status(200).send(resultNewDefiWithPassword)
+    res.status(200).send(resultNewDefiWithPassword);
+});
+
+defiRouter.put('/:defiId', async (req: Request, res: Response) => {
+    const defi = await defiService.getById(req.params.defiId);
+    if (defi === null) {
+        res.status(404).send('Not found');
+        return;
+    } else {
+        if (req.query?.password !== defi?.password || req.query?.password === undefined) {
+            res.status(404).send('Not found'); //Mauvais mot de passe
+            return;
+        } else {
+            const resultPutDefi = await defiService.update(req.params.defiId, req.body);
+            if (resultPutDefi === null) {
+                res.status(404).send('Not found');
+                return;
+            } else {
+                //Delete all qrcode with defiId
+                await qrcodeService.deleteByDefiId(req.params.defiId);
+                for (let qrCodeRequest of req.body.qrcode) {
+                    await createQrCode(qrCodeRequest, resultPutDefi._id);
+                }
+                res.status(200).send(resultPutDefi);
+            }
+        }
+    }
 });
 
 export default defiRouter;
