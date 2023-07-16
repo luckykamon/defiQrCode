@@ -119,7 +119,6 @@ export const getClassement = async (_id: string): Promise<Array<{
             })
         }
     }
-
     return result
 }
 
