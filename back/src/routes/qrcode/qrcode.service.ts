@@ -34,6 +34,11 @@ export const getByIdQrCodeEquipe = async (idQrCode: string, equipeId: string): P
     }
 }
 
+export const getByDefiId = async (defiId: string): Promise<Array<QrCode> | null> => {
+    await db.connect();
+    return qrcodeSchema.find({defiId: defiId});
+}
+
 export const create = async (qrcode: QrCode): Promise<QrCode> => {
     await db.connect();
     return await qrcodeSchema.create(qrcode);

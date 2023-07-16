@@ -37,7 +37,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             {/*<Route path="solution" element={<QrCodeSoluce/>}/>*/}
             <Route path="equipe" element={<Equipe/>}/>
             <Route path="equipe/:id" element={<Equipe/>}/>
-            <Route path="create" element={<CreateDefiQrCode/>}/>
+            <Route path="defi" element={<CreateDefiQrCode/>}/>
             <Route path=":idQrCode" element={<Etapes/>}/>
         </Routes>
     </BrowserRouter>

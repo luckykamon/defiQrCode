@@ -29,6 +29,7 @@ qrcodeRouter.post('', async (req: Request, res: Response) => {
                 number: qrcodeSoluce.number,
                 indice: qrcodeSoluce.indice,
                 date: new Date(),
+                defiId: qrcodeSoluce.defiId,
                 equipeId: req.body.equipeId,
                 isSolution: false
             }

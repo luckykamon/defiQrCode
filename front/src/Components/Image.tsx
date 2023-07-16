@@ -10,8 +10,7 @@ interface AttenteImageProps {
 const AttenteImage: FC<AttenteImageProps> = ({alt}) => {
     return (
         <div>
-            <h4 style={{textAlign: "center", color: "white", marginTop: "40px"}}>L&apos;image arrive bientôt 😉, voici un
-                petit indice en attendant:</h4>
+            <h4 style={{textAlign: "center", color: "white", marginTop: "40px"}}>L&apos;image arrive bientôt 😉, voici la description de l&apos; en attendant:</h4>
             <p style={{textAlign: "center", fontWeight: "bold", fontSize: "18px"}}>{alt}</p>
         </div>
     );
@@ -44,7 +43,7 @@ const Image: FC<ImageProps> = ({src, alt}) => {
         <div>
             {!onError && (
                 <div style={{textAlign: "center"}}>
-                    <a href={src_original} download> <img src={src} alt={alt} onError={() => setOnError(true)}/> </a>
+                    <a href={src_original} download target="_blank" rel="noreferrer"> <img src={src} alt={alt} onError={() => setOnError(true)}/> </a>
                 </div>
             )} {onError && (
             <AttenteImage alt={alt}/>

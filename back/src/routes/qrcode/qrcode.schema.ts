@@ -22,12 +22,14 @@ const CollectionSchema = new Mongoose.Schema({
             default: null
         },
         defiId: {
-            type: String,
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: 'defi',
             required: false,
             default: null
         },
         equipeId: {
-            type: String,
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: 'equipe',
             required: false,
             default: null
         },

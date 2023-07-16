@@ -41,7 +41,7 @@ const calculScore = async (listQrCode: QrCode[], listEquipeMotTrouve: Equipe[]):
             }
         }
         for (let equipe of listEquipeMotTrouve) {
-            if (equipe._id.toString() === equipeId) {
+            if (equipe._id.toString() === equipeId?.toString()) {
                 tempsMotTimeStamp = Math.abs((equipe.dateMot ? equipe.dateMot.getTime() : 0) - (timeStampMin ? timeStampMin : 0));
                 break;
             }
@@ -75,10 +75,13 @@ export const getClassement = async (_id: string): Promise<Array<{
     let grouped: { [key: string]: QrCode[] } = {};
 
     for (let qrcode of listQrcode) {
-        if (!grouped[qrcode.equipeId]) {// Si le groupe n'existe pas encore, on le crée
-            grouped[qrcode.equipeId] = [];
+        if (!qrcode.equipeId) {
+            continue
         }
-        grouped[qrcode.equipeId].push(qrcode);
+        if (!grouped[qrcode.equipeId.toString()]) {// Si le groupe n'existe pas encore, on le crée
+            grouped[qrcode.equipeId.toString()] = [];
+        }
+        grouped[qrcode.equipeId.toString()].push(qrcode);
     }
 
     let result = [];
@@ -87,6 +90,9 @@ export const getClassement = async (_id: string): Promise<Array<{
     for (let equipeId in grouped) {
         id += 1;
         let nbQrCode = grouped[equipeId].length;
+        if (!Types.ObjectId.isValid(equipeId)) {
+            continue
+        }
         let nameEquipe = (await equipeSchema.findById(equipeId))?.name;
         let score = await calculScore(grouped[equipeId], listEquipeMotTrouve);
         let motTrouve = false;

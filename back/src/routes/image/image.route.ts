@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import path from 'path';
 import fs from 'fs';
 import sharp from 'sharp';
-import { upload } from "../../index";
+import {upload} from "../../index";
 
 const imageRouter = express.Router();
 
@@ -12,6 +12,9 @@ const resizeAndCopyImage = (req: Request, res: Response, next: NextFunction) => 
     }
 
     const filename = req.file.filename;
+    if (req.file.mimetype.split('/')[0] !== 'image') {
+        return next();
+    }
     const originalPath = path.join('public/uploads', filename);
     const copyPath = path.join('public/uploads', filename.replace(path.extname(filename), '_original' + path.extname(filename)));
 
@@ -32,7 +35,7 @@ const resizeAndCopyImage = (req: Request, res: Response, next: NextFunction) => 
             console.log(err);
             next(err);
         });
-}
+};
 
 imageRouter.post('', upload.single('image'), resizeAndCopyImage, async (req: any, res: Response) => {
     if (!req.file) {

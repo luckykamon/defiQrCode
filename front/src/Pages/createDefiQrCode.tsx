@@ -4,6 +4,7 @@ import Footer from "../Layout/Footer";
 import Image from "../Components/Image";
 import {faFileImport} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {v4 as uuidv4} from 'uuid'; // Importez la fonction uuid
 
 const CreateDefiQrCode: FC = () => {
     const initialStep = {indice: '', images: null, message: ''};
@@ -17,7 +18,7 @@ const CreateDefiQrCode: FC = () => {
     const uploadImage = (file: File) => {
         return new Promise((resolve, reject) => {
             const formdata = new FormData();
-            formdata.append("image", file, "IMG_4874.jpeg");
+            formdata.append("image", file, file.name);
 
             fetch(process.env.REACT_APP_URL_BACK + "/api/image", {
                 method: 'POST',
@@ -29,12 +30,18 @@ const CreateDefiQrCode: FC = () => {
                     resolve("/" + result);
                 })
                 .catch(error => {
-                    console.log('error', error)
+                    console.log('error', error);
                     reject(error);
                 });
-        })
+        });
 
-    }
+    };
+
+    const updateStepMessage = (index: number, message: string) => {
+        const updatedSteps = [...steps];
+        updatedSteps[index].message = message;
+        setSteps(updatedSteps);
+    };
 
     const checkForm = () => {
         const messages: string[] = [];
@@ -53,10 +60,11 @@ const CreateDefiQrCode: FC = () => {
         for (let stepId = 0; stepId < steps.length; stepId++) {
             if (messageStep(steps[stepId]).length > 0) {
                 messages.push("Vous avez des erreurs dans l'étape " + (stepId) + ".");
+                updateStepMessage(stepId, messageStep(steps[stepId]).join(' '));
             }
         }
         return messages;
-    }
+    };
 
     const messageStep = (updatedStep) => {
         const messages: string[] = [];
@@ -66,11 +74,11 @@ const CreateDefiQrCode: FC = () => {
         if (updatedStep.images === null) {
             messages.push('Vous devez choisir au moins une image.');
         }
-        if (updatedStep.images.length > 3) {
+        if (updatedStep.images?.length > 3) {
             messages.push('Vous ne pouvez pas ajouter plus de 3 images par étape.');
         }
         return messages;
-    }
+    };
 
     const handleStepChange = async (index: number, field: string, value: string | FileList) => {
         const updatedSteps = [...steps];
@@ -102,7 +110,7 @@ const CreateDefiQrCode: FC = () => {
                             })
                             .catch(() => {
                                 return;
-                            })
+                            });
                     }
                 } else {
                     return;
@@ -117,7 +125,7 @@ const CreateDefiQrCode: FC = () => {
             updatedSteps[index].message = '';
         }
         setSteps(updatedSteps);
-    }
+    };
 
 
     const createDefi = () => {
@@ -137,7 +145,7 @@ const CreateDefiQrCode: FC = () => {
                 "number": stepId,
                 "indice": steps[stepId].indice,
                 "listImage": listImage
-            })
+            });
         }
 
         const raw = JSON.stringify({
@@ -162,10 +170,10 @@ const CreateDefiQrCode: FC = () => {
         })
             .then(response => response.text())
             .then(result => {
-                console.log(result)
+                console.log(result);
             })
             .catch(error => console.log('error', error));
-    }
+    };
 
     const handleDefiCreation = () => {
         const messages = checkForm();
@@ -173,7 +181,7 @@ const CreateDefiQrCode: FC = () => {
             alert(messages.join('\n'));
             return;
         } else {
-            createDefi()
+            createDefi();
         }
     };
 
@@ -193,28 +201,31 @@ const CreateDefiQrCode: FC = () => {
         uploadImage(file)
             .then((result: string) => {
                 setImage(result);
-            })
-    }
+            });
+    };
 
     const addFile = (file) => {
         uploadImage(file)
             .then((result: string) => {
                 setFile(result);
-            })
-    }
+            });
+    };
 
     const InputAddFile: React.FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
+        const uniqueId = uuidv4();  // Générez un ID unique pour chaque instance du composant
+
         return (
             <div className="custom-file-upload">
-                <input type="file" id="file-upload" style={{display: 'none'}} {...props} /> <label
-                htmlFor="file-upload">
+                <input type="file" id={uniqueId} style={{display: 'none'}} {...props} /> <label htmlFor={uniqueId}>
                 <div className="inner-content">
-                        <span><FontAwesomeIcon icon={faFileImport}/></span>
+                    <span><FontAwesomeIcon icon={faFileImport}/></span>
                 </div>
             </label>
             </div>
         );
     };
+
+    console.log(file);
 
     return (
         <>
@@ -236,8 +247,8 @@ const CreateDefiQrCode: FC = () => {
                             <td style={{textAlign: "center"}}>
                                 <InputAddFile type="file" accept="image/*" onChange={e => addImage(e.target.files[0])}/>
                                 <br/>
-                                <div className={"img-preview"}>
-                                    {image && <img src={process.env.REACT_APP_URL_BACK + image} alt=""/>}
+                                <div className={"file-preview"}>
+                                    {image && <Image src={process.env.REACT_APP_URL_BACK + image} alt=""/>}
                                 </div>
                                 <br/><br/>
                             </td>
@@ -247,13 +258,20 @@ const CreateDefiQrCode: FC = () => {
                             <td style={{textAlign: "center"}}>
                                 <textarea placeholder="Description du défi"
                                           style={{width: "90%", margin: "auto", borderRadius: "10px"}} rows={4}
-                                          value={description} onChange={e => setDescription(e.target.value)}/> <br/>
+                                          value={description} onChange={e => setDescription(e.target.value)}/>
+
+                                <br/>
                             </td>
                         </tr>
                         <tr>
                             <td style={{margin: "10px", textAlign: "right"}}>Fichier:</td>
                             <td style={{textAlign: "center"}}>
-                                <InputAddFile type="file" onChange={e => addFile(e.target.files[0])}/> <br/><br/>
+                                <InputAddFile type="file" onChange={e => addFile(e.target.files[0])}/>
+                                <div className={"file-preview"}> {file && (
+                                    <a href={process.env.REACT_APP_URL_BACK + file} target="_blank" rel="noreferrer">{file.split("/")[file.split("/").length - 1]}</a>
+                                )
+                                }</div>
+                                <br/><br/>
                             </td>
                         </tr>
                         </tbody>
@@ -268,7 +286,7 @@ const CreateDefiQrCode: FC = () => {
                                style={{margin: "20px"}}/> <InputAddFile placeholder="Image" type="file" multiple
                                                                         accept="image/*"
                                                                         onChange={(e) => handleStepChange(index, 'images', e.target.files)}/>
-                        <div className={"img-preview"}> {step.images && step.images.map((image) => (
+                        <div className={"file-preview"}> {step.images && step.images.map((image) => (
                             <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
                                    alt={process.env.REACT_APP_URL_BACK + image}/>
 
@@ -286,6 +304,6 @@ const CreateDefiQrCode: FC = () => {
             <Footer/>
         </>
     );
-}
+};
 
 export default CreateDefiQrCode;

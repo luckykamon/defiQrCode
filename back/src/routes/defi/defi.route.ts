@@ -1,36 +1,19 @@
 import {Request, Response, Router} from 'express';
 import * as defiService from './defi.service';
 import * as qrcodeService from '../qrcode/qrcode.service';
+import {Body, File, QrCode} from './defi.types';
 
 const defiRouter: Router = Router();
 
-interface File {
-    name: string;
-    path: string;
-}
 
-interface QrCode {
-    number: string;
-    indice: string;
-    listImage: File[];
-}
-
-interface Body {
-    name: string;
-    image: File;
-    description: string;
-    fichier: File;
-    qrcode: QrCode[];
-}
-
-function validateFile(file: any): file is File {
+const validateFile = (file: any): file is File => {
     return typeof file === 'object' &&
         file !== null &&
         (file.name == null || typeof file.name === 'string') &&
         (file.path == null || typeof file.path === 'string');
 }
 
-function validateQrCode(qrCode: any): qrCode is QrCode {
+const validateQrCode = (qrCode: any): qrCode is QrCode => {
     return typeof qrCode === 'object' &&
         qrCode !== null &&
         !isNaN(Number(qrCode.number)) &&
@@ -39,7 +22,7 @@ function validateQrCode(qrCode: any): qrCode is QrCode {
         qrCode.listImage.every(validateFile);
 }
 
-function validateBody(body: any): body is Body {
+const validateBody = (body: any): body is Body => {
     return typeof body === 'object' &&
         body !== null &&
         typeof body.name === 'string' &&
@@ -50,11 +33,10 @@ function validateBody(body: any): body is Body {
         body.qrcode.every(validateQrCode);
 }
 
-function generatePassword() {
+const generatePassword = () => {
     const lower = 'abcdefghijklmnopqrstuvwxyz';
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
-    const symbols = '-_,.;';
 
     function generateRandomChars(length: number, possibleChars: string) {
         let result = '';
@@ -65,12 +47,11 @@ function generatePassword() {
         return result;
     }
 
-    const allChars = lower + upper + numbers + symbols;
+    const allChars = lower + upper + numbers;
 
     let password = generateRandomChars(4, lower);
     password += generateRandomChars(4, upper);
     password += generateRandomChars(4, numbers);
-    password += generateRandomChars(4, symbols);
     password += generateRandomChars(6 + Math.floor(Math.random() * 10), allChars);
 
     // Shuffle password
@@ -79,6 +60,33 @@ function generatePassword() {
     return password;
 }
 
+defiRouter.get('/:defiId', async (req: Request, res: Response) => {
+    const defi = await defiService.getById(req.params.defiId);
+    if (defi === null) {
+        res.status(404).send('Not found');
+        return;
+    } else {
+        if (req.query?.password !== defi?.password || req.query?.password === undefined) {
+            res.status(200).send({
+                "_id": defi._id,
+                "name": defi.name,
+                "description": defi.description,
+                "image": defi.image,
+                "fichier": defi.fichier
+            });
+        } else {
+            const qrCodesByDefiId = await qrcodeService.getByDefiId(req.params.defiId);
+            res.status(200).send({
+                "_id": defi._id,
+                "name": defi.name,
+                "description": defi.description,
+                "image": defi.image,
+                "fichier": defi.fichier,
+                "qrCodes": qrCodesByDefiId
+            });
+        }
+    }
+})
 
 defiRouter.post('', async (req: Request, res: Response) => {
 
@@ -108,21 +116,23 @@ defiRouter.post('', async (req: Request, res: Response) => {
     for (let qrCodeRequest of req.body.qrcode) {
         let listImage = [];
 
-        for (let image of qrCodeRequest.listImage) {
-            listImage.push({
-                path: image.path,
-                alt: "Image du QRCode " + image.name
-            })
+        if (qrCodeRequest.listImage) {
+            for (let image of qrCodeRequest.listImage) {
+                listImage.push({
+                    path: image.path,
+                    name: "Image du QRCode " + image.name
+                })
+            }
         }
 
 
         let qrCode = {
             idQrCode: "verification",  // Un humain doit avoir au préalable validé le QrCode afin qu'il n'y ai pas de problème (on pense à des conneries que pourraient uploader des utilisateurs)
-            number: parseInt(qrCodeRequest.number),
+            number: qrCodeRequest.number,
             indice: qrCodeRequest.indice,
             date: new Date(),
             defiId: resultNewDefi._id,
-            equipeId: "random",
+            equipeId: null,
             isSolution: true,
             listImage: listImage
         }

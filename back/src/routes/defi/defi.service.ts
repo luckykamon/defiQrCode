@@ -1,10 +1,16 @@
-import {Defi} from './defi.types';
+import {Defi, DefiWithId} from './defi.types';
 import {defiSchema} from './defi.schema';
 import * as db from '../../mongoose/db';
 import mongoose from "mongoose";
+import Mongoose from "mongoose";
 
-interface DefiWithId extends Defi {
-    _id: mongoose.Types.ObjectId;
+export const getById = async (id: string): Promise<DefiWithId | null> => {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return null;
+    }
+
+    await db.connect();
+    return defiSchema.findById(new mongoose.Types.ObjectId(id));
 }
 
 export const create = async (defi: Defi): Promise<DefiWithId> => {
@@ -12,6 +18,6 @@ export const create = async (defi: Defi): Promise<DefiWithId> => {
     const createdDefi = await defiSchema.create(defi);
     return {
         ...createdDefi.toObject(),
-        _id: createdDefi._id
+        _id: new Mongoose.Schema.Types.ObjectId(createdDefi._id.toString())
     };
 }

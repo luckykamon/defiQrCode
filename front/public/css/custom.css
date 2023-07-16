@@ -35,12 +35,12 @@ textarea:focus {
     color: black;
 }
 
-.img-preview {
+.file-preview {
     display: flex;
     justify-content: center;
 }
 
-.img-preview img {
+.file-preview img {
     max-height: 100px;
     margin: 5px;
 }
