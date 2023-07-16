@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express, {Request} from 'express';
-import multer from 'multer'
+import multer from 'multer';
 
 const cors = require('cors');
 const app = express();
@@ -12,22 +12,22 @@ const storage = multer.diskStorage({
     },
     filename: async function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
         // Définissez le nom du fichier comme vous le souhaitez
-        let extension
+        let extension;
         const fileMimetypeSplit = file.mimetype.split('/');
         const extensionSplit = file.originalname.split('.');
         if (extensionSplit.length === 0) { // Si le fichier n'a pas d'extension donné par l'utilisateur alors on prend le Mime Type
-            extension = fileMimetypeSplit[fileMimetypeSplit.length - 1]
+            extension = fileMimetypeSplit[fileMimetypeSplit.length - 1];
         } else { // Si le fichier a une extension donné par l'utilisateur alors on prend celle-ci (car par exemple les gpx n'ont pas de Mime Type spécifiques)
-            extension = extensionSplit[extensionSplit.length - 1]
+            extension = extensionSplit[extensionSplit.length - 1];
         }
-        cb(null, Date.now() + '-' + file.originalname.split(".").slice(0,1).join("").replace(/[^a-zA-Z0-9]/g, '') + '.' + extension);
+        cb(null, Math.round(Math.random() * 100000) + "-" + Date.now() + '-' + file.originalname.split(".").slice(0, 1).join("").replace(/[^a-zA-Z0-9]/g, '') + '.' + extension);
     }
 });
 const imageFileFilter = function (req: Request, file: Express.Multer.File, cb: (error: Error | null, allowed?: boolean) => void) {
     // Accept only image files
-    const fileMimeType = file.mimetype
+    const fileMimeType = file.mimetype;
     if (fileMimeType.split("/")[0] !== 'image' && fileMimeType !== 'application/pdf' && fileMimeType !== 'application/octet-stream') {
-        console.log(fileMimeType) // En regardant les logs on pourra voir les mimeType des fichiers que certains utilisateurs essayent d'uploader
+        console.log(fileMimeType); // En regardant les logs on pourra voir les mimeType des fichiers que certains utilisateurs essayent d'uploader
         return cb(new Error('Only image files are allowed!'), false);
     }
     cb(null, true);
@@ -56,4 +56,4 @@ interface File {
     size: number;
 }
 
-export {File, upload}
+export {File, upload};

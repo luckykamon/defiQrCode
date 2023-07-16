@@ -44,7 +44,7 @@ const CollectionSchema = new Mongoose.Schema({
                     type: String,
                     required: true
                 },
-                alt: {
+                name: {
                     type: String,
                     required: true
                 }

@@ -1,11 +1,11 @@
-import Mongoose from "mongoose";
+import { ObjectId } from 'mongoose';
 
 export interface DefiWithQrCodes extends Defi {
     qrCodes: QrCode[] | null
 }
 
 export interface Defi {
-    _id?: Mongoose.Schema.Types.ObjectId,
+    _id?: ObjectId,
     name: string,
     image: {
         path: string | null,
@@ -39,7 +39,7 @@ export interface Body {
 }
 
 export interface DefiWithId extends Defi {
-    _id: Mongoose.Schema.Types.ObjectId;
+    _id: ObjectId;
 }
 
 export interface DefiWithStringId extends Omit<DefiWithId, '_id'> {

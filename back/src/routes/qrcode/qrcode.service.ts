@@ -41,5 +41,6 @@ export const getByDefiId = async (defiId: string): Promise<Array<QrCode> | null>
 
 export const create = async (qrcode: QrCode): Promise<QrCode> => {
     await db.connect();
+    console.log(qrcode);
     return await qrcodeSchema.create(qrcode);
 }

@@ -38,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="equipe" element={<Equipe/>}/>
             <Route path="equipe/:id" element={<Equipe/>}/>
             <Route path="defi" element={<CreateDefiQrCode/>}/>
+            <Route path="defi/:idDefi" element={<CreateDefiQrCode/>}/>
             <Route path=":idQrCode" element={<Etapes/>}/>
         </Routes>
     </BrowserRouter>

@@ -17,7 +17,7 @@ const Layout = (props) => {
 }
 
 const Equipe = () => {
-    const {id} = useParams();
+    const {idEquipe} = useParams();
     const createEquipe = () => {
         const equipeName = document.getElementById("equipeName") as HTMLInputElement
         const equipeNameValue = equipeName.value
@@ -113,9 +113,9 @@ const Equipe = () => {
     const equipeName = getLocalStorage("equipeName")
     const equipeURL = localStorage.getItem("equipeURL")
     if (equipeId === null || equipeName === null || equipeURL === null) {
-        if (id !== undefined) {
+        if (idEquipe !== undefined) {
             const messageErreurGetEquipe = "<div>Une erreur est survenue lors de la récupération de votre équipe. Assurez-vous d'être sur la bonne url. Sinon je vous invite à créer une nouvelle équipe en cliquant sur l'onglet  <a href=\"/equipe\">ÉQUIPE</a>.</div>"
-            fetch(process.env.REACT_APP_URL_BACK + "/api/equipe/" + id, {
+            fetch(process.env.REACT_APP_URL_BACK + "/api/equipe/" + idEquipe, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"

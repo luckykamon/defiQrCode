@@ -1,19 +1,57 @@
-import React, {FC, InputHTMLAttributes, useState} from 'react';
+import React, {FC, InputHTMLAttributes, useEffect, useState} from 'react';
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import Image from "../Components/Image";
-import {faFileImport} from "@fortawesome/free-solid-svg-icons";
+import {faFileImport, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {v4 as uuidv4} from 'uuid'; // Importez la fonction uuid
+import {v4 as uuidv4} from 'uuid';
+import {useParams, useSearchParams} from "react-router-dom"; // Importez la fonction uuid
 
 const CreateDefiQrCode: FC = () => {
-    const initialStep = {indice: '', images: null, message: ''};
+    const {idDefi} = useParams();
+    const passwordDefi = useSearchParams()[0].get('password');
 
-    const [steps, setSteps] = useState([initialStep]);
+    const initialStep = [{indice: '', images: null, message: ''}, {indice: '', images: null, message: ''}, {
+        indice: '',
+        images: null,
+        message: ''
+    }];
+
+    const [steps, setSteps] = useState(initialStep);
     const [defiName, setDefiName] = useState('');
     const [image, setImage] = useState<string | null>(null);
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<string | null>(null);
+
+    const getStepFromDefi = () => {
+        console.log(idDefi);
+        console.log(passwordDefi);
+        if (idDefi !== undefined && passwordDefi !== null) {
+            fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + idDefi + "?password=" + passwordDefi, {
+                method: 'GET',
+                redirect: 'follow'
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+                    setDefiName(result.name);
+                    setImage(result.image.path);
+                    setDescription(result.description);
+                    setFile(result.fichier.path);
+                    const newSteps = [];
+                    for (let i = 0; i < result.qrCodes.length; i++) {
+                        newSteps.push({
+                            indice: result.qrCodes[i].indice,
+                            images: result.qrCodes[i].listImage.map((image) => {
+                                return image.path;
+                            })
+                        })
+                    }
+                    setSteps(newSteps);
+                })
+                .catch(error => console.log('error', error));
+        }
+    };
 
     const uploadImage = (file: File) => {
         return new Promise((resolve, reject) => {
@@ -168,9 +206,10 @@ const CreateDefiQrCode: FC = () => {
             body: raw,
             redirect: 'follow'
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(result => {
                 console.log(result);
+                window.location.href = "/defi/" + result._id + "?password=" + result.password;
             })
             .catch(error => console.log('error', error));
     };
@@ -225,7 +264,9 @@ const CreateDefiQrCode: FC = () => {
         );
     };
 
-    console.log(file);
+    useEffect(() => {
+        getStepFromDefi();
+    }, []);
 
     return (
         <>
@@ -268,7 +309,8 @@ const CreateDefiQrCode: FC = () => {
                             <td style={{textAlign: "center"}}>
                                 <InputAddFile type="file" onChange={e => addFile(e.target.files[0])}/>
                                 <div className={"file-preview"}> {file && (
-                                    <a href={process.env.REACT_APP_URL_BACK + file} target="_blank" rel="noreferrer">{file.split("/")[file.split("/").length - 1]}</a>
+                                    <a href={process.env.REACT_APP_URL_BACK + file} target="_blank"
+                                       rel="noreferrer">{file.split("/").pop().split("-").pop()}</a>
                                 )
                                 }</div>
                                 <br/><br/>
@@ -281,6 +323,10 @@ const CreateDefiQrCode: FC = () => {
                 {steps.map((step, index) => (
                     <div key={index}>
                         <h3>Étape {index}:</h3>
+                        <button onClick={() => handleRemoveStep(index)}
+                                style={{margin: "20px", backgroundColor: "red", height: "40px", width: "40px"}}>
+                            <FontAwesomeIcon icon={faTrash}/>
+                        </button>
                         <input placeholder="Indice" value={step.indice}
                                onChange={(e) => handleStepChange(index, 'indice', e.target.value)}
                                style={{margin: "20px"}}/> <InputAddFile placeholder="Image" type="file" multiple
@@ -291,12 +337,11 @@ const CreateDefiQrCode: FC = () => {
                                    alt={process.env.REACT_APP_URL_BACK + image}/>
 
                         ))}</div>
-                        <p style={{color: "red"}}>{step.message}</p>
-                        <button onClick={() => handleRemoveStep(index)} style={{margin: "20px"}}>Supprimer cette étape
-                        </button>
+                        <p style={{color: "red"}}>{step.message}</p><br/>
                     </div>
                 ))} <br/>
-                <button onClick={handleAddStep}>Ajouter une étape</button>
+                <button onClick={handleAddStep} style={{backgroundColor: "green", height: "40px", width: "40px"}}>
+                    <FontAwesomeIcon icon={faPlus}/></button>
 
                 <br/><br/>
                 <button onClick={handleDefiCreation}>Créer le défi</button>
