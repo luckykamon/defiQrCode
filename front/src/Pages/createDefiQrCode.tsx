@@ -1,31 +1,37 @@
-import React, {FC, InputHTMLAttributes, useEffect, useState} from 'react';
+import React, {FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
 import Image from "../Components/Image";
-import {faFileImport, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faFileImport, faPlus, faQrcode, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {v4 as uuidv4} from 'uuid';
 import {useParams, useSearchParams} from "react-router-dom"; // Importez la fonction uuid
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
 
 const CreateDefiQrCode: FC = () => {
     const {idDefi} = useParams();
     const passwordDefi = useSearchParams()[0].get('password');
+    const notificationCreate = useSearchParams()[0].get('notificationCreate');
 
-    const initialStep = [{indice: '', images: null, message: ''}, {indice: '', images: null, message: ''}, {
-        indice: '',
-        images: null,
-        message: ''
-    }];
+    const initialStep = new Array(5).fill(null).map(() => ({
+        ...{
+            indice: '',
+            images: null,
+            message: '',
+            idQrCode: 'verification'
+        }
+    }));
 
     const [steps, setSteps] = useState(initialStep);
     const [defiName, setDefiName] = useState('');
     const [image, setImage] = useState<string | null>(null);
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<string | null>(null);
+    const [messageGeneral, setMessageGeneral] = useState(null);
 
     const getStepFromDefi = () => {
-        console.log(idDefi);
-        console.log(passwordDefi);
         if (idDefi !== undefined && passwordDefi !== null) {
             fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + idDefi + "?password=" + passwordDefi, {
                 method: 'GET',
@@ -39,13 +45,21 @@ const CreateDefiQrCode: FC = () => {
                     setDescription(result.description);
                     setFile(result.fichier.path);
                     const newSteps = [];
+                    let allQrcodeAreVerif = true;
                     for (let i = 0; i < result.qrCodes.length; i++) {
                         newSteps.push({
                             indice: result.qrCodes[i].indice,
                             images: result.qrCodes[i].listImage.map((image) => {
                                 return image.path;
-                            })
-                        })
+                            }),
+                            idQrCode: result.qrCodes[i].idQrCode
+                        });
+                        if (result.qrCodes[i].idQrCode === "verification") {
+                            allQrcodeAreVerif = false;
+                        }
+                    }
+                    if (!allQrcodeAreVerif) {
+                        setMessageGeneral("Votre défi n'as pas encore été vérifié par un administrateur, lorsqu'il le sera il sera publié et vous pourrez obtenir des QR Codes afin de le partager.");
                     }
                     setSteps(newSteps);
                 })
@@ -165,11 +179,7 @@ const CreateDefiQrCode: FC = () => {
         setSteps(updatedSteps);
     };
 
-
-    const createDefi = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
+    const prepareDataDefi = () => {
         const qrcodes = [];
         for (let stepId = 0; stepId < steps.length; stepId++) {
             const listImage = [];
@@ -186,7 +196,7 @@ const CreateDefiQrCode: FC = () => {
             });
         }
 
-        const raw = JSON.stringify({
+        return JSON.stringify({
             "name": defiName,
             "image": {
                 "name": image ? image?.split('/').pop() : null,
@@ -199,6 +209,30 @@ const CreateDefiQrCode: FC = () => {
             },
             "qrcode": qrcodes
         });
+    };
+
+    const updateDefi = () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = prepareDataDefi();
+
+        fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + idDefi + "?password=" + passwordDefi, {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        })
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    };
+
+    const createDefi = () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = prepareDataDefi();
 
         fetch(process.env.REACT_APP_URL_BACK + "/api/defi", {
             method: 'POST',
@@ -209,7 +243,7 @@ const CreateDefiQrCode: FC = () => {
             .then(response => response.json())
             .then(result => {
                 console.log(result);
-                window.location.href = "/defi/" + result._id + "?password=" + result.password;
+                window.location.href = "/defi/" + result._id + "?password=" + result.password + "&notificationCreate=true";
             })
             .catch(error => console.log('error', error));
     };
@@ -219,13 +253,15 @@ const CreateDefiQrCode: FC = () => {
         if (messages.length > 0) {
             alert(messages.join('\n'));
             return;
-        } else {
+        } else if (isCreate()) {
             createDefi();
+        } else if (isUpdate()) {
+            updateDefi();
         }
     };
 
     const handleAddStep = () => {
-        setSteps([...steps, initialStep]);
+        setSteps([...steps, initialStep[0]]);
     };
 
     const handleRemoveStep = (index: number) => {
@@ -252,28 +288,114 @@ const CreateDefiQrCode: FC = () => {
 
     const InputAddFile: React.FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
         const uniqueId = uuidv4();  // Générez un ID unique pour chaque instance du composant
+        const fileInputRef = useRef<HTMLInputElement>(null); // Créer une référence
 
+        const onButtonClick = () => { // Créer une fonction pour gérer le clic sur le bouton
+            fileInputRef.current?.click();
+        };
         return (
             <div className="custom-file-upload">
-                <input type="file" id={uniqueId} style={{display: 'none'}} {...props} /> <label htmlFor={uniqueId}>
-                <div className="inner-content">
-                    <span><FontAwesomeIcon icon={faFileImport}/></span>
-                </div>
+                <input ref={fileInputRef} type="file" id={uniqueId} style={{display: 'none'}} {...props} /> <label
+                htmlFor={uniqueId} onClick={onButtonClick}>
+                <button className="inner-content">
+                    <FontAwesomeIcon icon={faFileImport}/>
+                </button>
             </label>
             </div>
         );
     };
 
+    const isUpdate = () => {
+        return idDefi && passwordDefi;
+    };
+
+    const isCreate = () => {
+        return !idDefi || !passwordDefi;
+    };
+
+    const generateQrCode = ({color, text, fileUrl}) => {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('color', color);
+
+            // Fetch the image file from the provided URL
+            fetch(fileUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    // Create a new file instance
+                    const file = new File([blob], 'filename.png', {type: 'image/png'});
+                    formData.append('file', file);
+
+                    fetch('https://generateqrcode.lucasbodin.com/uploadQrCode', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => response.text())
+                        .then(result => {
+                            console.log("here1");
+                            console.log(result);
+                            console.log(color, text, fileUrl);
+                            resolve(result);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            reject(error);
+                        });
+                })
+                .catch(error => {
+                    console.error(error);
+                    reject(error);
+                });
+        });
+    };
+
+    const handleGenerateQrCode = async (stepId: number) => {
+        generateQrCode({
+            color: '#000000',
+            text: steps[stepId].idQrCode,
+            fileUrl: process.env.REACT_APP_URL_BACK + image
+        }).then((nameQrCode: string) => {
+            window.open("https://generateqrcode.lucasbodin.com/getQrCode/" + nameQrCode, '_blank');
+        }).catch((error) => {
+            console.error(error);
+            NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
+        });
+
+    };
+
+
     useEffect(() => {
         getStepFromDefi();
+        if (notificationCreate === 'true') {
+            NotificationManager.success('Il sera publié une fois validé par un administrateur', 'Défi Créé', 5000);
+        }
+        if (isUpdate()) {
+            // generateQrCode({
+            //     color: '#000000',
+            //     text: "test1",
+            //     fileUrl: "http://localhost:4011/public/uploads/36582-1689518180173-profileluckykamonjeuxvideorogne650x650modified.png"
+            // });
+        }
+
     }, []);
+
+    console.log(steps);
 
     return (
         <>
-            <NavBar page=""/>
+            <NotificationContainer/> <NavBar page=""/>
             <div style={{textAlign: "center", marginTop: "40px"}}>
                 <div style={{display: "block"}}>
-                    <h1>Créer un défi</h1><br/>
+                    {idDefi && passwordDefi && (
+                        <h1>Modifier un défi</h1>
+                    )} {!idDefi || !passwordDefi && (
+                    <h1>Modifier un défi</h1>
+                )} <br/> {messageGeneral && (
+                    <>
+                        <p>{messageGeneral}</p><br/>
+                    </>
+                )}
                     <table style={{textAlign: "center", margin: "auto", width: "90vw"}}>
                         <tbody style={{fontWeight: "bold"}}>
                         <tr style={{borderBottom: "none"}}>
@@ -287,11 +409,10 @@ const CreateDefiQrCode: FC = () => {
                             <td style={{margin: "10px", textAlign: "right"}}>Image:</td>
                             <td style={{textAlign: "center"}}>
                                 <InputAddFile type="file" accept="image/*" onChange={e => addImage(e.target.files[0])}/>
-                                <br/>
                                 <div className={"file-preview"}>
                                     {image && <Image src={process.env.REACT_APP_URL_BACK + image} alt=""/>}
                                 </div>
-                                <br/><br/>
+                                <br/>
                             </td>
                         </tr>
                         <tr>
@@ -331,7 +452,10 @@ const CreateDefiQrCode: FC = () => {
                                onChange={(e) => handleStepChange(index, 'indice', e.target.value)}
                                style={{margin: "20px"}}/> <InputAddFile placeholder="Image" type="file" multiple
                                                                         accept="image/*"
-                                                                        onChange={(e) => handleStepChange(index, 'images', e.target.files)}/>
+                                                                        onChange={(e) => handleStepChange(index, 'images', e.target.files)}/> {step.idQrCode && step.idQrCode !== "verification" && (
+                        <button onClick={() => handleGenerateQrCode(index)}
+                                style={{height: "40px", width: "40px", margin: "15px"}}><FontAwesomeIcon
+                            icon={faQrcode}/></button>)}
                         <div className={"file-preview"}> {step.images && step.images.map((image) => (
                             <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
                                    alt={process.env.REACT_APP_URL_BACK + image}/>
@@ -344,7 +468,11 @@ const CreateDefiQrCode: FC = () => {
                     <FontAwesomeIcon icon={faPlus}/></button>
 
                 <br/><br/>
-                <button onClick={handleDefiCreation}>Créer le défi</button>
+                <button onClick={handleDefiCreation}>{isUpdate() && (
+                    <span>Envoyer la modification du défi</span>
+                )}{isCreate() && (
+                    <span>Créer le défi</span>
+                )}</button>
             </div>
             <Footer/>
         </>

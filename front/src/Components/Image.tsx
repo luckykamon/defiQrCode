@@ -43,7 +43,7 @@ const Image: FC<ImageProps> = ({src, alt}) => {
         <div>
             {!onError && (
                 <div style={{textAlign: "center"}}>
-                    <a href={src_original} download target="_blank" rel="noreferrer"> <img src={src} alt={alt} onError={() => setOnError(true)}/> </a>
+                    <a href={src_original} download target="_blank" rel="noreferrer" style={{display: 'inline-block', verticalAlign: 'top'}}> <img style={{display: 'block'}} src={src} alt={alt} onError={() => setOnError(true)}/> </a>
                 </div>
             )} {onError && (
             <AttenteImage alt={alt}/>
