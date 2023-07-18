@@ -3,6 +3,7 @@ import * as defiService from './defi.service';
 import * as qrcodeService from '../qrcode/qrcode.service';
 import {Body, File, QrCode} from './defi.types';
 import mongoose from "mongoose";
+import {defiSchema} from "./defi.schema";
 
 const defiRouter: Router = Router();
 
@@ -63,36 +64,23 @@ const generatePassword = () => {
 };
 
 defiRouter.get('/navbar', async (req: Request, res: Response) => {
-    const defis = await defiService.getAll();
-    const promises = defis.map(async defi => {
-        const qrCodesByDefiId = await qrcodeService.getByDefiIdSolution(defi._id.toString());
-        if (!qrCodesByDefiId || qrCodesByDefiId.length === 0) {
-            // Cas où il n'y a pas de QrCode pour ce défi, ce qui ne peut pas arriver
-            return null;
+    res.status(200).send(await defiSchema.aggregate([
+        {
+            $lookup:
+                {
+                    from: "qrcodes", // nom de la collection avec laquelle on souhaite faire le "join"
+                    localField: "_id", // champ de la collection defiSchema correspondant
+                    foreignField: "defiId", // champ de la collection qrcodes correspondant
+                    as: "qrCodesByDefiId" // nom du nouveau champ qui contiendra les résultats
+                }
+        },
+        {
+            $match: {'qrCodesByDefiId.isSolution': true, 'qrCodesByDefiId.idQrCode': {$ne: "verification"}}
+        },
+        {
+            $project: {_id: 1, name: 1}
         }
-        let qrCodeInVerification = false;
-        qrCodesByDefiId.forEach(qrCode => {
-            if (qrCode.idQrCode === "verification") {
-                qrCodeInVerification = true;
-            }
-        });
-        if (qrCodeInVerification) {
-            return null;
-        }
-        if (defi._id.toString() === "64b66ef1b45f50b48e23eef4"){
-            console.log({
-                _id: defi._id,
-                name: defi.name
-            });
-        }
-        return {
-            _id: defi._id.toString(),
-            name: defi.name
-        };
-    });
-
-    const results = (await Promise.all(promises)).filter(item => item !== null);
-    res.status(200).send(results);
+    ]));
 });
 
 defiRouter.get('/:defiId', async (req: Request, res: Response) => {
