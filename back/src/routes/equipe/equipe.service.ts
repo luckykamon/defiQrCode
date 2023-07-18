@@ -4,6 +4,7 @@ import {qrcodeSchema} from "../qrcode/qrcode.schema";
 import * as db from '../../mongoose/db';
 import {Types} from "mongoose";
 import {QrCode} from "../qrcode/qrcode.types";
+import * as defiService from "../defi/defi.service";
 
 export const getAll = async (): Promise<Array<Equipe>> => {
     await db.connect();
@@ -69,8 +70,10 @@ export const getClassement = async (_id: string): Promise<Array<{
 
     await db.connect();
 
-    let listQrcode: Array<QrCode> = await qrcodeSchema.find({isSolution: false, number: {$ne: 0}}) // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
-    let listEquipeMotTrouve: Array<Equipe> = await equipeSchema.find({motTrouve: true});
+    let equipeIdRequest = await equipeSchema.findById(_id);
+
+    let listQrcode: Array<QrCode> = await qrcodeSchema.find({isSolution: false, number: {$ne: 0}, defiId: equipeIdRequest?.defiId}) // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
+    let listEquipeMotTrouve: Array<Equipe> = await equipeSchema.find({motTrouve: true, defiId: equipeIdRequest?.defiId});
     // Créer un objet pour grouper les données par equipeId
     let grouped: { [key: string]: QrCode[] } = {};
 
@@ -122,12 +125,19 @@ export const getClassement = async (_id: string): Promise<Array<{
     return result
 }
 
-export const mot = async (body: { equipeId: string, mot: string }): Promise<Boolean> => {
+export const mot = async (body: { equipeId?: string, mot: string, defiId: string}): Promise<Boolean> => {
     await db.connect();
 
-    let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === "accord";
+    const motCache = await defiService.getMotCacheById(body.defiId)
 
-    if (motIsFound && Types.ObjectId.isValid(body.equipeId)) {
+    if (!motCache) {
+        console.log("Le mot caché n'as pas été trouve pour l'équipe " + body.equipeId + " . Il y a une erreur dans les données de mongoDB")
+        return false;
+    }
+
+    let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === motCache;
+
+    if (motIsFound && body.equipeId && Types.ObjectId.isValid(body.equipeId)) {
         await equipeSchema.updateOne({_id: body.equipeId}, {motTrouve: true, dateMot: new Date()});
     }
 
@@ -136,7 +146,5 @@ export const mot = async (body: { equipeId: string, mot: string }): Promise<Bool
 
 export const create = async (equipe: Equipe): Promise<Equipe> => {
     await db.connect();
-    equipe.motTrouve = false;
-    equipe.dateMot = null;
     return await equipeSchema.create(equipe);
 }

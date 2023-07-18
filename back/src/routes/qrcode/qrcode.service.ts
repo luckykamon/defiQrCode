@@ -1,6 +1,7 @@
 import {QrCode} from './qrcode.types';
 import {qrcodeSchema} from './qrcode.schema';
 import * as db from '../../mongoose/db';
+import mongoose from "mongoose";
 
 export const deleteByDefiId = async (defiId: string) => {
     await db.connect();
@@ -17,7 +18,11 @@ export const get = async (idQrCode: String): Promise<QrCode | null> => {
     }
 };
 
-export const getAll = async (equipeId: String): Promise<Array<QrCode>> => {
+export const getAll = async (equipeId: string): Promise<Array<QrCode>> => {
+    if (!mongoose.Types.ObjectId.isValid(equipeId)) {
+        return [];
+    }
+
     await db.connect();
     return qrcodeSchema.find({equipeId: equipeId, idQrCode: {$ne: "verification"}});
 };

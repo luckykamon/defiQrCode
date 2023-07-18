@@ -15,7 +15,13 @@ const CollectionSchema = new Mongoose.Schema({
         dateMot: {
             type: Date,
             default: null
-        }
+        },
+        defiId: {
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: 'defi',
+            required: true,
+            default: null
+        },
     }
 );
 

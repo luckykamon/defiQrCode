@@ -15,17 +15,16 @@ const CreateDefiQrCode: FC = () => {
     const passwordDefi = useSearchParams()[0].get('password');
     const notificationCreate = useSearchParams()[0].get('notificationCreate');
 
-    const initialStep = new Array(5).fill(null).map(() => ({
-        ...{
-            indice: '',
-            images: null,
-            message: '',
-            idQrCode: 'verification'
-        }
-    }));
+    const initialStep = {
+        indice: '',
+        images: null,
+        message: '',
+        idQrCode: 'verification'
+    };
 
-    const [steps, setSteps] = useState(initialStep);
+    const [steps, setSteps] = useState(new Array(5).fill(null).map(() => ({...initialStep})));
     const [defiName, setDefiName] = useState('');
+    const [motCache, setMotCache] = useState('');
     const [image, setImage] = useState<string | null>(null);
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<string | null>(null);
@@ -39,11 +38,11 @@ const CreateDefiQrCode: FC = () => {
             })
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
                     setDefiName(result.name);
                     setImage(result.image.path);
                     setDescription(result.description);
                     setFile(result.fichier.path);
+                    setMotCache(result.motCache);
                     const newSteps = [];
                     let allQrcodeAreVerif = true;
                     for (let i = 0; i < result.qrCodes.length; i++) {
@@ -207,6 +206,7 @@ const CreateDefiQrCode: FC = () => {
                 "name": file ? file?.split('/').pop() : null,
                 "path": file ? file : null
             },
+            "motCache": motCache,
             "qrcode": qrcodes
         });
     };
@@ -268,17 +268,19 @@ const CreateDefiQrCode: FC = () => {
                 })
                 .catch(() => {
                     NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi');
-                })
+                });
         }
     };
 
     const handleAddStep = () => {
-        setSteps([...steps, initialStep[0]]);
+        setSteps([...steps, initialStep]);
     };
 
     const handleRemoveStep = (index: number) => {
         if (steps.length === 1) return alert('Vous devez avoir au moins une étape.');
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
+        if (steps[index].indice !== "" || steps[index].images !== null) { // Si l'étape a déjà un indice ou une image d'ajouté, on ajoute un message de confirmation
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
+        }
         const updatedSteps = [...steps];
         updatedSteps.splice(index, 1);
         setSteps(updatedSteps);
@@ -394,9 +396,14 @@ const CreateDefiQrCode: FC = () => {
                     <h1>Modifier un défi</h1>
                 )} <br/> {messageGeneral && (
                     <>
-                        <p>{messageGeneral}</p><br/>
+                        <p>{messageGeneral}</p>
                     </>
-                )}
+                )} {isUpdate() && (<>
+                    <p style={{wordBreak: "break-word"}}>
+                        Pour revenir sur cette page afin de récupérer les QR Codes ou modifier le défi, veuillez enregistrer l&apos;url
+                        suivante: <a href={window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi} target="_blank" rel="noreferrer">{window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi}</a>
+                    </p><br/>
+                </>)}
                     <table style={{textAlign: "center", margin: "auto", width: "90vw"}}>
                         <tbody style={{fontWeight: "bold"}}>
                         <tr style={{borderBottom: "none"}}>
@@ -435,7 +442,14 @@ const CreateDefiQrCode: FC = () => {
                                        rel="noreferrer">{file.split("/").pop().split("-").pop()}</a>
                                 )
                                 }</div>
-                                <br/><br/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr style={{borderBottom: "none"}}>
+                            <td style={{margin: "10px", textAlign: "right"}}>Mot caché:</td>
+                            <td style={{textAlign: "center"}}>
+                                <input placeholder="Mot caché" value={motCache}
+                                       onChange={e => setMotCache(e.target.value)}/> <br/><br/>
                             </td>
                         </tr>
                         </tbody>

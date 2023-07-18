@@ -13,7 +13,7 @@ rootRouter.use('/api/equipe', equipeRoute);
 rootRouter.use('/api/qrcode', qrcodeRoute);
 rootRouter.use('/api/defi', defiRoute);
 rootRouter.use('/api/image', imageRouter);
-rootRouter.use('/images', express.static(path.join(__dirname, '../../public/images')));
+rootRouter.use('/defi', express.static(path.join(__dirname, '../../public/defi')));
 rootRouter.use('/public/uploads', express.static(path.join(__dirname, '../../public/uploads')));
 
 export default rootRouter;

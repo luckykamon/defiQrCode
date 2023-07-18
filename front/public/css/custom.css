@@ -72,3 +72,25 @@ textarea:focus {
     height: 40px;
     background-color: darkgrey;
 }
+
+.sous-menu {
+    display: none;
+    position: absolute;
+    background-color: #0f0f0f;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+li:hover .sous-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.navbarLi {
+    border: 1px solid transparent !important;
+    border-radius: 10px;
+}
+
+.navbarLi:hover {
+    border: #fe6928 1px solid !important;
+}

@@ -4,6 +4,7 @@ import Image from "../Components/Image";
 import {useParams} from "react-router-dom";
 import NavBar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
+import {setLocalStorage} from "../Functions/LocalStorage";
 
 const Etapes: FC = () => {
     const [qrCode, setQrCode] = useState(null)
@@ -25,6 +26,7 @@ const Etapes: FC = () => {
             .then(data => {
                 if (data) {  // On vérifie si data existe car dans le cas où le status n'est pas 200, data sera undefined
                     setQrCode(data)
+                    setLocalStorage("defiId", data.defiId)
                     setStatus("success")
                 }
             })

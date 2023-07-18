@@ -5,6 +5,9 @@ export function setLocalStorage(key: string, value: string): void {
 
 // Fonction qui récupère une valeur de localStorage
 export function getLocalStorage(key: string): string | null {
+    if (localStorage.getItem("defiId") === null) {
+        setLocalStorage("defiId", "64b66ef1b45f50b48e23eef4"); // Valeur par défaut
+    }
     return localStorage.getItem(key);
 }
 

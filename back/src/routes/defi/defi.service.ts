@@ -22,6 +22,15 @@ export const getById = async (id: string): Promise<DefiWithId | null> => {
     return defiSchema.findById(new mongoose.Types.ObjectId(id));
 };
 
+export const getMotCacheById = async (id: string): Promise<string | null> => {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return null;
+    }
+
+    await db.connect();
+    return (await defiSchema.findById(new mongoose.Types.ObjectId(id)))?.motCache ?? null;
+}
+
 export const create = async (defi: Defi): Promise<DefiWithId> => {
     await db.connect();
     const createdDefi = await defiSchema.create(defi);

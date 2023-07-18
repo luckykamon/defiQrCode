@@ -31,7 +31,8 @@ const Equipe = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name: equipeNameValue
+                name: equipeNameValue,
+                defiId: getLocalStorage("defiId")
             })
         }).then((response) => {
             if (response.status === 200) {

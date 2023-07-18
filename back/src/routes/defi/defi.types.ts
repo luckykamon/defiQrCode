@@ -1,9 +1,5 @@
 import mongoose from 'mongoose';
 
-export interface DefiWithQrCodes extends Defi {
-    qrCodes: QrCode[] | null
-}
-
 export interface Defi {
     _id?: mongoose.Types.ObjectId,
     name: string,
@@ -16,7 +12,8 @@ export interface Defi {
         path: string | null,
         alt: string | null
     },
-    password: string
+    password: string,
+    motCache: string
 }
 
 export interface File {
@@ -36,12 +33,9 @@ export interface Body {
     description: string;
     fichier: File;
     qrcode: QrCode[];
+    motCache: string;
 }
 
 export interface DefiWithId extends Defi {
     _id: mongoose.Types.ObjectId;
-}
-
-export interface DefiWithStringId extends Omit<DefiWithId, '_id'> {
-    _id: string;
 }

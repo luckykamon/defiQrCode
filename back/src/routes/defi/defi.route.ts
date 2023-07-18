@@ -30,6 +30,7 @@ const validateBody = (body: any): body is Body => {
         body.image === null || validateFile(body.image) &&
         typeof body.description === 'string' &&
         body.fichier === null || validateFile(body.fichier) &&
+        typeof body.motCache === 'string' &&
         Array.isArray(body.qrcode) &&
         body.qrcode.every(validateQrCode);
 };
@@ -83,7 +84,8 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
                 "description": defi.description,
                 "image": defi.image,
                 "fichier": defi.fichier,
-                "qrCodes": qrCodesByDefiId
+                "qrCodes": qrCodesByDefiId,
+                "motCache": defi.motCache
             });
         }
     }
@@ -129,7 +131,8 @@ defiRouter.post('', async (req: Request, res: Response) => {
             path: req.body?.fichier?.path ? req.body.fichier.path : null,
             alt: req.body?.fichier?.name ? "Fichier d'aide du défi " + req.body.fichier.name : null
         },
-        password: passwordDefi
+        password: passwordDefi,
+        motCache: req.body.motCache
     };
     const resultNewDefi = await defiService.create(defiNew);
     for (let qrCodeRequest of req.body.qrcode) {

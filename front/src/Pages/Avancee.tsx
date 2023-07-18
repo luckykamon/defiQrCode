@@ -236,6 +236,7 @@ const InputMot: FC = () => {
 
         const raw = JSON.stringify({
             "equipeId": getLocalStorage("equipeId"),
+            "defiId": getLocalStorage("defiId"),
             "mot": mot
         });
 

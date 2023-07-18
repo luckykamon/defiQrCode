@@ -39,6 +39,10 @@ const CollectionSchema = new Mongoose.Schema({
     password:{
         type: String,
         required: true
+    },
+    motCache: {
+        type: String,
+        required: true
     }
 });
 
