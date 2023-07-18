@@ -1,6 +1,8 @@
-require('dotenv').config();
+import {connect} from "./mongoose/db";
 import express, {Request} from 'express';
 import multer from 'multer';
+
+require('dotenv').config();
 
 const cors = require('cors');
 const app = express();
@@ -34,7 +36,7 @@ const imageFileFilter = function (req: Request, file: Express.Multer.File, cb: (
 };
 const upload = multer({storage: storage, fileFilter: imageFileFilter});
 
-import rootRouter from './routes/router' // ! Attention au reformat du fichier ! Doit se situer après l'import de multer (après le const de upload)
+import rootRouter from './routes/router'; // ! Attention au reformat du fichier ! Doit se situer après l'import de multer (après le const de upload)
 
 app.use(cors());
 app.use(express.json());
@@ -42,7 +44,10 @@ app.use(rootRouter);
 
 
 app.listen(PORT, () => {
-    console.log(`Server has started and is listening on port ${PORT}.`);
+    connect()
+        .then(() => {
+            console.log(`Server has started and is listening on port ${PORT}.`);
+        });
 });
 
 interface File {
