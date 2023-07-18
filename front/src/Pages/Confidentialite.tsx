@@ -4,7 +4,7 @@ import Footer from "../Layout/Footer";
 const Confidentialite = () => {
     return (
         <div>
-            <NavBar page=""/>
+            <NavBar/>
             <div style={{textAlign: "center", margin: "20px"}}>
                 <h3 style={{color: "white", marginTop: "40px"}}>Politique de Confidentialité:</h3>
                 <p>Ce site enregistre dans localStorage les numéros des QrCodes scannés ainsi que la date du premier

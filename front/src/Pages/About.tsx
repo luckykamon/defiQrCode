@@ -10,7 +10,7 @@ const About: FC = () => {
 
     return (
         <div>
-            <NavBar page="/"/>
+            <NavBar/>
             <section id="about">
                 <div className="row">
                     <div className="three columns">

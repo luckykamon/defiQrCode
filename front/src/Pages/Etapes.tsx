@@ -39,19 +39,19 @@ const Etapes: FC = () => {
 
     if (status === "loading") {
         return (<>
-            <NavBar page="/etape_0"/>
+            <NavBar/>
             <div style={{textAlign: "center"}}>Vérification du QrCode en cours...</div>
             <Footer/>
         </>)
     } else if (status === "error") {
         return (<>
-            <NavBar page="/etape_0"/>
+            <NavBar/>
             <div style={{textAlign: "center"}}>Une erreur est survenue lors de la vérification du QrCode</div>
             <Footer/>
         </>)
     } else if (status === "badId") {
         return (<>
-            <NavBar page="/etape_0"/>
+            <NavBar/>
             <div style={{textAlign: "center"}}>Le QrCode que vous scanné n&apos;existe pas</div>
             <Footer/>
         </>)

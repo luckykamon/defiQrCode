@@ -62,6 +62,39 @@ const generatePassword = () => {
     return password;
 };
 
+defiRouter.get('/navbar', async (req: Request, res: Response) => {
+    const defis = await defiService.getAll();
+    const promises = defis.map(async defi => {
+        const qrCodesByDefiId = await qrcodeService.getByDefiIdSolution(defi._id.toString());
+        if (!qrCodesByDefiId || qrCodesByDefiId.length === 0) {
+            // Cas où il n'y a pas de QrCode pour ce défi, ce qui ne peut pas arriver
+            return null;
+        }
+        let qrCodeInVerification = false;
+        qrCodesByDefiId.forEach(qrCode => {
+            if (qrCode.idQrCode === "verification") {
+                qrCodeInVerification = true;
+            }
+        });
+        if (qrCodeInVerification) {
+            return null;
+        }
+        if (defi._id.toString() === "64b66ef1b45f50b48e23eef4"){
+            console.log({
+                _id: defi._id,
+                name: defi.name
+            });
+        }
+        return {
+            _id: defi._id.toString(),
+            name: defi.name
+        };
+    });
+
+    const results = (await Promise.all(promises)).filter(item => item !== null);
+    res.status(200).send(results);
+});
+
 defiRouter.get('/:defiId', async (req: Request, res: Response) => {
     const defi = await defiService.getById(req.params.defiId);
     if (defi === null) {
@@ -69,6 +102,22 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
         return;
     } else {
         if (req.query?.password !== defi?.password || req.query?.password === undefined) {
+            const qrCodesByDefiId = await qrcodeService.getByDefiId(req.params.defiId);
+            if (!qrCodesByDefiId) { // Cas où il n'y a pas de QrCode pour ce défi, ce qui ne peut pas arriver
+                console.log("Pas de QrCode pour ce défi, il faut regarder parce qu'il doit y avoir un problème; defiId: " + req.params.defiId);
+                res.status(404).send('Not found');
+                return;
+            }
+            let qrCodeInVerification = false;
+            qrCodesByDefiId.forEach(qrCode => {
+                if (qrCode.idQrCode === "verification") {
+                    qrCodeInVerification = true;
+                }
+            });
+            if (qrCodeInVerification) {
+                res.status(404).send('Not found');
+                return;
+            }
             res.status(200).send({
                 "_id": defi._id,
                 "name": defi.name,

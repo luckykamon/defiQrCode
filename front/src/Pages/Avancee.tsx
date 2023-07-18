@@ -327,7 +327,7 @@ const Avancee: FC = () => {
 
     return (
         <div>
-            <NavBar page="/avancee"/>
+            <NavBar/>
             <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir
                 votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span>&nbsp;
                 <u>et</u> trouver le <span

@@ -42,7 +42,7 @@ const AffichageEtape: FC<AffichageEtapeProps> = ({nbQrCode = 0, mot = "Exemple",
     }
     return (
         <div>
-            <NavBar page="/etape_0"/>
+            <NavBar/>
             <h4 style={{
                 textAlign: "center",
                 color: "white",

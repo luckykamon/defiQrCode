@@ -11,6 +11,10 @@ export function getLocalStorage(key: string): string | null {
     return localStorage.getItem(key);
 }
 
+export function getLocalStorageStartWith(keyStart: string): string[] {
+    return Object.keys(localStorage).filter(key => key.startsWith(keyStart));
+}
+
 // Fonction qui supprime toutes les valeurs de localStorage
 export function deleteLocalStorage(messageConfirmation = undefined): void {
     if (messageConfirmation === undefined) {

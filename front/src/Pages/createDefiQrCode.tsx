@@ -387,7 +387,7 @@ const CreateDefiQrCode: FC = () => {
 
     return (
         <>
-            <NotificationContainer/> <NavBar page=""/>
+            <NotificationContainer/> <NavBar/>
             <div style={{textAlign: "center", marginTop: "40px"}}>
                 <div style={{display: "block"}}>
                     {idDefi && passwordDefi && (

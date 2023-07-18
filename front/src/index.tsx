@@ -9,7 +9,6 @@ import Equipe from "./Pages/Equipe";
 import CreateDefiQrCode from "./Pages/createDefiQrCode";
 
 
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
         <Routes>

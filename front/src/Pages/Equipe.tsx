@@ -11,7 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 const Layout = (props) => {
     return (
         <div>
-            <NavBar page="/equipe"/> {props.children} <Footer/>
+            <NavBar/> {props.children} <Footer/>
         </div>
     )
 }

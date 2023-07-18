@@ -120,7 +120,6 @@ header .scrolldown a {
     width: 42px;
     font-size: 42px;
     line-height: 42px;
-    color: #fff;
     border-radius: 100%;
 
     -webkit-transition: all .3s ease-in-out;
@@ -202,9 +201,11 @@ ul#nav li a:active {
     background-color: transparent !important;
 }
 
-ul#nav li.current a {
+ul#nav li.current > a {
     color: #fe6928;
 }
+
+
 
 
 /* ------------------------------------------------------------------ */
@@ -359,7 +360,7 @@ ul#nav li.current a {
     margin-bottom: 60px;
     background: #333;
     height: 42px;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .bars li em {
@@ -383,7 +384,7 @@ ul#nav li.current a {
     display: inline-block;
     height: 42px;
     line-height: 42px;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 /*
@@ -697,7 +698,7 @@ ul#nav li.current a {
 }
 
 #call-to-action .header-col h1:before {
-    font-family: 'FontAwesome';
+    font-family: 'FontAwesome', sans-serif;
     content: "\f0ac";
     padding-right: 10px;
     font-size: 72px;
@@ -780,7 +781,7 @@ call-to-action .button {
 }
 
 #testimonials .header-col h1:before {
-    font-family: 'FontAwesome';
+    font-family: 'FontAwesome', sans-serif;
     content: "\f10d";
     padding-right: 10px;
     font-size: 72px;
@@ -792,10 +793,10 @@ call-to-action .button {
 
 /*	Blockquotes */
 #testimonials blockquote {
-    margin: 0 0px 30px 0px;
+    margin: 0 0 30px 0;
     padding-left: 0;
     position: relative;
-    text-shadow: 0px 1px 3px rgba(0, 0, 0, 1);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
 }
 
 #testimonials blockquote:before {
@@ -931,7 +932,6 @@ call-to-action .button {
     text-indent: -9999px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
-    -o-border-radius: 20px;
     border-radius: 20px;
     box-shadow: inset 0 0 3px rgba(255, 255, 255, .3);
 }
@@ -986,7 +986,7 @@ call-to-action .button {
 }
 
 #contact h1:before {
-    font-family: 'FontAwesome';
+    font-family: 'FontAwesome', sans-serif;
     content: "\f0e0";
     padding-right: 10px;
     font-size: 72px;
@@ -1056,7 +1056,7 @@ call-to-action .button {
     cursor: pointer;
     height: auto;
     display: inline-block;
-    border-radius: 0px;
+    border-radius: 0;
     margin-left: 26%;
 }
 
@@ -1107,7 +1107,7 @@ call-to-action .button {
 }
 
 #twitter li {
-    margin: 6px 0px 12px 0;
+    margin: 6px 0 12px 0;
     line-height: 30px;
 }
 
