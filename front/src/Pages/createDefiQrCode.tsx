@@ -1,6 +1,4 @@
 import React, {FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import Image from "../Components/Image";
 import {faFileImport, faPlus, faQrcode, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -387,7 +385,7 @@ const CreateDefiQrCode: FC = () => {
 
     return (
         <>
-            <NotificationContainer/> <NavBar/>
+            <NotificationContainer/>
             <div style={{textAlign: "center", marginTop: "40px"}}>
                 <div style={{display: "block"}}>
                     {idDefi && passwordDefi && (
@@ -489,7 +487,6 @@ const CreateDefiQrCode: FC = () => {
                     <span>Créer le défi</span>
                 )}</button>
             </div>
-            <Footer/>
         </>
     );
 };

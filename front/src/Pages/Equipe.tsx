@@ -1,5 +1,3 @@
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
 import {useParams} from 'react-router-dom';
@@ -11,7 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 const Layout = (props) => {
     return (
         <div>
-            <NavBar/> {props.children} <Footer/>
+            {props.children}
         </div>
     )
 }

@@ -1,6 +1,4 @@
 import React, {FC, ReactNode} from 'react';
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 
@@ -42,7 +40,6 @@ const AffichageEtape: FC<AffichageEtapeProps> = ({nbQrCode = 0, mot = "Exemple",
     }
     return (
         <div>
-            <NavBar/>
             <h4 style={{
                 textAlign: "center",
                 color: "white",
@@ -53,7 +50,7 @@ const AffichageEtape: FC<AffichageEtapeProps> = ({nbQrCode = 0, mot = "Exemple",
                 découvrir le mot cachée.</p>
                 <p style={{marginTop: "6px"}}>Les images ci-dessous indiquent où se trouve le prochain QrCode:</p>
             </h4>
-            {children} <Footer/>
+            {children}
         </div>
     )
 }

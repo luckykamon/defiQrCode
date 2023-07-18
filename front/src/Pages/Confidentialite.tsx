@@ -1,10 +1,6 @@
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
-
 const Confidentialite = () => {
     return (
         <div>
-            <NavBar/>
             <div style={{textAlign: "center", margin: "20px"}}>
                 <h3 style={{color: "white", marginTop: "40px"}}>Politique de Confidentialité:</h3>
                 <p>Ce site enregistre dans localStorage les numéros des QrCodes scannés ainsi que la date du premier
@@ -15,7 +11,6 @@ const Confidentialite = () => {
                 <p>Pour toutes questions/remarques/autres vous pouvez me contacter par mail: <a
                     href="mailto:lucas.bodin.contacter@gmail.com">lucas.bodin.contacter@gmail.com</a></p>
             </div>
-            <Footer/>
         </div>
     )
 }

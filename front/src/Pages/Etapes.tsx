@@ -2,8 +2,6 @@ import React, {FC, useEffect, useState} from 'react';
 import AffichageEtape from "../Components/AffichageEtape"
 import Image from "../Components/Image";
 import {useParams} from "react-router-dom";
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import {setLocalStorage} from "../Functions/LocalStorage";
 
 const Etapes: FC = () => {
@@ -39,21 +37,15 @@ const Etapes: FC = () => {
 
     if (status === "loading") {
         return (<>
-            <NavBar/>
             <div style={{textAlign: "center"}}>Vérification du QrCode en cours...</div>
-            <Footer/>
         </>)
     } else if (status === "error") {
         return (<>
-            <NavBar/>
             <div style={{textAlign: "center"}}>Une erreur est survenue lors de la vérification du QrCode</div>
-            <Footer/>
         </>)
     } else if (status === "badId") {
         return (<>
-            <NavBar/>
             <div style={{textAlign: "center"}}>Le QrCode que vous scanné n&apos;existe pas</div>
-            <Footer/>
         </>)
     }
 

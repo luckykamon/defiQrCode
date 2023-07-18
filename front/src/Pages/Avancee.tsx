@@ -1,6 +1,4 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import {getCookieConsentValue} from "react-cookie-consent";
 import PropTypes, {number, string} from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -327,7 +325,6 @@ const Avancee: FC = () => {
 
     return (
         <div>
-            <NavBar/>
             <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir
                 votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span>&nbsp;
                 <u>et</u> trouver le <span
@@ -335,7 +332,7 @@ const Avancee: FC = () => {
                                                                                                     onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Si vous faîtes parti d'une équipe, cela vous déconnectera de celle-ci et ne supprimera pas son avancement)")}
                                                                                                     style={{cursor: "pointer"}}/>
             </h3>
-            <TableResult/><InputMot/><TempsParcours/><Footer/>
+            <TableResult/><InputMot/><TempsParcours/>
         </div>
     )
 }

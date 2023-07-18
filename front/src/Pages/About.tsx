@@ -1,6 +1,4 @@
 import React, {FC, MouseEventHandler} from "react";
-import NavBar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 
 const About: FC = () => {
 
@@ -10,7 +8,6 @@ const About: FC = () => {
 
     return (
         <div>
-            <NavBar/>
             <section id="about">
                 <div className="row">
                     <div className="three columns">
@@ -43,7 +40,6 @@ const About: FC = () => {
                     </div>
                 </div>
             </section>
-            <Footer/>
         </div>
     );
 }
