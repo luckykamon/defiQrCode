@@ -99,7 +99,7 @@ const NavBar: FC = () => {
                 }));
             })
             .catch(error => console.log('error', error));
-    });
+    }, []);
 
     return (
         <div id="nav-wrap">
