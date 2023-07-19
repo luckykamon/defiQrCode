@@ -478,18 +478,10 @@ const insertDefaultData = async () => {
 
     for (const defi of defis) {
         // On supprime tous les QrCodes et les défis qui auraient pu être créé avant correspondant au défi CÀP 2023 (afin de mettre à jour par la suite et éviter les doublons)
-        await defiSchema.find({name: defi.name})
-            .then(async (defisToBeDelete) => {
-                let tasks = [];
-                for (const defiToBeDelete of defisToBeDelete) {
-                    tasks.push(
-                        qrcodeSchema.deleteMany({defiId: defiToBeDelete._id}),
-                        defiSchema.deleteOne({_id: defiToBeDelete._id})
-                    );
-                }
-                await Promise.all(tasks);
-            });
+        await defiSchema.deleteMany({_id: defi._id})
+        await qrcodeSchema.deleteMany({defiId: defi._id})
 
+        // On crée le défi
         await defiSchema.create(defi)
             .then(async () => {
                 let tasks2: Promise<any>[] = [];

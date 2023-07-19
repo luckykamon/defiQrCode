@@ -1,8 +1,9 @@
 import {Request, Response, Router} from 'express';
 import * as defiService from './defi.service';
 import * as qrcodeService from '../qrcode/qrcode.service';
-import {Body, File, QrCode} from './defi.types';
+import {Body, File, QrCode as QrCodeDefi} from './defi.types';
 import mongoose from "mongoose";
+import {sendMail} from "../../mail/sendMail";
 
 const defiRouter: Router = Router();
 
@@ -14,7 +15,7 @@ const validateFile = (file: any): file is File => {
         (file.path == null || typeof file.path === 'string');
 };
 
-const validateQrCode = (qrCode: any): qrCode is QrCode => {
+const validateQrCode = (qrCode: any): qrCode is QrCodeDefi => {
     return typeof qrCode === 'object' &&
         qrCode !== null &&
         !isNaN(Number(qrCode.number)) &&
@@ -136,7 +137,7 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
     }
 });
 
-const createQrCode = async (qrCode: QrCode, defiId: mongoose.Types.ObjectId) => {
+const createQrCode = async (qrCode: QrCodeDefi, defiId: mongoose.Types.ObjectId) => {
     let listImage = [];
     if (qrCode.listImage) {
         for (let image of qrCode.listImage) {
@@ -194,6 +195,8 @@ defiRouter.post('', async (req: Request, res: Response) => {
     const resultNewDefiWithPassword = resultNewDefi;
     resultNewDefiWithPassword.password = passwordDefi;
 
+    await sendMail("Création d'un défi", "Le défi " + resultNewDefi.name + " a été créé. Vous pouvez le consulter à l'url suivante : " + process.env.URL_FRONT + "/defi/" + resultNewDefi._id + "?password=" + process.env.PASSWORD_DEFI + "&validateDefi=true");
+
     res.status(200).send(resultNewDefiWithPassword);
 });
 
@@ -227,8 +230,34 @@ defiRouter.put('/:defiId', async (req: Request, res: Response) => {
                 for (let qrCodeRequest of req.body.qrcode) {
                     await createQrCode(qrCodeRequest, resultPutDefi._id);
                 }
+                await sendMail("Modification d'un défi", "Le défi " + resultPutDefi.name + " a été modifié. Vous pouvez le consulter à l'url suivante : " + process.env.URL_FRONT + "/defi/" + resultPutDefi._id + "?password=" + process.env.PASSWORD_DEFI + "&validateDefi=true");
                 res.status(200).send(resultPutDefi);
             }
+        }
+    }
+});
+
+defiRouter.get('/validate/:defiId', async (req: Request, res: Response) => {
+    const defi = await defiService.getById(req.params.defiId);
+    if (defi === null) {
+        res.status(404).send('Not found');
+        return;
+    } else {
+        if ((req.query?.password !== process.env.PASSWORD_DEFI) || req.query?.password === undefined) { // Uniquement le mot de passe de l'admin
+            res.status(404).send('Not found'); //Mauvais mot de passe
+            return;
+        } else {
+            const listQrCode = await qrcodeService.getByDefiId(req.params.defiId);
+            if (!listQrCode) {
+                res.status(404).send('Not found');
+                return;
+            }
+            for (let qrCode of listQrCode) {
+                if (qrCode.isSolution && qrCode?._id !== undefined) {
+                    await qrcodeService.update(qrCode._id.toString(), {idQrCode: generatePassword()});
+                }
+            }
+            res.status(200).send(listQrCode);
         }
     }
 });

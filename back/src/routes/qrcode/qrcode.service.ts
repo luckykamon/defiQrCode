@@ -59,3 +59,12 @@ export const create = async (qrcode: QrCode): Promise<QrCode> => {
     await db.connect();
     return await qrcodeSchema.create(qrcode);
 };
+
+export const update = async (qrcodeId: string, newQrCode: any): Promise<QrCode | null> => {
+    if (!mongoose.Types.ObjectId.isValid(qrcodeId)) {
+        return null;
+    }
+
+    await db.connect();
+    return qrcodeSchema.findByIdAndUpdate(new mongoose.Types.ObjectId(qrcodeId), newQrCode);
+}

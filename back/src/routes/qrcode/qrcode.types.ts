@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface QrCode {
+    _id?: mongoose.Types.ObjectId;
     idQrCode: string; // L'id qui est scanné sur un QrCode
     number: number; // Le numéro du QrCode (0, 1, 2, 3, 4, 5, 6, 7, 8, 9...)
     indice: string; // L'indice du QrCode

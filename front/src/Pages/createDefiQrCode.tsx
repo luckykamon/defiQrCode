@@ -11,6 +11,7 @@ import 'react-notifications/lib/notifications.css';
 const CreateDefiQrCode: FC = () => {
     const {idDefi} = useParams();
     const passwordDefi = useSearchParams()[0].get('password');
+    const validateDefi = useSearchParams()[0].get('validateDefi');
     const notificationCreate = useSearchParams()[0].get('notificationCreate');
 
     const initialStep = {
@@ -43,7 +44,7 @@ const CreateDefiQrCode: FC = () => {
                     setMotCache(result.motCache);
                     const newSteps = [];
                     let allQrcodeAreVerif = true;
-                    for (let i = 0; i < result.qrCodes.length; i++) {
+                    for (let i = 0; i < result.qrCodes.sort((a, b) => a.number - b.number).length; i++) {
                         newSteps.push({
                             indice: result.qrCodes[i].indice,
                             images: result.qrCodes[i].listImage.map((image) => {
@@ -74,8 +75,15 @@ const CreateDefiQrCode: FC = () => {
                 body: formdata,
                 redirect: 'follow'
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (response.status !== 200) {
+                        console.log('here');
+                        reject(response);
+                    }
+                    return response.text();
+                })
                 .then(result => {
+                    console.log();
                     resolve("/" + result);
                 })
                 .catch(error => {
@@ -273,6 +281,22 @@ const CreateDefiQrCode: FC = () => {
         }
     };
 
+    const handleValidateDefi = () => {
+
+        fetch(process.env.REACT_APP_URL_BACK + "/api/defi/validate/" + idDefi + "?password=" + passwordDefi, {
+            method: 'GET',
+            redirect: 'follow'
+        })
+            .then(response => response.json())
+            .then(() => {
+                NotificationManager.success('Défi validé avec succès');
+            })
+            .catch(error => {
+                console.log('error', error);
+                NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
+            });
+    };
+
     const handleAddStep = () => {
         setSteps([...steps, initialStep]);
     };
@@ -297,8 +321,12 @@ const CreateDefiQrCode: FC = () => {
     const addFile = (file) => {
         uploadImage(file)
             .then((result: string) => {
+                console.log(result);
                 setFile(result);
-            });
+            })
+            .catch(() => {
+                NotificationManager.error("Une erreur est survenue lors de l'upload du fichier", 'Erreur', 5000);
+            })
     };
 
     const InputAddFile: FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
@@ -489,6 +517,12 @@ const CreateDefiQrCode: FC = () => {
                 )}{isCreate() && (
                     <span>Créer le défi</span>
                 )}</button>
+                {validateDefi && (
+                    <>
+                        <br/>
+                        <button onClick={handleValidateDefi}>Valider le défi</button>
+                    </>
+                )}
             </div>
         </>
     );

@@ -5,7 +5,7 @@ describe('Test du front', () => {
     })
 
     it('Page /etape_0', () => {
-        cy.visit(FRONT_URL +'/etape_0')
+        cy.visit(FRONT_URL +'/etape_0_2022')
     })
 
     it('Page /avancee', () => {
