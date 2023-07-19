@@ -106,6 +106,9 @@ const CreateDefiQrCode: FC = () => {
         if (file === null) {
             messages.push('Vous devez choisir un fichier.');
         }
+        if (motCache.length === 0) {
+            messages.push('Vous devez saisir un mot caché.');
+        }
         for (let stepId = 0; stepId < steps.length; stepId++) {
             if (messageStep(steps[stepId]).length > 0) {
                 messages.push("Vous avez des erreurs dans l'étape " + (stepId) + ".");
@@ -123,8 +126,8 @@ const CreateDefiQrCode: FC = () => {
         if (updatedStep.images === null) {
             messages.push('Vous devez choisir au moins une image.');
         }
-        if (updatedStep.images?.length > 3) {
-            messages.push('Vous ne pouvez pas ajouter plus de 3 images par étape.');
+        if (updatedStep.images?.length > 5) {
+            messages.push('Vous ne pouvez pas ajouter plus de 5 images par étape.');
         }
         return messages;
     };
@@ -144,11 +147,11 @@ const CreateDefiQrCode: FC = () => {
                 break;
             case 'images':
                 if (value instanceof FileList) {
-                    if (value.length > 3) {
-                        messages.push('Seul les 3 premières images ont été prisent en compte.');
+                    if (value.length > 5) {
+                        messages.push('Seul les 5 premières images ont été prisent en compte.');
                     }
                     newValue = [];
-                    for (let nbImage = 0; nbImage < Math.min(3, value.length); nbImage++) {
+                    for (let nbImage = 0; nbImage < Math.min(5, value.length); nbImage++) {
                         await uploadImage(value.item(nbImage))
                             .then((result) => {
                                 if (typeof result === "string" && typeof newValue !== "string") {

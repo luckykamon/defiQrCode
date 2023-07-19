@@ -199,6 +199,16 @@ defiRouter.put('/:defiId', async (req: Request, res: Response) => {
             res.status(404).send('Not found'); //Mauvais mot de passe
             return;
         } else {
+            if (req.body?.qrcode !== undefined) {
+                for (let qrCodeRequest of req.body.qrcode) {
+                    if (qrCodeRequest?.listImage !== undefined) {
+                        if (qrCodeRequest.listImage.length > 5) { // On ne peut pas avoir plus de 5 images par QrCode
+                            res.status(400).send('Bad request'); //Mauvais format de requête
+                            return;
+                        }
+                    }
+                }
+            }
             const resultPutDefi = await defiService.update(req.params.defiId, req.body);
             if (resultPutDefi === null) {
                 res.status(404).send('Not found');
