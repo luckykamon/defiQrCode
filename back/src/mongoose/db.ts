@@ -32,7 +32,7 @@ const insertDefaultData = async () => {
         motCache: "accord",
         qrCodes: [
             {
-                idQrCode: 'etape_0',
+                idQrCode: 'etape_0_2023',
                 defiId: defiIds[0],
                 number: 0,
                 indice: 'Exemple',
@@ -211,7 +211,7 @@ const insertDefaultData = async () => {
         password: process.env.PASSWORD_DEFI,
         motCache: "Les capains font la fete toute la soiree aux Gayeulles en chantant.",
         qrCodes: [{
-            idQrCode: 'etape_0',
+            idQrCode: 'etape_0_2022',
             defiId: defiIds[1],
             number: 0,
             indice: 'Les',

@@ -1,6 +1,7 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import Cookie from "../Components/Cookie";
-import {getLocalStorage, getLocalStorageStartWith, setLocalStorage} from "../Functions/LocalStorage";
+import {getLocalStorage, getLocalStorageStartWith, setLocalStorage,} from "../Functions/LocalStorage";
+import {changeDefiFromIdToId} from "../Functions/ChangeDefiId";
 
 interface LiProps {
     children: ReactNode;
@@ -10,18 +11,17 @@ interface LiProps {
 
 
 const onClickNavbar = (href: string, type: string, id: string) => {
-    switch (type) {
-        case "defi":
-            if (getLocalStorage("defiId") !== id) {
-                setLocalStorage("defiId", id);
+    if (type === "defi") {
+        const currentDefiId = getLocalStorage("defiId");
+        if (currentDefiId !== id) {
+            if (confirm("Êtes-vous sûr de vouloir changer de défi ?")) {
+                changeDefiFromIdToId(currentDefiId, id);
             }
-            window.location.href = href;
-            break;
-        case "qrCode":
-        case "avancee":
-        case "equipe":
-            window.location.href = href;
-            break;
+        }
+        window.location.href = href;
+    }
+    if (type === "qrCode" || type === "avancee" || type === "equipe") {
+        window.location.href = href;
     }
 };
 
@@ -41,9 +41,33 @@ const containHref = (href: string, hrefs: string[]): boolean => {
     return false;
 };
 
+const isCurrent = (actionMenu: ActionMenu, listSousMenu: ActionMenu[]): boolean => {
+    if (listSousMenu.length > 0) {
+        for (let i = 0; i < listSousMenu.length; i++) {
+            if (isCurrent(listSousMenu[i], [])) {
+                return true;
+            }
+        }
+    }
+    if (actionMenu.type === "defi" && getLocalStorage("defiId") !== actionMenu.id) {
+        return false;
+    }
+    switch (actionMenu.type) {
+        case "defi":
+        case "qrCode":
+        case "avancee":
+        case "equipe":
+            return containHref(window.location.href.replace(window.location.origin, ""), typeof actionMenu.href === 'string' ? [actionMenu.href] : actionMenu.href);
+    }
+};
+
+const isDefiSelected = (actionMenu: ActionMenu): boolean => {
+    return actionMenu.type === "defi" && getLocalStorage("defiId") === actionMenu.id;
+};
+
 const Li: FC<LiProps> = ({children, actionMenu, listSousMenu}) => {
     return (
-        <li className={(containHref(window.location.href.replace(window.location.origin, ""), typeof actionMenu.href === 'string' ? [actionMenu.href] : actionMenu.href) ? "current" : "") + " " + "navbarLi"}
+        <li className={(isCurrent(actionMenu, listSousMenu) ? "current" : "") + " " + (isDefiSelected(actionMenu) ? "isDefiSelected" : "") + " " + "navbarLi"}
             style={(listSousMenu.length === 0 ? {cursor: "pointer"} : null)}
             onClick={!listSousMenu || listSousMenu.length == 0 ? () => onClickNavbar(actionMenu.href, actionMenu.type, actionMenu.id) : null}>
             <a>
@@ -66,12 +90,12 @@ const SousMenu: FC<{ listSousMenu: ActionMenu[] }> = ({listSousMenu}) => {
 
 const NavBar: FC = () => {
     const [listSousMenuDefi, setListSousMenuDefi] = useState([{
-        name: '1',
+        name: 'CÀP 2023',
         href: "/",
         type: "defi",
         id: "64b66ef1b45f50b48e23eef4"
     }]);
-    const listSousMenuQrCode = getLocalStorageStartWith("QrCode").map((qrCode) => {
+    const [listSousMenuQrCode, setListSousMenuQrCode] = useState(getLocalStorageStartWith("QrCode").map((qrCode) => {
         const nbQrCode = qrCode.split("-")[1];
         return {
             name: "Qr Code " + nbQrCode,
@@ -79,7 +103,7 @@ const NavBar: FC = () => {
             type: "qrCode",
             id: nbQrCode
         };
-    }).sort((a, b) => a.name.localeCompare(b.name));
+    }).sort((a, b) => a.name.localeCompare(b.name)));
 
     useEffect(() => {
         fetch(process.env.REACT_APP_URL_BACK + "/api/defi/navbar", {
@@ -89,7 +113,21 @@ const NavBar: FC = () => {
             .then(response => response.json())
             .then(result => {
 
-                setListSousMenuDefi(result.map((defi: { name: string, _id: string }) => {
+                setListSousMenuDefi(result.map((defi: { name: string, _id: string, qrCode0: string, nbQrCode: string }) => {
+                    if (defi._id === getLocalStorage("defiId")) {
+                        setLocalStorage("nbQrCode", defi.nbQrCode);
+                        const filteredListSousMenuQrCode = listSousMenuQrCode.filter((item) => {
+                            return item.name !== "Qr Code 0";
+                        });
+                        filteredListSousMenuQrCode.push({
+                            name: "Qr Code 0",
+                            href: window.location.origin + "/" + defi.qrCode0,
+                            type: "qrCode",
+                            id: defi.qrCode0
+                        });
+                        setListSousMenuQrCode(filteredListSousMenuQrCode.sort((a, b) => a.name.localeCompare(b.name)));
+
+                    }
                     return {
                         name: defi.name,
                         href: "/",

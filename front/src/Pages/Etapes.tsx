@@ -2,7 +2,8 @@ import React, {FC, useEffect, useState} from 'react';
 import AffichageEtape from "../Components/AffichageEtape"
 import Image from "../Components/Image";
 import {useParams} from "react-router-dom";
-import {setLocalStorage} from "../Functions/LocalStorage";
+import {getLocalStorage} from "../Functions/LocalStorage";
+import {changeDefiFromIdToId} from "../Functions/ChangeDefiId";
 
 const Etapes: FC = () => {
     const [qrCode, setQrCode] = useState(null)
@@ -24,7 +25,13 @@ const Etapes: FC = () => {
             .then(data => {
                 if (data) {  // On vérifie si data existe car dans le cas où le status n'est pas 200, data sera undefined
                     setQrCode(data)
-                    setLocalStorage("defiId", data.defiId)
+                    console.log("data", data);
+                    const currentDefiId = getLocalStorage("defiId")
+                    console.log("currentDefiId", currentDefiId);
+                    console.log("data.defiId", data.defiId);
+                    if (data.defiId !== currentDefiId) {
+                        changeDefiFromIdToId(currentDefiId, data.defiId)
+                    }
                     setStatus("success")
                 }
             })
@@ -37,14 +44,17 @@ const Etapes: FC = () => {
 
     if (status === "loading") {
         return (<>
+            <br/>
             <div style={{textAlign: "center"}}>Vérification du QrCode en cours...</div>
         </>)
     } else if (status === "error") {
         return (<>
+            <br/>
             <div style={{textAlign: "center"}}>Une erreur est survenue lors de la vérification du QrCode</div>
         </>)
     } else if (status === "badId") {
         return (<>
+            <br/>
             <div style={{textAlign: "center"}}>Le QrCode que vous scanné n&apos;existe pas</div>
         </>)
     }

@@ -4,7 +4,7 @@ import {faFileImport, faPlus, faQrcode, faTrash} from "@fortawesome/free-solid-s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {v4 as uuidv4} from 'uuid';
 import {useParams, useSearchParams} from "react-router-dom"; // Importez la fonction uuid
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
@@ -298,7 +298,7 @@ const CreateDefiQrCode: FC = () => {
             });
     };
 
-    const InputAddFile: React.FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
+    const InputAddFile: FC<InputHTMLAttributes<HTMLInputElement>> = ({...props}) => {
         const uniqueId = uuidv4();  // Générez un ID unique pour chaque instance du composant
         const fileInputRef = useRef<HTMLInputElement>(null); // Créer une référence
 
@@ -385,7 +385,6 @@ const CreateDefiQrCode: FC = () => {
 
     return (
         <>
-            <NotificationContainer/>
             <div style={{textAlign: "center", marginTop: "40px"}}>
                 <div style={{display: "block"}}>
                     {idDefi && passwordDefi && (

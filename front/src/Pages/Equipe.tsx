@@ -5,6 +5,7 @@ import {getCookieConsentValue} from "react-cookie-consent";
 import Classement from "../Components/Classement";
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {changeDefiFromIdToId} from "../Functions/ChangeDefiId";
 
 const Layout = (props) => {
     return (
@@ -16,6 +17,7 @@ const Layout = (props) => {
 
 const Equipe = () => {
     const {idEquipe} = useParams();
+
     const createEquipe = () => {
         const equipeName = document.getElementById("equipeName") as HTMLInputElement
         const equipeNameValue = equipeName.value
@@ -23,6 +25,7 @@ const Equipe = () => {
             alert("Veuillez entrer un nom d'équipe valide")
             return
         }
+        const defiId = getLocalStorage("defiId")
         fetch(process.env.REACT_APP_URL_BACK + "/api/equipe", {
             method: "POST",
             headers: {
@@ -30,7 +33,7 @@ const Equipe = () => {
             },
             body: JSON.stringify({
                 name: equipeNameValue,
-                defiId: getLocalStorage("defiId")
+                defiId: defiId
             })
         }).then((response) => {
             if (response.status === 200) {
@@ -40,7 +43,8 @@ const Equipe = () => {
             }
         }).then((data) => {
             if (data !== undefined) {
-                localStorage.clear()
+                deleteLocalStorage(undefined)
+                localStorage.setItem("defiId", defiId)
                 localStorage.setItem("equipeId", data._id)
                 localStorage.setItem("equipeName", data.name)
                 const textQrCode = window.location.origin + "/equipe/" + data._id
@@ -127,6 +131,9 @@ const Equipe = () => {
                 }
             }).then((data) => {
                 if (data !== undefined) {
+                    if (data.defiId !== getLocalStorage("defiId")) {
+                        changeDefiFromIdToId(getLocalStorage("defiId"), data.defiId)
+                    }
                     localStorage.setItem("equipeId", data._id)
                     localStorage.setItem("equipeName", data.name)
                     const textQrCode = window.location.origin + "/equipe/" + data._id

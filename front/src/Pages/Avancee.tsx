@@ -27,7 +27,7 @@ BaliseAIfHref.propTypes =
 const ResultScan: FC = () => {
     const resultScanTab: Array<{ nbQrCode: number, mot: string, url: string, timestamp: string }> = []
 
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 0; i < parseInt(getLocalStorage("nbQrCode")); i++) {
         const localStorage = getLocalStorage("QrCode-" + i)
         const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {
             nbQrCode: number,

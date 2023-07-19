@@ -9,12 +9,13 @@ import Equipe from "./Pages/Equipe";
 import CreateDefiQrCode from "./Pages/createDefiQrCode";
 import NavBar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
+import {NotificationContainer} from "react-notifications";
 
 
 const Layout: FC = ({children}) => {
     return (
         <>
-            <NavBar/> {children} <Footer/>
+            <NavBar/><NotificationContainer/> {children} <Footer/>
         </>
     );
 };
@@ -22,7 +23,7 @@ const Layout: FC = ({children}) => {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <Layout> <BrowserRouter> <Routes> <Route path="/" element={<About/>}/> <Route path="confidentialite"
                                                                                   element={<Confidentialite/>}/> <Route
-        path="avancee" element={<Avancee/>}/> <Route path="equipe" element={<Equipe/>}/> <Route path="equipe/:id"
+        path="avancee" element={<Avancee/>}/> <Route path="equipe" element={<Equipe/>}/> <Route path="equipe/:idEquipe"
                                                                                                 element={
                                                                                                     <Equipe/>}/> <Route
         path="defi" element={<CreateDefiQrCode/>}/> <Route path="defi/:idDefi" element={<CreateDefiQrCode/>}/> <Route

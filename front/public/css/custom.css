@@ -74,7 +74,7 @@ textarea:focus {
 }
 
 .sous-menu {
-    display: none;
+    display: block;
     position: absolute;
     background-color: #0f0f0f;
     min-width: 160px;
@@ -93,4 +93,8 @@ li:hover .sous-menu {
 
 .navbarLi:hover {
     border: #fe6928 1px solid !important;
+}
+
+.isDefiSelected > a {
+    text-decoration: underline !important;
 }

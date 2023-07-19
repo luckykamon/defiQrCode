@@ -1,40 +1,57 @@
-import React, {FC, MouseEventHandler} from "react";
+import React, {FC, MouseEventHandler, useEffect, useState} from "react";
+import {getLocalStorage} from "../Functions/LocalStorage";
+import SkeletonCustom from "../Components/SkeletonCustom";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const About: FC = () => {
+    const [name, setName] = useState(null);
+    const [description, setDescription] = useState(null);
+    const [image, setImage] = useState(null);
+    const [fichier, setFichier] = useState(null);
+
+    useEffect(() => {
+        fetch(process.env.REACT_APP_URL_BACK + "/api/defi/" + getLocalStorage("defiId"), {
+            method: 'GET',
+            redirect: 'follow'
+        })
+            .then(response => response.json())
+            .then(result => {
+                setName(result.name);
+                setDescription(result.description);
+                setImage(result.image);
+                setFichier(result.fichier);
+            })
+            .catch(error => console.log('error', error));
+    }, []);
 
     const openGpxDownload: MouseEventHandler<HTMLSpanElement> = () => {
-        window.open('/gpx/chien_gayeulles.gpx')
-    }
+        window.open(process.env.REACT_APP_URL_BACK + fichier.path, '_blank');
+    };
 
     return (
         <div>
             <section id="about">
                 <div className="row">
-                    <div className="three columns">
-                        <img className="profile-pic" src="/images/carte_parc_gayeulles.jpg"
-                             alt="Lucas Bodin Profile Pic"/>
+                    <div className="three columns" style={{textAlign: "center"}}>
+                        {!image && <SkeletonCustom circle={true} height="150px" width="150px"/>} {image && (
+                        <img className="profile-pic" src={process.env.REACT_APP_URL_BACK + image.path}
+                             alt={image.alt}/>)}
                     </div>
+                    <br/>
                     <div className="nine columns main-col" style={{textAlign: "justify"}}>
-                        <h2 style={{textAlign: "center"}}>Le défi QrCode</h2>
-
-                        <p>Le défi QrCode est une course d&apos;orientation se situant dans le parc des Gayeulles à
-                            Rennes.</p>
-                        <p>L&apos;objectif est de réussir à trouver le mot caché en partant du <a href="/etape_0">point de
-                            départ (cliquez ici)</a>. Point de départ où il faudra scanner le QrCode permettant
-                            d&apos;accéder à un indice du mot caché et contenant plusieurs indices vers le prochain QrCode.
-                            Et ainsi de suite... afin de trouver le mot 🎁</p>
-                        <p>Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger
-                            ci-dessous.</p>
-                        <p>Si vous acceptez les cookies, vous pourrez consulter <a href="/avancee">votre avancée
-                            (cliquez ici)</a> qui se complètera automatiquement.</p>
-                        <p>Cet évènement a eu lieu le 3 juin 2023 avec le groupe facebook <a
-                            href={"https://fb.me/e/5xzzDJfAp"} target={"_blank"} rel={"noreferrer"}>Courir à
-                            Plusieurs</a></p>
+                        <h2 style={{textAlign: "center", ...(!image ? {paddingLeft: "25%", paddingRight: "25%"}: {})}}>{name || <SkeletonCustom/>}</h2><br/>{
+                        !description && <SkeletonCustom count={10}/>
+                    } {description && description.split("\n").map((item, key) => {
+                        return <p key={key}>{item}</p>;
+                    })}
+                        <br/>
                         <div className="row">
-                            <div className="columns download" style={{width: "100%", textAlign: "center"}}>
-                                <span className="button" onClick={openGpxDownload} style={{margin: "20px"}}>
+                            <div className="columns download" style={{width: "100%", textAlign: "center", ...(!fichier ? {paddingLeft: "25%", paddingRight: "25%"}: {})}}>
+                                {!fichier && <SkeletonCustom height={"50px"}/>} {fichier && (
+                                <span className="button" onClick={openGpxDownload} title={fichier.alt} style={{margin: "20px"}}>
                                     Télécharger le fichier lié au parcours
                                 </span>
+                            )}
                             </div>
                         </div>
                     </div>
@@ -42,7 +59,7 @@ const About: FC = () => {
             </section>
         </div>
     );
-}
+};
 
 
 export default About;

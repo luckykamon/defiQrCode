@@ -79,9 +79,12 @@ defiRouter.get('/navbar', async (req: Request, res: Response) => {
         if (qrCodeInVerification) {
             return null;
         }
+
         return {
             _id: defi._id.toString(),
-            name: defi.name
+            name: defi.name,
+            qrCode0: qrCodesByDefiId.filter(item => item.number === 0)?.[0]?.idQrCode,
+            nbQrCode: qrCodesByDefiId.length
         };
     });
     const results = (await Promise.all(promises)).filter(item => item !== null);
