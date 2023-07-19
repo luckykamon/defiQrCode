@@ -179,6 +179,14 @@ defiRouter.post('', async (req: Request, res: Response) => {
         password: passwordDefi,
         motCache: req.body.motCache
     };
+    for (let qrCodeRequest of req.body.qrcode) {
+        if (qrCodeRequest?.listImage !== undefined) {
+            if (qrCodeRequest.listImage.length > 5) { // On ne peut pas avoir plus de 5 images par QrCode
+                res.status(400).send('Bad request'); //Mauvais format de requête
+                return;
+            }
+        }
+    }
     const resultNewDefi = await defiService.create(defiNew);
     for (let qrCodeRequest of req.body.qrcode) {
         await createQrCode(qrCodeRequest, resultNewDefi._id);
