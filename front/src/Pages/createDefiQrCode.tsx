@@ -331,7 +331,7 @@ const CreateDefiQrCode: FC = () => {
     const generateQrCode = ({color, text, fileUrl}) => {
         return new Promise((resolve, reject) => {
             const formData = new FormData();
-            formData.append('text', text);
+            formData.append('text', window.location.origin + "/" + text);
             formData.append('color', color);
 
             // Fetch the image file from the provided URL
@@ -341,7 +341,6 @@ const CreateDefiQrCode: FC = () => {
                     // Create a new file instance
                     const file = new File([blob], 'filename.png', {type: 'image/png'});
                     formData.append('file', file);
-
                     fetch(process.env.REACT_APP_URL_QRCODE + '/uploadQrCode', {
                         method: 'POST',
                         body: formData,
