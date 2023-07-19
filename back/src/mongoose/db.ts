@@ -21,7 +21,7 @@ const insertDefaultData = async () => {
             "Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger ci-dessous.\n" +
             "Cet évènement a eu lieu le 3 juin 2023 avec le groupe facebook Courir à Plusieurs",
         image: {
-            path: "/defi/cap_2023/images/carte_parc_gayeulles.jpg",
+            path: "/defi/cap_2023/images/logo_CAP_2023_v2_rogner_transparent.png",
             alt: "Carte du Parc des Gayeulles"
         },
         fichier: {
@@ -201,7 +201,7 @@ const insertDefaultData = async () => {
             "Chaque QrCode se situe à moins de 20m maximum du parcours que vous pouvez télécharger ci-dessous.\n" +
             "Cet évènement a eu lieu le 3 juin 2023 avec le groupe facebook Courir à Plusieurs",
         image: {
-            path: "/defi/cap_2023/images/carte_parc_gayeulles.jpg", // Même image en 2022 & 2023
+            path: "/defi/cap_2022/images/logo_CAP_2022.png",
             alt: "Carte du Parc des Gayeulles"
         },
         fichier: {
