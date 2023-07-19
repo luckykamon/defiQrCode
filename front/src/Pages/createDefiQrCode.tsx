@@ -339,7 +339,7 @@ const CreateDefiQrCode: FC = () => {
                     const file = new File([blob], 'filename.png', {type: 'image/png'});
                     formData.append('file', file);
 
-                    fetch('https://generateqrcode.lucasbodin.com/uploadQrCode', {
+                    fetch(process.env.REACT_APP_URL_QRCODE + '/uploadQrCode', {
                         method: 'POST',
                         body: formData,
                     })
@@ -368,7 +368,7 @@ const CreateDefiQrCode: FC = () => {
             text: steps[stepId].idQrCode,
             fileUrl: process.env.REACT_APP_URL_BACK + image
         }).then((nameQrCode: string) => {
-            window.open("https://generateqrcode.lucasbodin.com/getQrCode/" + nameQrCode, '_blank');
+            window.open(process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode, '_blank');
         }).catch((error) => {
             console.error(error);
             NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
@@ -397,8 +397,10 @@ const CreateDefiQrCode: FC = () => {
                     </>
                 )} {isUpdate() && (<>
                     <p style={{wordBreak: "break-word"}}>
-                        Pour revenir sur cette page afin de récupérer les QR Codes ou modifier le défi, veuillez enregistrer l&apos;url
-                        suivante: <a href={window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi} target="_blank" rel="noreferrer">{window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi}</a>
+                        Pour revenir sur cette page afin de récupérer les QR Codes ou modifier le défi, veuillez
+                        enregistrer l&apos;url suivante: <a
+                        href={window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi} target="_blank"
+                        rel="noreferrer">{window.location.origin + "/defi/" + idDefi + "?password=" + passwordDefi}</a>
                     </p><br/>
                 </>)}
                     <table style={{textAlign: "center", margin: "auto", width: "90vw"}}>
