@@ -97,7 +97,7 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
         res.status(404).send('Not found');
         return;
     } else {
-        if (req.query?.password !== defi?.password || req.query?.password === undefined) {
+        if ((req.query?.password !== defi?.password && req.query?.password !== process.env.PASSWORD_DEFI) || req.query?.password === undefined) {
             const qrCodesByDefiId = await qrcodeService.getByDefiId(req.params.defiId);
             if (!qrCodesByDefiId) { // Cas où il n'y a pas de QrCode pour ce défi, ce qui ne peut pas arriver
                 console.log("Pas de QrCode pour ce défi, il faut regarder parce qu'il doit y avoir un problème; defiId: " + req.params.defiId);
@@ -203,7 +203,7 @@ defiRouter.put('/:defiId', async (req: Request, res: Response) => {
         res.status(404).send('Not found');
         return;
     } else {
-        if (req.query?.password !== defi?.password || req.query?.password === undefined) {
+        if ((req.query?.password !== defi?.password && req.query?.password !== process.env.PASSWORD_DEFI) || req.query?.password === undefined) {
             res.status(404).send('Not found'); //Mauvais mot de passe
             return;
         } else {
