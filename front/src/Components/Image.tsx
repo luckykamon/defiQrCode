@@ -38,7 +38,8 @@ interface ImageProps {
 const Image: FC<ImageProps> = ({src, alt}) => {
     const [onError, setOnError] = useState(false)
     const splitSrc = src.split(".");
-    const src_original = splitSrc[splitSrc.length - 2] + "_original." + splitSrc[splitSrc.length - 1];
+    const splitSrcLenght = splitSrc.length;
+    const src_original = splitSrc.slice(0, splitSrcLenght - 1).join(".") + "_original." + splitSrc[splitSrcLenght - 1];
 
     return (
         <div>
