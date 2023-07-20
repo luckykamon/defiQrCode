@@ -97,6 +97,7 @@ jobs:
             cd ..
             cd back
             mkdir -p public/uploads
+            touch public/uploads/.gitkeep
             npm ci
             pm2 delete ${{ env.PM2_APP_NAME }}
             pm2 --name ${{ env.PM2_APP_NAME }} start npm -- start
