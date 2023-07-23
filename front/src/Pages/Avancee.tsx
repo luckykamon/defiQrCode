@@ -1,28 +1,20 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {getCookieConsentValue} from "react-cookie-consent";
-import PropTypes, {number, string} from "prop-types";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 import Confetti from 'react-confetti'
 
-type BaliseAIfHrefProps = {
+const BaliseAIfHref: FC<{
     href: string,
-    children: ReactNode
-}
-
-const BaliseAIfHref: FC<BaliseAIfHrefProps> = (props) => {
-    if (props.href !== "") {
-        return <a href={props.href}>{props.children}</a>
+    children?: ReactNode
+}> = ({href, children}) => {
+    if (href !== "") {
+        return <a href={href}>{children}</a>
     } else {
-        return <>{props.children}</>
+        return <>{children}</>
     }
 }
-
-BaliseAIfHref.propTypes =
-    {
-        href: PropTypes.string
-    }
 
 const ResultScan: FC = () => {
     const resultScanTab: Array<{ nbQrCode: number, mot: string, url: string, timestamp: string }> = []
@@ -30,17 +22,9 @@ const ResultScan: FC = () => {
     for (let i = 0; i < parseInt(getLocalStorage("nbQrCode")); i++) {
         const localStorage = getLocalStorage("QrCode-" + i)
         const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {
-            nbQrCode: number,
-            mot: string,
-            url: string,
-            timestamp: string
+            nbQrCode: i, mot: "", url: "", timestamp: ""
         }
-        resultScanJson["nbQrCode"] = i
-        if (localStorage === null) {
-            resultScanJson["mot"] = ""
-            resultScanJson["url"] = ""
-            resultScanJson["timestamp"] = ""
-        } else {
+        if (localStorage !== null) {
             const parseLocalStorage = JSON.parse(localStorage)
             resultScanJson["mot"] = parseLocalStorage["mot"]
             resultScanJson["url"] = parseLocalStorage["url"]

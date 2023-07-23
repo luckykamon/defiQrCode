@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import {useParams, useSearchParams} from "react-router-dom"; // Importez la fonction uuid
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import {createPdfDefi} from "../Functions/CreatePdfDefi";
 
 
 const CreateDefiQrCode: FC = () => {
@@ -28,6 +29,16 @@ const CreateDefiQrCode: FC = () => {
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<string | null>(null);
     const [messageGeneral, setMessageGeneral] = useState(null);
+
+    const allQrcodeAreVerif = () => {
+        steps.forEach((step) => {
+            if (step.idQrCode === "verification") {
+                return false;
+            }
+        })
+        return true
+    }
+
 
     const getStepFromDefi = () => {
         if (idDefi !== undefined && passwordDefi !== null) {
@@ -375,9 +386,6 @@ const CreateDefiQrCode: FC = () => {
                     })
                         .then(response => response.text())
                         .then(result => {
-                            console.log("here1");
-                            console.log(result);
-                            console.log(color, text, fileUrl);
                             resolve(result);
                         })
                         .catch(error => {
@@ -517,12 +525,20 @@ const CreateDefiQrCode: FC = () => {
                 )}{isCreate() && (
                     <span>Créer le défi</span>
                 )}</button>
-                {validateDefi && (
+                {validateDefi && !allQrcodeAreVerif() && (
                     <>
                         <br/>
                         <button onClick={handleValidateDefi}>Valider le défi</button>
                     </>
-                )}
+                )} <br/> {allQrcodeAreVerif() && (
+                <button onClick={() => createPdfDefi({
+                    description: description,
+                    file: file,
+                    image: image,
+                    motCache: motCache,
+                    steps: steps,
+                    defiName: defiName
+                })}>Générer le pdf</button>)}
             </div>
         </>
     );
