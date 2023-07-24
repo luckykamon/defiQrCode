@@ -181,9 +181,9 @@ ul#nav li {
 /* Links */
 ul#nav li a {
 
-    /* 8px padding top + 8px padding bottom + 32px line-height = 48px */
+    width: max-content;
 
-    display: inline-block;
+    display: flex;
     padding: 8px 13px;
     line-height: 32px;
     text-decoration: none;
