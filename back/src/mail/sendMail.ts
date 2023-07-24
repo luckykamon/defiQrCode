@@ -24,6 +24,11 @@ export const sendMail = async (subject: string, text: string) => {
         return;
     }
 
+    if (text.includes('http://localhost:')) {
+        console.log("Email not sent: localhost link");
+        return;
+    }
+
     let transporter = nodemailer.createTransport(transporterObject);
 
     let mailOptions = {

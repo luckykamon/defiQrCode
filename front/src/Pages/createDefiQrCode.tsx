@@ -1,6 +1,6 @@
-import React, {FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
+import React, {ButtonHTMLAttributes, FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
 import Image from "../Components/Image";
-import {faFileImport, faPlus, faQrcode, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faFileImport, faPlus, faQrcode, faSpinner, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {v4 as uuidv4} from 'uuid';
 import {useParams, useSearchParams} from "react-router-dom"; // Importez la fonction uuid
@@ -41,10 +41,28 @@ export const generateQrCode = ({color, text, fileUrl}) => {
     });
 };
 
+export const ButtonLoad: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({onClick, ...props}) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleClick = async (e) => {
+        if (onClick) {
+            setIsLoading(true);
+            await onClick(e);
+            setIsLoading(false);
+        }
+    };
+
+    if (isLoading) {
+        return <button {...props}><FontAwesomeIcon icon={faSpinner} spinPulse/></button>;
+    } else {
+        return <button {...props} onClick={handleClick}></button>;
+    }
+};
+
 const CreateDefiQrCode: FC = () => {
     const {idDefi} = useParams();
     const passwordDefi = useSearchParams()[0].get('password');
-    const validateDefi = useSearchParams()[0].get('validateDefi');
+    const [validateDefiNeed, setValidateDefiNeed] = useState(useSearchParams()[0].get('validateDefi') === 'true');
     const notificationCreate = useSearchParams()[0].get('notificationCreate');
 
     const initialStep = {
@@ -63,12 +81,7 @@ const CreateDefiQrCode: FC = () => {
     const [messageGeneral, setMessageGeneral] = useState(null);
 
     const allQrcodeAreVerif = () => {
-        steps.forEach((step) => {
-            if (step.idQrCode === "verification") {
-                return false;
-            }
-        })
-        return true
+        return !steps.some(step => step.idQrCode === "verification");
     }
 
 
@@ -286,13 +299,13 @@ const CreateDefiQrCode: FC = () => {
         });
     };
 
-    const createDefi = () => {
+    const createDefi = async () => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = prepareDataDefi();
 
-        fetch(process.env.REACT_APP_URL_BACK + "/api/defi", {
+        await fetch(process.env.REACT_APP_URL_BACK + "/api/defi", {
             method: 'POST',
             headers: myHeaders,
             body: raw,
@@ -306,37 +319,63 @@ const CreateDefiQrCode: FC = () => {
             .catch(error => console.log('error', error));
     };
 
-    const handleDefiCreation = () => {
+    const handleDefiPdf = async () => {
         const messages = checkForm();
         if (messages.length > 0) {
-            alert(messages.join('\n'));
+            messages.map((message) => {
+                NotificationManager.error(message, "Erreur");
+            })
+            return;
+        } else {
+            try {
+                await createPdfDefi({
+                    description: description,
+                    file: file,
+                    image: image,
+                    motCache: motCache,
+                    steps: steps,
+                    defiName: defiName
+                })
+                NotificationManager.success('Défi mis à jour avec succès');
+            } catch {
+                NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi', "Erreur");
+            }
+        }
+    };
+
+    const handleDefiCreation = async () => {
+        const messages = checkForm();
+        if (messages.length > 0) {
+            messages.map((message) => {
+                NotificationManager.error(message, "Erreur");
+            })
             return;
         } else if (isCreate()) {
-            createDefi();
+            await createDefi();
         } else if (isUpdate()) {
-            updateDefi()
+            await updateDefi()
                 .then(() => {
                     NotificationManager.success('Défi mis à jour avec succès');
                 })
                 .catch(() => {
-                    NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi');
+                    NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi', "Erreur");
                 });
         }
     };
 
-    const handleValidateDefi = () => {
-
-        fetch(process.env.REACT_APP_URL_BACK + "/api/defi/validate/" + idDefi + "?password=" + passwordDefi, {
+    const handleValidateDefi = async () => {
+        await fetch(process.env.REACT_APP_URL_BACK + "/api/defi/validate/" + idDefi + "?password=" + passwordDefi, {
             method: 'GET',
             redirect: 'follow'
         })
             .then(response => response.json())
             .then(() => {
                 NotificationManager.success('Défi validé avec succès');
+                setValidateDefiNeed(false);
             })
             .catch(error => {
                 console.log('error', error);
-                NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
+                NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur');
             });
     };
 
@@ -345,7 +384,7 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const handleRemoveStep = (index: number) => {
-        if (steps.length === 1) return alert('Vous devez avoir au moins une étape.');
+        if (steps.length === 1) return NotificationManager.error('Vous devez avoir au moins une étape.', "Erreur");
         if (steps[index].indice !== "" || steps[index].images !== null) { // Si l'étape a déjà un indice ou une image d'ajouté, on ajoute un message de confirmation
             if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
         }
@@ -368,7 +407,7 @@ const CreateDefiQrCode: FC = () => {
                 setFile(result);
             })
             .catch(() => {
-                NotificationManager.error("Une erreur est survenue lors de l'upload du fichier", 'Erreur', 5000);
+                NotificationManager.error("Une erreur est survenue lors de l'upload du fichier", "Erreur");
             })
     };
 
@@ -400,7 +439,7 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const handleGenerateQrCode = async (stepId: number) => {
-        generateQrCode({
+        await generateQrCode({
             color: '#000000',
             text: steps[stepId].idQrCode,
             fileUrl: process.env.REACT_APP_URL_BACK + image
@@ -408,7 +447,7 @@ const CreateDefiQrCode: FC = () => {
             window.open(process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode, '_blank');
         }).catch((error) => {
             console.error(error);
-            NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
+            NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur');
         });
 
     };
@@ -416,7 +455,7 @@ const CreateDefiQrCode: FC = () => {
     useEffect(() => {
         getStepFromDefi();
         if (notificationCreate === 'true') {
-            NotificationManager.success('Il sera publié une fois validé par un administrateur', 'Défi Créé', 5000);
+            NotificationManager.success('Il sera publié une fois validé par un administrateur', 'Défi Créé');
         }
     }, []);
 
@@ -495,18 +534,17 @@ const CreateDefiQrCode: FC = () => {
                 {steps.map((step, index) => (
                     <div key={index}>
                         <h3>Étape {index}:</h3>
-                        <button onClick={() => handleRemoveStep(index)}
-                                style={{margin: "20px", backgroundColor: "red", height: "40px", width: "40px"}}>
-                            <FontAwesomeIcon icon={faTrash}/>
-                        </button>
-                        <input placeholder="Indice" value={step.indice}
-                               onChange={(e) => handleStepChange(index, 'indice', e.target.value)}
-                               style={{margin: "20px"}}/> <InputAddFile placeholder="Image" type="file" multiple
-                                                                        accept="image/*"
-                                                                        onChange={(e) => handleStepChange(index, 'images', e.target.files)}/> {step.idQrCode && step.idQrCode !== "verification" && (
-                        <button onClick={() => handleGenerateQrCode(index)}
-                                style={{height: "40px", width: "40px", margin: "15px"}}><FontAwesomeIcon
-                            icon={faQrcode}/></button>)}
+                        <ButtonLoad onClick={() => handleRemoveStep(index)}
+                                    style={{margin: "20px", backgroundColor: "red", height: "40px", width: "40px"}}>
+                            <FontAwesomeIcon icon={faTrash}/> </ButtonLoad> <input placeholder="Indice"
+                                                                                   value={step.indice}
+                                                                                   onChange={(e) => handleStepChange(index, 'indice', e.target.value)}
+                                                                                   style={{margin: "20px"}}/>
+                        <InputAddFile placeholder="Image" type="file" multiple accept="image/*"
+                                      onChange={(e) => handleStepChange(index, 'images', e.target.files)}/> {step.idQrCode && step.idQrCode !== "verification" && (
+                        <ButtonLoad onClick={() => handleGenerateQrCode(index)}
+                                    style={{height: "40px", width: "40px", margin: "15px"}}><FontAwesomeIcon
+                            icon={faQrcode}/> </ButtonLoad>)}
                         <div className={"file-preview"}> {step.images && step.images.map((image) => (
                             <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
                                    alt={process.env.REACT_APP_URL_BACK + image}/>
@@ -514,33 +552,25 @@ const CreateDefiQrCode: FC = () => {
                         ))}</div>
                         <p style={{color: "red"}}>{step.message}</p><br/>
                     </div>
-                ))} <br/>
-                <button onClick={handleAddStep} style={{backgroundColor: "green", height: "40px", width: "40px"}}>
-                    <FontAwesomeIcon icon={faPlus}/></button>
+                ))} <br/> <ButtonLoad onClick={handleAddStep}
+                                      style={{backgroundColor: "green", height: "40px", width: "40px"}}>
+                <FontAwesomeIcon icon={faPlus}/></ButtonLoad>
 
-                <br/><br/>
-                <button onClick={handleDefiCreation}>{isUpdate() && (
-                    <span>Envoyer la modification du défi</span>
-                )}{isCreate() && (
-                    <span>Créer le défi</span>
-                )}</button>
-                {validateDefi && !allQrcodeAreVerif() && (
-                    <>
-                        <br/>
-                        <button onClick={handleValidateDefi}>Valider le défi</button>
-                    </>
-                )} <br/> {allQrcodeAreVerif() && (
-                <button onClick={() => createPdfDefi({
-                    description: description,
-                    file: file,
-                    image: image,
-                    motCache: motCache,
-                    steps: steps,
-                    defiName: defiName
-                })}>Générer le pdf</button>)}
+                <br/><br/> {allQrcodeAreVerif() && (
+                <ButtonLoad onClick={handleDefiPdf}>Générer la feuille de Route</ButtonLoad>
+            )} <br/> <ButtonLoad onClick={handleDefiCreation}>{isUpdate() && (
+                <>Envoyer la modification du défi</>
+            )}{isCreate() && (
+                <span>Créer le défi</span>
+            )}</ButtonLoad> {validateDefiNeed && !allQrcodeAreVerif() && (
+                <>
+                    <br/> <ButtonLoad onClick={handleValidateDefi}>Valider le défi</ButtonLoad>
+                </>
+            )}
             </div>
         </>
-    );
+    )
+        ;
 };
 
 export default CreateDefiQrCode;

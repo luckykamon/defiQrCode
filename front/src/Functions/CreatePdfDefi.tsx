@@ -183,7 +183,7 @@ export const createPdfDefi = async (dataDefi: {
                         imageQrCodes.push({number: index, image: qrCodeImage});
                     }).catch((error) => {
                         console.error(error);
-                        NotificationManager.error("Une erreur est survenue lors de la génération d'un QR Code, un Qr Code non personnalisé sera alors généré", 'Erreur', 5000);
+                        NotificationManager.error("Une erreur est survenue lors de la génération d'un QR Code, un QR Code non personnalisé sera alors généré", 'Erreur', 5000);
                     });
 
 
@@ -193,8 +193,6 @@ export const createPdfDefi = async (dataDefi: {
                 } else {
                     qrCodeObject = {qr: window.location.origin + "/" + idQrCode, style: {alignment: 'center'}}
                 }
-
-                console.log(index)
 
                 return [
                     {text: '', pageBreak: 'after'}, // Saut de page
@@ -208,14 +206,14 @@ export const createPdfDefi = async (dataDefi: {
                         table: {
                             widths: ['auto', '*'],
                             body: [
-                                ["Url du Qr Code", {
+                                ["Url du QR Code", {
                                     text: urlQrCode,
                                     link: urlQrCode,
                                     style: {color: '#fe6928', alignment: 'center'}
                                 }],
                                 ["Indice", {text: indice, style: {alignment: 'center'}}],
-                                ["Qr Code", qrCodeObject],
-                                ["Placement", imagesTable]
+                                ["QR Code", qrCodeObject],
+                                ["Images où placer le QR Code", imagesTable]
                             ]
                         }
                     }
