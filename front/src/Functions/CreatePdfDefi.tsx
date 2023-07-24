@@ -144,7 +144,12 @@ export const createPdfDefi = async (dataDefi: {
                         }],
                         ["Logo", {image: dataDefiImage, width: 100, style: {alignment: 'center'}}],
                         ["Description", dataDefi.description],
-                        ["Mot Caché", {text: dataDefi.motCache, style: {alignment: 'center'}}]
+                        ["Mot Caché", {text: dataDefi.motCache, style: {alignment: 'center'}}],
+                        ["Fichier", {
+                            text: process.env.REACT_APP_URL_BACK + dataDefi.file,
+                            link: process.env.REACT_APP_URL_BACK + dataDefi.file,
+                            style: {color: '#fe6928', alignment: 'center'}
+                        }]
                     ]
                 }
             },
