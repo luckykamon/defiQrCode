@@ -1,5 +1,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import {NotificationManager} from "react-notifications";
+import {generateQrCode} from "../Pages/createDefiQrCode";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -47,22 +49,11 @@ export const createPdfDefi = async (dataDefi: {
             // Ajouter les qrCodes au document
             ...await Promise.all(dataDefi.steps.map(async (qrCode, index) => {
                 const imagesTable = [];
-                for (let i = 0; i < qrCode.images.length; i += 2) {
-                    const imageUrl1 = process.env.REACT_APP_URL_BACK + qrCode.images[i];
-                    const imageData1 = await getImageData(imageUrl1);
-                    const cell1 = {image: imageData1, width: 250};
+                for (let i = 0; i < qrCode.images.length; i++) {
+                    const imageUrl = process.env.REACT_APP_URL_BACK + qrCode.images[i];
+                    const imageData = await getImageData(imageUrl);
 
-                    let cell2; // Déclaration sans valeur initiale
-
-                    if (i + 1 < qrCode.images.length) {
-                        const imageUrl2 = process.env.REACT_APP_URL_BACK + qrCode.images[i + 1];
-                        const imageData2 = await getImageData(imageUrl2);
-                        cell2 = {image: imageData2, width: 250}; // Assignation de la valeur
-                    } else {
-                        cell2 = {text: '', border: [false, false, false, false]}; // Cellule vide par défaut
-                    }
-
-                    imagesTable.push([cell1, cell2]);
+                    imagesTable.push({image: imageData, width: 250, style: {alignment: 'center'}});
                 }
 
                 let indice;
@@ -77,6 +68,21 @@ export const createPdfDefi = async (dataDefi: {
 
                 const urlQrCode = window.location.origin + "/" + idQrCode
 
+                let urlQrCodeImage = "";
+
+                await generateQrCode({
+                    color: '#000000',
+                    text: idQrCode,
+                    fileUrl: process.env.REACT_APP_URL_BACK + dataDefi.image
+                }).then((nameQrCode: string) => {
+                    urlQrCodeImage = process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode;
+                }).catch((error) => {
+                    console.error(error);
+                    NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
+                });
+
+                const qrCodeImage = await getImageData(urlQrCodeImage);
+
                 return [
                     {text: '', pageBreak: 'after'}, // Saut de page
                     {text: "Qr Code" + index, style: {fontSize: 18, bold: true, alignment: 'center'}},
@@ -85,20 +91,17 @@ export const createPdfDefi = async (dataDefi: {
                         table: {
                             widths: ['auto', '*'],
                             body: [
-                                ["Url du Qr Code", {text: urlQrCode, link: urlQrCode, style: {color: '#fe6928', alignment: 'center'}}],
-                                ["Indice", {text: indice, style: {alignment: 'center'}}]
+                                ["Url du Qr Code", {
+                                    text: urlQrCode,
+                                    link: urlQrCode,
+                                    style: {color: '#fe6928', alignment: 'center'}
+                                }],
+                                ["Indice", {text: indice, style: {alignment: 'center'}}],
+                                ["Qr Code", {image: qrCodeImage, width: 300, style: {alignment: 'center'}}],
+                                ["Placement", imagesTable]
                             ]
                         }
-                    },
-                    {text: ' '},  // Ajoute un espace
-                    {text: `Vous devez placer le Qr Code ici:`},
-                    {
-                        table: {
-                            widths: ['*', '*'],
-                            body: imagesTable
-                        },
-                        layout: 'noBorders'
-                    },
+                    }
                 ];
             })),
         ],

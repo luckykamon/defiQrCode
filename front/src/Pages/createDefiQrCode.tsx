@@ -8,6 +8,38 @@ import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {createPdfDefi} from "../Functions/CreatePdfDefi";
 
+export const generateQrCode = ({color, text, fileUrl}) => {
+    return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('text', window.location.origin + "/" + text);
+        formData.append('color', color);
+
+        // Fetch the image file from the provided URL
+        fetch(fileUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a new file instance
+                const file = new File([blob], 'filename.png', {type: 'image/png'});
+                formData.append('file', file);
+                fetch(process.env.REACT_APP_URL_QRCODE + '/uploadQrCode', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => response.text())
+                    .then(result => {
+                        resolve(result);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        reject(error);
+                    });
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            });
+    });
+};
 
 const CreateDefiQrCode: FC = () => {
     const {idDefi} = useParams();
@@ -365,39 +397,6 @@ const CreateDefiQrCode: FC = () => {
 
     const isCreate = () => {
         return !idDefi || !passwordDefi;
-    };
-
-    const generateQrCode = ({color, text, fileUrl}) => {
-        return new Promise((resolve, reject) => {
-            const formData = new FormData();
-            formData.append('text', window.location.origin + "/" + text);
-            formData.append('color', color);
-
-            // Fetch the image file from the provided URL
-            fetch(fileUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    // Create a new file instance
-                    const file = new File([blob], 'filename.png', {type: 'image/png'});
-                    formData.append('file', file);
-                    fetch(process.env.REACT_APP_URL_QRCODE + '/uploadQrCode', {
-                        method: 'POST',
-                        body: formData,
-                    })
-                        .then(response => response.text())
-                        .then(result => {
-                            resolve(result);
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            reject(error);
-                        });
-                })
-                .catch(error => {
-                    console.error(error);
-                    reject(error);
-                });
-        });
     };
 
     const handleGenerateQrCode = async (stepId: number) => {
