@@ -32,14 +32,65 @@ export const createPdfDefi = async (dataDefi: {
     const dataDefiImageUrl = process.env.REACT_APP_URL_BACK + dataDefi.image;
     const dataDefiImage = await getImageData(dataDefiImageUrl);
 
+    const tocQrCode = []
+
+    for (let nbStep = 0; nbStep < dataDefi.steps.length; nbStep++) {
+        tocQrCode.push({
+            toc: {id: 'qrCode_' + nbStep},
+            style: {fontSize: 12}
+        })
+    }
+
     const docDefinition = {
+        info: {
+            title: 'Feuille de route - ' + dataDefi.defiName,
+            creator: 'Lucas BODIN',
+            subject: 'Feuille de route pour mettre en place le défi - ' + dataDefi.defiName,
+            keywords: 'lucas bodin defi ' + dataDefi.defiName,
+        },
+        footer: function (currentPage, pageCount) {
+            return {
+                text: currentPage.toString() + ' / ' + pageCount,
+                alignment: 'center'
+            };
+        },
         content: [
+            {text: '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'},  // Ajoute un espace
             {text: "Feuille de route: " + dataDefi.defiName, style: {fontSize: 20, bold: true, alignment: 'center'}},
+            {text: ' '},  // Ajoute un espace
+            {image: dataDefiImage, width: 100, style: {alignment: 'center'}},
+            {text: '', pageBreak: 'after'}, // Saut de page
+            {text: "Sommaire", tocItem: 'sommaire', style: {fontSize: 18, bold: true, alignment: 'center'}},
+            {text: ' '},  // Ajoute un espace
+            {
+                toc: {
+                    id: 'sommaire',
+                },
+                style: {fontSize: 12}
+            },
+            {
+                toc: {
+                    id: 'recapitulatif'
+                },
+                style: {fontSize: 12}
+            },
+            ...tocQrCode,
+            {text: '', pageBreak: 'after'}, // Saut de page
+            {
+                text: "Récapitulatif du défi",
+                tocItem: 'recapitulatif',
+                style: {fontSize: 18, bold: true, alignment: 'center'}
+            },
             {text: ' '},  // Ajoute un espace
             {
                 table: {
                     widths: ['auto', '*'],
                     body: [
+                        ["Lien Défi", {
+                            text: window.location.href,
+                            link: window.location.href,
+                            style: {color: '#fe6928', alignment: 'center'}
+                        }],
                         ["Logo", {image: dataDefiImage, width: 100, style: {alignment: 'center'}}],
                         ["Description", dataDefi.description],
                         ["Mot Caché", {text: dataDefi.motCache, style: {alignment: 'center'}}]
@@ -68,24 +119,36 @@ export const createPdfDefi = async (dataDefi: {
 
                 const urlQrCode = window.location.origin + "/" + idQrCode
 
-                let urlQrCodeImage = "";
-
+                let urlQrCodeImage = undefined;
+                let qrCodeImage = undefined;
                 await generateQrCode({
                     color: '#000000',
                     text: idQrCode,
                     fileUrl: process.env.REACT_APP_URL_BACK + dataDefi.image
-                }).then((nameQrCode: string) => {
-                    urlQrCodeImage = process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode;
-                }).catch((error) => {
-                    console.error(error);
-                    NotificationManager.error('Une erreur est survenue lors de la génération du QR Code', 'Erreur', 5000);
-                });
+                })
+                    .then(async (nameQrCode: string) => {
+                        urlQrCodeImage = process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode;
+                        qrCodeImage = await getImageData(urlQrCodeImage);
+                    }).catch((error) => {
+                        console.error(error);
+                        NotificationManager.error("Une erreur est survenue lors de la génération d'un QR Code, un Qr Code non personnalisé sera alors généré", 'Erreur', 5000);
+                    });
 
-                const qrCodeImage = await getImageData(urlQrCodeImage);
+
+                let qrCodeObject
+                if (urlQrCodeImage !== undefined && qrCodeImage !== undefined) {
+                    qrCodeObject = {image: qrCodeImage, width: 300, style: {alignment: 'center'}}
+                } else {
+                    qrCodeObject = {qr: window.location.origin + "/" + idQrCode, style: {alignment: 'center'}}
+                }
 
                 return [
                     {text: '', pageBreak: 'after'}, // Saut de page
-                    {text: "Qr Code" + index, style: {fontSize: 18, bold: true, alignment: 'center'}},
+                    {
+                        text: "Qr Code" + index,
+                        tocItem: 'qrCode_' + index,
+                        style: {fontSize: 18, bold: true, alignment: 'center'}
+                    },
                     {text: ' '},  // Ajoute un espace
                     {
                         table: {
@@ -97,7 +160,7 @@ export const createPdfDefi = async (dataDefi: {
                                     style: {color: '#fe6928', alignment: 'center'}
                                 }],
                                 ["Indice", {text: indice, style: {alignment: 'center'}}],
-                                ["Qr Code", {image: qrCodeImage, width: 300, style: {alignment: 'center'}}],
+                                ["Qr Code", qrCodeObject],
                                 ["Placement", imagesTable]
                             ]
                         }
