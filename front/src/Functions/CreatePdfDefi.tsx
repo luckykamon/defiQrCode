@@ -37,9 +37,50 @@ export const createPdfDefi = async (dataDefi: {
     for (let nbStep = 0; nbStep < dataDefi.steps.length; nbStep++) {
         tocQrCode.push({
             toc: {id: 'qrCode_' + nbStep},
-            style: {fontSize: 12}
+            style: {fontSize: 12},
+            margin: [20, 0, 0, 0]
         })
     }
+
+    function rotateImage(data, rotationAngle): Promise<string> {
+        return new Promise((resolve, reject) => {
+            // Créer une nouvelle image
+            const img = new Image();
+            img.src = data;
+
+            img.onload = () => {
+                // Créer un canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Définir les dimensions du canvas en fonction de l'angle de rotation
+                if (rotationAngle === 90 || rotationAngle === 270) {
+                    canvas.width = img.height;
+                    canvas.height = img.width;
+                } else {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                }
+
+                // Déplacer l'origine au centre du canvas
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                // Effectuer la rotation
+                ctx.rotate(rotationAngle * Math.PI / 180);
+
+                // Dessiner l'image
+                ctx.drawImage(img, -img.width / 2, -img.height / 2);
+
+                // Récupérer l'image sous forme de data URL
+                resolve(canvas.toDataURL().toString());
+            };
+
+            img.onerror = reject;
+        });
+    }
+
+
+    const imageQrCodes = []
 
     const docDefinition = {
         info: {
@@ -49,6 +90,9 @@ export const createPdfDefi = async (dataDefi: {
             keywords: 'lucas bodin defi ' + dataDefi.defiName,
         },
         footer: function (currentPage, pageCount) {
+            if (pageCount - currentPage < dataDefi.steps.length) { // On supprime la pagination pour l'impression des QR Codes
+                return null;
+            }
             return {
                 text: currentPage.toString() + ' / ' + pageCount,
                 alignment: 'center'
@@ -66,15 +110,22 @@ export const createPdfDefi = async (dataDefi: {
                 toc: {
                     id: 'sommaire',
                 },
-                style: {fontSize: 12}
+                style: {fontSize: 12, bold: true}
             },
             {
                 toc: {
                     id: 'recapitulatif'
                 },
-                style: {fontSize: 12}
+                style: {fontSize: 12, bold: true}
             },
+            {text: 'QR Codes', bold: true},
             ...tocQrCode,
+            {
+                toc: {
+                    id: 'impression'
+                },
+                style: {fontSize: 12, bold: true}
+            },
             {text: '', pageBreak: 'after'}, // Saut de page
             {
                 text: "Récapitulatif du défi",
@@ -129,6 +180,7 @@ export const createPdfDefi = async (dataDefi: {
                     .then(async (nameQrCode: string) => {
                         urlQrCodeImage = process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode;
                         qrCodeImage = await getImageData(urlQrCodeImage);
+                        imageQrCodes.push(qrCodeImage);
                     }).catch((error) => {
                         console.error(error);
                         NotificationManager.error("Une erreur est survenue lors de la génération d'un QR Code, un Qr Code non personnalisé sera alors généré", 'Erreur', 5000);
@@ -145,7 +197,7 @@ export const createPdfDefi = async (dataDefi: {
                 return [
                     {text: '', pageBreak: 'after'}, // Saut de page
                     {
-                        text: "Qr Code" + index,
+                        text: "QR Code " + index,
                         tocItem: 'qrCode_' + index,
                         style: {fontSize: 18, bold: true, alignment: 'center'}
                     },
@@ -167,6 +219,29 @@ export const createPdfDefi = async (dataDefi: {
                     }
                 ];
             })),
+            {text: '', pageBreak: 'after'}, // Saut de page
+            {
+                text: "Impression QR Codes",
+                tocItem: 'impression',
+                style: {fontSize: 18, bold: true, alignment: 'center'}
+            },
+            {text: ' '},  // Ajoute un espace
+            {text: "Pour l'impression des QR Codes, il est conseillé d'imprimer les QR Codes sur une feuille A4. Sur chaque page, il est indiqué le numéro de chaque QR Code ce qui vous servira lorsque vous les placerez."},
+            ...await Promise.all(imageQrCodes.map(async (qrCodeImage, index) => {
+                console.log(typeof qrCodeImage)
+                console.log(qrCodeImage)
+                let qrCodeImageRotated = qrCodeImage;
+                await rotateImage(qrCodeImage, 90)
+                    .then((dataRotate) => {
+                        qrCodeImageRotated = dataRotate
+                    })
+                return ([
+                    {text: '', pageBreak: 'after'}, // Saut de page
+                    {text: index},
+                    {text: '\n\n\n\n\n'},
+                    {image: qrCodeImageRotated, width: 600, style: {alignment: 'center'}}
+                ])
+            }))
         ],
     };
     pdfMake.createPdf(docDefinition).open();
