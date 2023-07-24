@@ -79,9 +79,42 @@ const CreateDefiQrCode: FC = () => {
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<string | null>(null);
     const [messageGeneral, setMessageGeneral] = useState(null);
+    const [isDefiChanged, setIsDefiChanged] = useState(false);
 
     const allQrcodeAreVerif = () => {
         return !steps.some(step => step.idQrCode === "verification");
+    }
+
+    const setQrCodes = (qrCodes) => {
+        const newSteps = [];
+        let allQrcodeAreVerif = true;
+        for (let i = 0; i < qrCodes.sort((a, b) => a.number - b.number).length; i++) {
+            newSteps.push({
+                indice: qrCodes[i].indice,
+                images: qrCodes[i].listImage.map((image) => {
+                    return image.path;
+                }),
+                idQrCode: qrCodes[i].idQrCode
+            });
+            if (qrCodes[i].idQrCode === "verification") {
+                allQrcodeAreVerif = false;
+            }
+        }
+        if (!allQrcodeAreVerif) {
+            setMessageGeneral("Votre défi n'as pas encore été vérifié par un administrateur, lorsqu'il le sera il sera publié et vous pourrez obtenir des QR Codes afin de le partager.");
+        } else {
+            setMessageGeneral(null);
+        }
+        setSteps(newSteps);
+    }
+
+    const setStateFromDefi = (result) => {
+        setDefiName(result.name);
+        setImage(result.image.path);
+        setDescription(result.description);
+        setFile(result.fichier.path);
+        setMotCache(result.motCache);
+        setQrCodes(result.qrCodes);
     }
 
 
@@ -93,29 +126,7 @@ const CreateDefiQrCode: FC = () => {
             })
                 .then(response => response.json())
                 .then(result => {
-                    setDefiName(result.name);
-                    setImage(result.image.path);
-                    setDescription(result.description);
-                    setFile(result.fichier.path);
-                    setMotCache(result.motCache);
-                    const newSteps = [];
-                    let allQrcodeAreVerif = true;
-                    for (let i = 0; i < result.qrCodes.sort((a, b) => a.number - b.number).length; i++) {
-                        newSteps.push({
-                            indice: result.qrCodes[i].indice,
-                            images: result.qrCodes[i].listImage.map((image) => {
-                                return image.path;
-                            }),
-                            idQrCode: result.qrCodes[i].idQrCode
-                        });
-                        if (result.qrCodes[i].idQrCode === "verification") {
-                            allQrcodeAreVerif = false;
-                        }
-                    }
-                    if (!allQrcodeAreVerif) {
-                        setMessageGeneral("Votre défi n'as pas encore été vérifié par un administrateur, lorsqu'il le sera il sera publié et vous pourrez obtenir des QR Codes afin de le partager.");
-                    }
-                    setSteps(newSteps);
+                    setStateFromDefi(result);
                 })
                 .catch(error => console.log('error', error));
         }
@@ -197,6 +208,7 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const handleStepChange = async (index: number, field: string, value: string | FileList) => {
+        setIsDefiChanged(true);
         const updatedSteps = [...steps];
         let newValue: string[] | string;
         let messages: string[] = [];
@@ -354,7 +366,9 @@ const CreateDefiQrCode: FC = () => {
             await createDefi();
         } else if (isUpdate()) {
             await updateDefi()
-                .then(() => {
+                .then((result) => {
+                    setStateFromDefi(result)
+                    setIsDefiChanged(false);
                     NotificationManager.success('Défi mis à jour avec succès');
                 })
                 .catch(() => {
@@ -369,7 +383,8 @@ const CreateDefiQrCode: FC = () => {
             redirect: 'follow'
         })
             .then(response => response.json())
-            .then(() => {
+            .then((result) => {
+                setStateFromDefi(result)
                 NotificationManager.success('Défi validé avec succès');
                 setValidateDefiNeed(false);
             })
@@ -380,10 +395,12 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const handleAddStep = () => {
+        setIsDefiChanged(true);
         setSteps([...steps, initialStep]);
     };
 
     const handleRemoveStep = (index: number) => {
+        setIsDefiChanged(true);
         if (steps.length === 1) return NotificationManager.error('Vous devez avoir au moins une étape.', "Erreur");
         if (steps[index].indice !== "" || steps[index].images !== null) { // Si l'étape a déjà un indice ou une image d'ajouté, on ajoute un message de confirmation
             if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
@@ -394,6 +411,7 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const addImage = (file) => {
+        setIsDefiChanged(true);
         uploadImage(file)
             .then((result: string) => {
                 setImage(result);
@@ -401,6 +419,7 @@ const CreateDefiQrCode: FC = () => {
     };
 
     const addFile = (file) => {
+        setIsDefiChanged(true);
         uploadImage(file)
             .then((result: string) => {
                 console.log(result);
@@ -484,8 +503,10 @@ const CreateDefiQrCode: FC = () => {
                         <tr style={{borderBottom: "none"}}>
                             <td style={{margin: "10px", textAlign: "right"}}>Nom du défi:</td>
                             <td style={{textAlign: "center"}}>
-                                <input placeholder="Nom du défi" value={defiName}
-                                       onChange={e => setDefiName(e.target.value)}/> <br/><br/>
+                                <input placeholder="Nom du défi" value={defiName} onChange={e => {
+                                    setIsDefiChanged(true);
+                                    setDefiName(e.target.value)
+                                }}/> <br/><br/>
                             </td>
                         </tr>
                         <tr>
@@ -503,7 +524,10 @@ const CreateDefiQrCode: FC = () => {
                             <td style={{textAlign: "center"}}>
                                 <textarea placeholder="Description du défi"
                                           style={{width: "90%", margin: "auto", borderRadius: "10px"}} rows={4}
-                                          value={description} onChange={e => setDescription(e.target.value)}/>
+                                          value={description} onChange={e => {
+                                    setIsDefiChanged(true);
+                                    setDescription(e.target.value)
+                                }}/>
 
                                 <br/>
                             </td>
@@ -523,8 +547,10 @@ const CreateDefiQrCode: FC = () => {
                         <tr style={{borderBottom: "none"}}>
                             <td style={{margin: "10px", textAlign: "right"}}>Mot caché:</td>
                             <td style={{textAlign: "center"}}>
-                                <input placeholder="Mot caché" value={motCache}
-                                       onChange={e => setMotCache(e.target.value)}/> <br/><br/>
+                                <input placeholder="Mot caché" value={motCache} onChange={e => {
+                                    setIsDefiChanged(true);
+                                    setMotCache(e.target.value)
+                                }}/> <br/><br/>
                             </td>
                         </tr>
                         </tbody>
@@ -558,11 +584,11 @@ const CreateDefiQrCode: FC = () => {
 
                 <br/><br/> {allQrcodeAreVerif() && (
                 <ButtonLoad onClick={handleDefiPdf}>Générer la feuille de Route</ButtonLoad>
-            )} <br/> <ButtonLoad onClick={handleDefiCreation}>{isUpdate() && (
+            )} <br/> {isDefiChanged && (<ButtonLoad onClick={handleDefiCreation}>{isUpdate() && (
                 <>Envoyer la modification du défi</>
             )}{isCreate() && (
                 <span>Créer le défi</span>
-            )}</ButtonLoad> {validateDefiNeed && !allQrcodeAreVerif() && (
+            )}</ButtonLoad>)} {validateDefiNeed && !allQrcodeAreVerif() && (
                 <>
                     <br/> <ButtonLoad onClick={handleValidateDefi}>Valider le défi</ButtonLoad>
                 </>

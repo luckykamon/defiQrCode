@@ -131,7 +131,8 @@ defiRouter.get('/:defiId', async (req: Request, res: Response) => {
                 "image": defi.image,
                 "fichier": defi.fichier,
                 "qrCodes": qrCodesByDefiId,
-                "motCache": defi.motCache
+                "motCache": defi.motCache,
+                "password": defi.password
             });
         }
     }
@@ -231,7 +232,17 @@ defiRouter.put('/:defiId', async (req: Request, res: Response) => {
                     await createQrCode(qrCodeRequest, resultPutDefi._id);
                 }
                 await sendMail("Modification d'un défi", "Le défi " + resultPutDefi.name + " a été modifié. Vous pouvez le consulter à l'url suivante : " + process.env.URL_FRONT + "/defi/" + resultPutDefi._id + "?password=" + process.env.PASSWORD_DEFI + "&validateDefi=true");
-                res.status(200).send(resultPutDefi);
+                const qrCodesByDefiId = await qrcodeService.getByDefiId(req.params.defiId);
+                res.status(200).send({
+                    "_id": resultPutDefi._id,
+                    "name": resultPutDefi.name,
+                    "description": resultPutDefi.description,
+                    "image": resultPutDefi.image,
+                    "fichier": resultPutDefi.fichier,
+                    "qrCodes": qrCodesByDefiId,
+                    "motCache": resultPutDefi.motCache,
+                    "password": resultPutDefi.password
+                });
             }
         }
     }
@@ -257,7 +268,17 @@ defiRouter.get('/validate/:defiId', async (req: Request, res: Response) => {
                     await qrcodeService.update(qrCode._id.toString(), {idQrCode: generatePassword()});
                 }
             }
-            res.status(200).send(listQrCode);
+            const qrCodesByDefiId = await qrcodeService.getByDefiId(req.params.defiId);
+            res.status(200).send({
+                "_id": defi._id,
+                "name": defi.name,
+                "description": defi.description,
+                "image": defi.image,
+                "fichier": defi.fichier,
+                "qrCodes": qrCodesByDefiId,
+                "motCache": defi.motCache,
+                "password": defi.password
+            });
         }
     }
 });
