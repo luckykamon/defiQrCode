@@ -180,7 +180,7 @@ export const createPdfDefi = async (dataDefi: {
                     .then(async (nameQrCode: string) => {
                         urlQrCodeImage = process.env.REACT_APP_URL_QRCODE + "/getQrCode/" + nameQrCode;
                         qrCodeImage = await getImageData(urlQrCodeImage);
-                        imageQrCodes.push(qrCodeImage);
+                        imageQrCodes.push({number: index, image: qrCodeImage});
                     }).catch((error) => {
                         console.error(error);
                         NotificationManager.error("Une erreur est survenue lors de la génération d'un QR Code, un Qr Code non personnalisé sera alors généré", 'Erreur', 5000);
@@ -193,6 +193,8 @@ export const createPdfDefi = async (dataDefi: {
                 } else {
                     qrCodeObject = {qr: window.location.origin + "/" + idQrCode, style: {alignment: 'center'}}
                 }
+
+                console.log(index)
 
                 return [
                     {text: '', pageBreak: 'after'}, // Saut de page
@@ -227,11 +229,9 @@ export const createPdfDefi = async (dataDefi: {
             },
             {text: ' '},  // Ajoute un espace
             {text: "Pour l'impression des QR Codes, il est conseillé d'imprimer les QR Codes sur une feuille A4. Sur chaque page, il est indiqué le numéro de chaque QR Code ce qui vous servira lorsque vous les placerez."},
-            ...await Promise.all(imageQrCodes.map(async (qrCodeImage, index) => {
-                console.log(typeof qrCodeImage)
-                console.log(qrCodeImage)
-                let qrCodeImageRotated = qrCodeImage;
-                await rotateImage(qrCodeImage, 90)
+            ...await Promise.all(imageQrCodes.sort((a, b) => a.number - b.number).map(async (qrCodeImageObject, index) => {
+                let qrCodeImageRotated = qrCodeImageObject.image;
+                await rotateImage(qrCodeImageRotated, 90)
                     .then((dataRotate) => {
                         qrCodeImageRotated = dataRotate
                     })
