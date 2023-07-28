@@ -1,4 +1,4 @@
-import React, {FC, MouseEventHandler, useEffect, useState} from "react";
+import {FC, MouseEventHandler, useEffect, useState} from "react";
 import {getLocalStorage} from "../Functions/LocalStorage";
 import SkeletonCustom from "../Components/SkeletonCustom";
 import 'react-loading-skeleton/dist/skeleton.css';

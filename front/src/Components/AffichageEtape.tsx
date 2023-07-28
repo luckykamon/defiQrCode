@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 import {getCookieConsentValue} from "react-cookie-consent";
 import {getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 

@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react';
+import {FC, ReactNode, useEffect, useState} from 'react';
 import Cookie from "../Components/Cookie";
 import {getLocalStorage, getLocalStorageStartWith, setLocalStorage,} from "../Functions/LocalStorage";
 import {changeDefiFromIdToId} from "../Functions/ChangeDefiId";
@@ -10,7 +10,10 @@ interface LiProps {
 }
 
 
-const onClickNavbar = (href: string, type: string, id: string) => {
+const onClickNavbar = (href: string | string[], type: string, id: string) => {
+    if (typeof href === 'object') { // href est de type string[]
+        return;
+    }
     if (type === "defi") {
         const currentDefiId = getLocalStorage("defiId");
         if (currentDefiId !== id) {
@@ -26,10 +29,10 @@ const onClickNavbar = (href: string, type: string, id: string) => {
 };
 
 interface ActionMenu {
-    name: string;
-    href: string;
-    type: string;
-    id: string;
+    name?: string;
+    href: string | string[];
+    type?: string;
+    id?: string;
 }
 
 const containHref = (href: string, hrefs: string[]): boolean => {
@@ -113,7 +116,12 @@ const NavBar: FC = () => {
             .then(response => response.json())
             .then(result => {
 
-                setListSousMenuDefi(result.map((defi: { name: string, _id: string, qrCode0: string, nbQrCode: string }) => {
+                setListSousMenuDefi(result.map((defi: {
+                    name: string,
+                    _id: string,
+                    qrCode0: string,
+                    nbQrCode: string
+                }) => {
                     if (defi._id === getLocalStorage("defiId")) {
                         setLocalStorage("nbQrCode", defi.nbQrCode);
                         const filteredListSousMenuQrCode = listSousMenuQrCode.filter((item) => {
@@ -143,18 +151,15 @@ const NavBar: FC = () => {
         <div id="nav-wrap">
             <Cookie/>
             <ul id="nav" className="nav">
-                <Li href="/" actionMenu={{href: listSousMenuDefi.map(item => item.href)}}
-                    listSousMenu={listSousMenuDefi}> Défi </Li> <Li href="/etape_0" actionMenu={{
+                <Li actionMenu={{href: listSousMenuDefi.map(item => item.href)}}
+                    listSousMenu={listSousMenuDefi}> Défi </Li> <Li actionMenu={{
                 href: listSousMenuQrCode.map(item => item.href),
                 type: "qrCode"
-            }} listSousMenu={listSousMenuQrCode}> Qr Code </Li> <Li href="/avancee"
-                                                                    actionMenu={{href: "/avancee", type: "avancee"}}
-                                                                    listSousMenu={[]}> Avancée </Li> <Li href="/equipe"
-                                                                                                         actionMenu={{
-                                                                                                             href: "/equipe",
-                                                                                                             type: "equipe"
-                                                                                                         }}
-                                                                                                         listSousMenu={[]}> Équipe </Li>
+            }} listSousMenu={listSousMenuQrCode}> Qr Code </Li> <Li actionMenu={{href: "/avancee", type: "avancee"}}
+                                                                    listSousMenu={[]}> Avancée </Li> <Li actionMenu={{
+                href: "/equipe",
+                type: "equipe"
+            }} listSousMenu={[]}> Équipe </Li>
             </ul>
         </div>
     );

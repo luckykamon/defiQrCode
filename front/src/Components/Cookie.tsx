@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import {FC} from "react";
 import CookieConsent from "react-cookie-consent";
 
 const Cookie: FC = () => {

@@ -185,7 +185,7 @@ const Equipe = () => {
                         <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}
                                                                           style={{marginTop: "25px"}}/>
                     </div>
-                    <Classement equipeId={equipeId}/>
+                    <Classement/>
                 </Layout>
             </div>
         )

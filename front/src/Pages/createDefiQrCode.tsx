@@ -1,4 +1,4 @@
-import React, {ButtonHTMLAttributes, FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
+import {ButtonHTMLAttributes, FC, InputHTMLAttributes, useEffect, useRef, useState} from 'react';
 import Image from "../Components/Image";
 import {faFileImport, faPlus, faQrcode, faSpinner, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

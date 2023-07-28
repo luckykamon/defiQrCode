@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import AffichageEtape from "../Components/AffichageEtape"
 import Image from "../Components/Image";
 import {useParams} from "react-router-dom";
@@ -60,7 +60,7 @@ const Etapes: FC = () => {
     }
 
     return (
-        <AffichageEtape nbQrCode={qrCode.number} mot={qrCode.indice} hideFooter>
+        <AffichageEtape nbQrCode={qrCode.number} mot={qrCode.indice}>
             {qrCode.listImage.map((imageInfo) => {
                 let urlImage = process.env.REACT_APP_URL_BACK + imageInfo.path
                 if (imageInfo.path.startsWith("http")) {

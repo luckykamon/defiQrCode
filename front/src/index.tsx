@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Avancee from "./Pages/Avancee";
@@ -12,7 +12,7 @@ import Footer from "./Layout/Footer";
 import {NotificationContainer} from "react-notifications";
 
 
-const Layout: FC = ({children}) => {
+const Layout: FC<{children: ReactNode}> = ({children}) => {
     return (
         <>
             <NavBar/><NotificationContainer/> {children} <Footer/>
