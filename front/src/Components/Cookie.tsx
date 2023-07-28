@@ -15,7 +15,7 @@ const Cookie: FC = () => {
             buttonId={""}
                        buttonWrapperClasses={""}
                        containerClasses={""}
-                       contentClasses={""} contentStyle={""}
+                       contentClasses={""}
                        // cookieValue customButtonProps customButtonWrapperAttributes customContainerAttributes
                        // customContentAttributes customDeclineButtonProps debug declineButtonClasses declineButtonId
                        // declineButtonStyle declineButtonText declineCookieValue disableButtonStyles disableStyles
