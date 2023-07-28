@@ -8,6 +8,7 @@ import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {createPdfDefi} from "../Functions/CreatePdfDefi";
 
+
 export const generateQrCode = ({color, text, fileUrl}) => {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
@@ -349,8 +350,9 @@ const CreateDefiQrCode: FC = () => {
                     defiName: defiName
                 })
                 NotificationManager.success('Défi mis à jour avec succès');
-            } catch {
-                NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi', "Erreur");
+            } catch (errot) {
+                console.log("error", errot)
+                NotificationManager.error('Une erreur est survenue lors de la génération de la feuille de route du défi', "Erreur");
             }
         }
     };
@@ -371,7 +373,8 @@ const CreateDefiQrCode: FC = () => {
                     setIsDefiChanged(false);
                     NotificationManager.success('Défi mis à jour avec succès');
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.log("error", error)
                     NotificationManager.error('Une erreur est survenue lors de la mise à jour du défi', "Erreur");
                 });
         }
@@ -425,7 +428,8 @@ const CreateDefiQrCode: FC = () => {
                 console.log(result);
                 setFile(result);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log("error", error)
                 NotificationManager.error("Une erreur est survenue lors de l'upload du fichier", "Erreur");
             })
     };
