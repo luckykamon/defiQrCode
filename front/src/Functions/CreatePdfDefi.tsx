@@ -114,6 +114,12 @@ export const createPdfDefi = async (dataDefi: {
             },
             {
                 toc: {
+                    id: 'deroulement',
+                },
+                style: {fontSize: 12, bold: true}
+            },
+            {
+                toc: {
                     id: 'recapitulatif'
                 },
                 style: {fontSize: 12, bold: true}
@@ -126,6 +132,36 @@ export const createPdfDefi = async (dataDefi: {
                 },
                 style: {fontSize: 12, bold: true}
             },
+            {text: '', pageBreak: 'after'}, // Saut de page
+            {
+                text: "Déroulement du défi",
+                tocItem: 'deroulement',
+                style: {fontSize: 18, bold: true, alignment: 'center'}
+            },
+            {text: ' '},  // Ajoute un espace
+            {text: '1 - La préparation du défi', style: {bold: true}},
+            {text: "Cette étape consiste à aller sur un lieu où l'on souhaite créer le défi et d'aller prendre en photos des lieux potentiels où l'on souhaite placer des QR Codes."},
+            {text: "Il est possible que le jour du défi, certains lieux ne soient plus accessibles pour des raisons diverses et variées. Il est donc conseillé de prendre un maximum de photos afin d'avoir un maximum de choix le jour du défi."},
+            {text: "Une fois que vous avez votre lot de photos, il faudra vous rendre sur la page de création de défi (" + window.location.origin + "/defi) et de remplir le formulaire de création de défi."},
+            {text: "Vous devrez alors attendre que votre défi soit validé par un administrateur avant de pouvoir passer à l'étape suivante."},
+            {text: "Une fois que votre défi est validé, vous pourrez télécharger votre feuille de route et imprimer les QR Codes. Attention, si vous souhaitez effectuer une modification sur votre défi, il faudra attendre que votre défi soit à nouveau validé par un administrateur et il ne sera plus disponible pendant ce laps de temps."},
+            {text: "Vous devrez alors imprimer les QR Codes situées à la fin de la feuille de route. Puis il faudra les plastifier afin qu'ils puissent résister aux intempéries. Vous pourrez acheter une plastifieuse A4 pour plus ou moins de 10€ sur Leboncoin avec la livraison (https://www.leboncoin.fr/recherche?text=plastifieuse%20A4&price=min-10). Une fois platifié, il faudra faire des trous dans les QR Codes à l'aide d'une perforatrice pour plus ou moins 3€ sur Leboncoin avec la livraison (https://www.leboncoin.fr/recherche?text=perforatrice%20feuille&price=min-3). Cela vous permettra de pouvoir les attacher le jour du défi."},
+            {text: ' '},  // Ajoute un espace
+            {text: '2 - La mise en place du défi', style: {bold: true}},
+            {text: "Le jour du défi, arrivez en avance afin de pouvoir mettre en place les QR Codes (plus de détails plus loin). Il faudra alors vous munir des QR Codes plastifié & perforés, de cette feuille de route sur votre téléphone, de ficelle et d'un ciseau."},
+            {text: "Commencez alors à vous rendre sur le lieu indiqué par le QR Code 0 (voir plus bas dans cette feuille de route). Vous devez comprendre que ce défi est une boucle. Par conséquent, le dernier QR Code est censé montrer comme images le lieu de départ du défi. Ainsi dans cette feuille de route, les images indiquent le lieu où doivent être placés les QR Code et non les images qui seront révélés une fois le QR Code scanné. Vous devrez suivre la procédure suivante pour chaque QR Code"},
+            {text: "Une fois rendu sur le lieu d'un QR Code à placer, attachez-le à l'endroit que vous avez prévu avec la ficelle et le ciseau pour qu'il ne s'envole pas. Pour que cela soit plus intéressant, placez-le de manière légèrement caché (cependant je vous invite à le rendre assez visible pour le QR Code 1 à trouver afin que les joueurs puissent comprendre d'eux-même ce qu'ils doivent trouver). Pensez aussi à rendre le QR Code accessible, cela doit rester sur le chemin principal afin de ne pas abimer la végétation. Une fois le QR Code posé, scannez-le afin de vérifier qu'il s'agit bien du bon QR Code (vous avez aussi le numéro indiqué sur pages des QR Code d'impression)."},
+            {text: "Il pourrait vous arriver plusieurs soucis, lors de la pose des QR Codes. Vous pourriez-vous oublier votre matériel, vous tromper de QR Code lors de la pose ou tout un tas d'autres raison qui pourraient vous faire prendre du retard. C'est pourquoi il est important de bien arriver en avance. En supposant que pour réaliser votre défi à pied, il vous faut 1h, arrivez alors sur le lieu, le double du temps, et donc dans cet exemple au moins 2 heures avant."},
+            {text: "Un autre soucis pourrait aussi vous arriver, le jour du défi, il est possible qu'un lieu ne soit plus accessible pour des raisons diverses (lieu en travaux, festival placé sur un QR Code, chemin inaccessible...). Ce cas est prévu, il vous faudra alors vous rendre sur le lien du défi (situé au niveau du Récapitulatif du défi plus bas dans cette feuille de route). Puis de désactiver le QR Code qui indique le lieu inaccessible."},
+            {text: "Exemple: Imaginons que le lieu où le QR Code 5 ne soit plus accessible, il vous faudra désactiver le QR Code 4 et placer le QR Code 5 sur le lieu du QR Code 4."},
+            {text: ' '},  // Ajoute un espace
+            {text: '3 - La réalisation du défi', style: {bold: true}},
+            {text: "Il vous faudra constituer plusieurs équipes. Dans chaque équipe un joueur devra créer un nom d'équipe et partager le lien pour rejoindre l'équipe. Le mieux étant de leurs faire scanner le QR Code d'équipe afin de vérifier que chacun arrive à scanner un QR Code avec son appareil. Il faut tout de même noter que les iPhones avec l'appareil photo permet de scanner nativement un QR Code. Une fois scanné ou arrivé sur le lien, il faudra accepter les cookies, ce qui actualisera la page et permettra de rejoindre l'équipe. Il faut noter qu'il n'est nécessaire de scanner un QR Code uniquement pour un seul membre de l'équipe et que cela ne pose pas de problème si le QR Code scanné à nouveau, seul le temps du premier est pris en compte."},
+            {text: "Ensuite il faudra expliquer le fonctionnement. Le plus simple sera alors de demander à un membre de chaque équipe de scanner le premier QR Code en précisant que le premier QR Code n'enclenche pas de chrono et est là pour servir d'exemple. Une fois sur la page du QR Code, expliquer que cela donne un indice afin de trouver le mot caché. En profiter pour indiquer que l'on peut entrer des réponses dans la page d'avancement (autant d'essai que l'on souhaite) et voir la liste des QR Codes déjà scannés. Il faudra aussi indiquer que l'on a aussi plusieurs images donnant des informations sur la localisation du prochain QR Code."},
+            {text: "Et pour finir, il faudra indiquer que le chrono commence lorsqu'ils auront scanné le second QR Code et que le défi se fini lorsque tout les QR Code auront été scannés et que le mot aura été trouvé."},
+            {text: ' '},  // Ajoute un espace
+            {text: '4 - Foire Aux Questions', style: {bold: true}},
+            {text: "Combien de temps prend la validation d'un défi ? Lorsqu'un défi est créé ou mis à jour, l'administrateur reçoit un e-mail, il faudra alors compter un délai de 1 semaine maximum afin de traiter la demande."},
             {text: '', pageBreak: 'after'}, // Saut de page
             {
                 text: "Récapitulatif du défi",
