@@ -36,10 +36,11 @@ const imageFileFilter = function (req: Request, file: Express.Multer.File, cb: (
 };
 const upload = multer({storage: storage, fileFilter: imageFileFilter});
 
-import rootRouter from './routes/router'; // ! Attention au reformat du fichier ! Doit se situer après l'import de multer (après le const de upload)
-
 app.use(cors());
 app.use(express.json());
+
+import rootRouter from './routes/router'; // ! Attention au reformat du fichier ! Doit se situer après l'import de multer (après le const de upload)
+
 app.use(rootRouter);
 
 
