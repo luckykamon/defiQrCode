@@ -170,20 +170,23 @@ const CreateDefiQrCode: FC = () => {
 
     const checkForm = () => {
         const messages: string[] = [];
-        if (defiName.length === 0) {
+        if (!defiName || defiName.length === 0) {
             messages.push('Vous devez saisir un nom de défi.');
         }
         if (image === null) {
             messages.push('Vous devez choisir une image.');
         }
-        if (description.length === 0) {
+        if (!description || description.length === 0) {
             messages.push('Vous devez saisir une description.');
         }
         if (file === null) {
             messages.push('Vous devez choisir un fichier.');
         }
-        if (motCache.length === 0) {
+        if (!motCache || motCache.length === 0) {
             messages.push('Vous devez saisir un mot caché.');
+        }
+        if (steps.length <= 1) {
+            messages.push('Vous devez avoir au moins 2 étapes.');
         }
         for (let stepId = 0; stepId < steps.length; stepId++) {
             if (messageStep(steps[stepId]).length > 0) {
@@ -404,7 +407,7 @@ const CreateDefiQrCode: FC = () => {
 
     const handleRemoveStep = (index: number) => {
         setIsDefiChanged(true);
-        if (steps.length === 1) return NotificationManager.error('Vous devez avoir au moins une étape.', "Erreur");
+        if (steps.length <= 2) return NotificationManager.error('Vous devez avoir au moins 2 étapes.', "Erreur");
         if (steps[index].indice !== "" || steps[index].images !== null) { // Si l'étape a déjà un indice ou une image d'ajouté, on ajoute un message de confirmation
             if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
         }
