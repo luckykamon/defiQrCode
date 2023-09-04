@@ -202,7 +202,7 @@ const CreateDefiQrCode: FC = () => {
         if (updatedStep.indice.length === 0) {
             messages.push('Vous devez saisir un indice.');
         }
-        if (updatedStep.images === null) {
+        if (updatedStep.images === null || updatedStep.images.length === 0) {
             messages.push('Vous devez choisir au moins une image.');
         }
         if (updatedStep.images?.length > 5) {
@@ -424,6 +424,22 @@ const CreateDefiQrCode: FC = () => {
             });
     };
 
+    const deleteImage = (step, image) => {
+        const newSteps = [...steps];
+        const newStep = {...step};
+
+        newStep.images = newStep.images.filter((imageStep) => imageStep !== image); // On supprime l'image de notre étape
+
+        const messages = messageStep(newStep);
+        if (messages.length > 0) {
+            newStep.message = messages.join(' ');
+        } else {
+            newStep.message = '';
+        }
+        newSteps[steps.indexOf(step)] = newStep;
+        setSteps(newSteps);
+    }
+
     const addFile = (file) => {
         setIsDefiChanged(true);
         uploadImage(file)
@@ -579,8 +595,23 @@ const CreateDefiQrCode: FC = () => {
                                     style={{height: "40px", width: "40px", margin: "15px"}}><FontAwesomeIcon
                             icon={faQrcode}/> </ButtonLoad>)}
                         <div className={"file-preview"}> {step.images && step.images.map((image) => (
-                            <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
-                                   alt={process.env.REACT_APP_URL_BACK + image}/>
+                            <div key={image} style={{position: 'relative'}}>
+                                <Image src={process.env.REACT_APP_URL_BACK + image}
+                                       alt={process.env.REACT_APP_URL_BACK + image}/>
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '2px',
+                                    right: '2px',
+                                    cursor: 'pointer',
+                                    backgroundColor: "red",
+                                    lineHeight: "20px",
+                                    height: "20px",
+                                    width: "20px",
+                                    borderRadius: "50%",
+                                }} onClick={() => deleteImage(step, image)}>
+                                    &#10005; {/* Symbole Unicode pour la croix */}
+                                </div>
+                            </div>
 
                         ))}</div>
                         <p style={{color: "red"}}>{step.message}</p><br/>
