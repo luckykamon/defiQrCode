@@ -145,13 +145,11 @@ const CreateDefiQrCode: FC = () => {
             })
                 .then(response => {
                     if (response.status !== 200) {
-                        console.log('here');
                         reject(response);
                     }
                     return response.text();
                 })
                 .then(result => {
-                    console.log();
                     resolve("/" + result);
                 })
                 .catch(error => {
@@ -227,11 +225,12 @@ const CreateDefiQrCode: FC = () => {
                 break;
             case 'images':
                 if (value instanceof FileList) {
-                    if (value.length > 5) {
-                        messages.push('Seul les 5 premières images ont été prisent en compte.');
+                    const nbPreviousImage = updatedSteps[index][field]?.length ? updatedSteps[index][field]?.length : 0;
+                    if (value.length + nbPreviousImage  > 5) {
+                        messages.push('Seul 5 images sont prisent en compte.');
                     }
-                    newValue = [];
-                    for (let nbImage = 0; nbImage < Math.min(5, value.length); nbImage++) {
+                    newValue = updatedSteps[index][field] ? [...updatedSteps[index][field]] : [];
+                    for (let nbImage = 0; nbImage < Math.min(5 - nbPreviousImage, value.length); nbImage++) {
                         await uploadImage(value.item(nbImage))
                             .then((result) => {
                                 if (typeof result === "string" && typeof newValue !== "string") {
@@ -258,6 +257,23 @@ const CreateDefiQrCode: FC = () => {
         }
         setSteps(updatedSteps);
     };
+
+    const deleteImageStep = (step, image) => {
+        setIsDefiChanged(true);
+        const newSteps = [...steps];
+        const newStep = {...step};
+
+        newStep.images = newStep.images.filter((imageStep) => imageStep !== image); // On supprime l'image de notre étape
+
+        const messages = messageStep(newStep);
+        if (messages.length > 0) {
+            newStep.message = messages.join(' ');
+        } else {
+            newStep.message = '';
+        }
+        newSteps[steps.indexOf(step)] = newStep;
+        setSteps(newSteps);
+    }
 
     const prepareDataDefi = () => {
         const qrcodes = [];
@@ -423,22 +439,6 @@ const CreateDefiQrCode: FC = () => {
                 setImage(result);
             });
     };
-
-    const deleteImage = (step, image) => {
-        const newSteps = [...steps];
-        const newStep = {...step};
-
-        newStep.images = newStep.images.filter((imageStep) => imageStep !== image); // On supprime l'image de notre étape
-
-        const messages = messageStep(newStep);
-        if (messages.length > 0) {
-            newStep.message = messages.join(' ');
-        } else {
-            newStep.message = '';
-        }
-        newSteps[steps.indexOf(step)] = newStep;
-        setSteps(newSteps);
-    }
 
     const addFile = (file) => {
         setIsDefiChanged(true);
@@ -608,7 +608,7 @@ const CreateDefiQrCode: FC = () => {
                                     height: "20px",
                                     width: "20px",
                                     borderRadius: "50%",
-                                }} onClick={() => deleteImage(step, image)}>
+                                }} onClick={() => deleteImageStep(step, image)}>
                                     &#10005; {/* Symbole Unicode pour la croix */}
                                 </div>
                             </div>
