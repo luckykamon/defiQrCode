@@ -1,12 +1,8 @@
 # Le défi QrCode
 
----
-
 Le défi QrCode est une application ludique destinée à encourager l'exploration de différents lieux à travers un jeu de piste interactif. Des QR Codes sont disposés à des emplacements spécifiques que les participants doivent trouver et scanner avec leur appareil mobile. Chaque scan révèle un indice qui les aide à progresser dans le jeu et à obtenir un indice pour trouver le mot caché. Le défi est chronométré, ajoutant une dimension compétitive au jeu. Il est également possible d'y jouer en équipe offrant ainsi une expérience passionnante à la fois pour les organisateurs et les participants.
 
 ## Mise en place
-
----
 
 ### 1 - Préparation du défi
 
@@ -49,15 +45,11 @@ Combien de temps faut-il pour valider un défi ? Lors de la création ou de la m
 
 ## Installation
 
----
-
 Pour démarrer le front, référez-vous au [README.md du front](./front/README.md) situé dans le dossier front.
 
 Pour démarrer le back, référez-vous au [README.md du back](./back/README.md) situé dans le dossier back.
 
 ## Features à réaliser
-
----
 
 * Passage des variables globales du localeStorage avec Redux
 * Ajouter un bouton de disable/enable d'urgence d'un QR Code dans un défi déjà validé au cas où un lieu de pose de QR Code ne soit pas accessible.
