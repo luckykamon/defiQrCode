@@ -185,7 +185,7 @@ defiRouter.post('', async (req: Request, res: Response) => {
     for (let qrCodeRequest of req.body.qrcode) {
         nbQrCodeRequest++;
         if (qrCodeRequest?.listImage !== undefined) {
-            if (qrCodeRequest.listImage.length > 5) { // On ne peut pas avoir plus de 5 images par QrCode
+            if (qrCodeRequest.listImage.length === 0 || qrCodeRequest.listImage.length > 5) { // On ne peut pas ne pas avoir d'images ou en avoir plus de 5 par QrCode
                 res.status(400).send('Bad request'); //Mauvais format de requête
                 return;
             }
@@ -221,7 +221,7 @@ defiRouter.put('/:defiId', async (req: Request, res: Response) => {
                 for (let qrCodeRequest of req.body.qrcode) {
                     nbQrCodeRequest++;
                     if (qrCodeRequest?.listImage !== undefined) {
-                        if (qrCodeRequest.listImage.length > 5) { // On ne peut pas avoir plus de 5 images par QrCode
+                        if (qrCodeRequest.listImage.length === 0 || qrCodeRequest.listImage.length > 5) { // On ne peut pas ne pas avoir d'images ou en avoir plus de 5 par QrCode
                             res.status(400).send('Bad request'); //Mauvais format de requête
                             return;
                         }

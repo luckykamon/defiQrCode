@@ -605,8 +605,8 @@ const CreateDefiQrCode: FC = () => {
                                     cursor: 'pointer',
                                     backgroundColor: "red",
                                     lineHeight: "20px",
-                                    height: "20px",
-                                    width: "20px",
+                                    height: "21px",
+                                    width: "21px",
                                     borderRadius: "50%",
                                 }} onClick={() => deleteImageStep(step, image)}>
                                     &#10005; {/* Symbole Unicode pour la croix */}
