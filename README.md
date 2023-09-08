@@ -2,9 +2,22 @@
 
 Le défi QrCode est une application ludique destinée à encourager l'exploration de différents lieux à travers un jeu de piste interactif. Des QR Codes sont disposés à des emplacements spécifiques que les participants doivent trouver et scanner avec leur appareil mobile. Chaque scan révèle un indice qui les aide à progresser dans le jeu et à obtenir un indice pour trouver le mot caché. Le défi est chronométré, ajoutant une dimension compétitive au jeu. Il est également possible d'y jouer en équipe offrant ainsi une expérience passionnante à la fois pour les organisateurs et les participants.
 
+## Sommaire
+
+- [Mise en place](#mise-en-place)
+  - [1 - Préparation du défi](#1---prparation-du-dfi)
+  - [2 - Organisation du défi](#2---organisation-du-dfi)
+  - [3 - Exécution du défi](#3---excution-du-dfi)
+  - [4 - Foire aux questions](#4---foire-aux-questions)
+- [Installation](#installation)
+  - [Front](#front)
+  - [Back](#back)
+- [Features à réaliser](#features--raliser)
+
 ## Mise en place
 
-### 1 - Préparation du défi
+<a id="1---prparation-du-dfi"></a>
+### 1 - Preparation du defi
 
 La première étape consiste à sélectionner un emplacement approprié pour votre défi. Photographiez plusieurs endroits potentiels pour placer des QR Codes.
 
@@ -19,6 +32,7 @@ Vous devez ensuite imprimer et plastifier les QR Codes pour les protéger contre
 
 Perforez ensuite les QR Codes plastifiés pour pouvoir les attacher le jour du défi. Vous pouvez trouver une perforatrice à un prix abordable sur Leboncoin: https://www.leboncoin.fr/recherche?text=perforatrice%20feuille&price=min-3
 
+<a id="2---organisation-du-dfi"></a>
 ### 2 - Organisation du défi
 
 Arrivez tôt le jour du défi pour disposer les QR Codes. Munissez-vous des QR Codes plastifiés et perforés, de votre feuille de route, de la ficelle et des ciseaux.
@@ -31,6 +45,7 @@ Prévoyez du temps en cas de problèmes inattendus, comme oublier votre matérie
 
 Si un lieu devient inaccessible le jour du défi (travaux, événements, etc.), vous pouvez désactiver le QR Code correspondant depuis le lien du défi. Par exemple, si le lieu du QR Code 5 est inaccessible, désactivez le QR Code 4 et placez le QR Code 5 à l'emplacement du QR Code 4.
 
+<a id="3---excution-du-dfi"></a>
 ### 3 - Exécution du défi
 
 Formez des équipes. Un membre de chaque équipe créera un nom d'équipe et partagera le lien pour rejoindre l'équipe. Faites-leur scanner le QR Code de l'équipe pour vérifier la compatibilité de leur appareil. Les iPhones peuvent scanner nativement un QR Code.
@@ -45,10 +60,15 @@ Combien de temps faut-il pour valider un défi ? Lors de la création ou de la m
 
 ## Installation
 
+### Front
+
 Pour démarrer le front, référez-vous au [README.md du front](./front/README.md) situé dans le dossier front.
+
+### Back
 
 Pour démarrer le back, référez-vous au [README.md du back](./back/README.md) situé dans le dossier back.
 
+<a id="features--raliser"></a>
 ## Features à réaliser
 
 * Passage des variables globales du localeStorage avec Redux
