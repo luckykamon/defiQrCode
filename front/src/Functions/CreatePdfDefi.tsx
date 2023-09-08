@@ -1,7 +1,10 @@
 
 import {NotificationManager} from "react-notifications";
 import {generateQrCode} from "../Pages/createDefiQrCode";
+import pdfMake from "pdfmake/build/pdfmake.min";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 
@@ -13,12 +16,6 @@ export const createPdfDefi = async (dataDefi: {
         images: Array<string>,
     }>
 }) => {
-
-    const pdfMake = await import("pdfmake/build/pdfmake.min");
-    const pdfFonts = await import("pdfmake/build/vfs_fonts");
-
-
-    pdfMake.vfs = pdfFonts.pdfMake.vfs;
     // Le dernier QrCode doit rediriger vers le premier QrCode, donc le dernier élément de la liste correspond à l'emplacement où le premier QrCode doit être placé
     const lastElement = dataDefi.steps.pop();
     dataDefi.steps.unshift(lastElement);
