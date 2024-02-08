@@ -22,7 +22,7 @@ jobs:
           node-version: '18.15.0'
 
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@master
+        uses: supercharge/mongodb-github-action@main
         with:
           mongodb-version: '6.0.6'
           mongodb-replica-set: test-rs
