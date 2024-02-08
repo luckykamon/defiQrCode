@@ -1,6 +1,11 @@
 name: Deploy Node.js app to server
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    # Exécute le workflow tous les jours à minuit (UTC)
+    - cron: '15 0 * * *'
 
 env:
   REMOTE_PATH: ''
