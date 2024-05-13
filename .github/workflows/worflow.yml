@@ -115,7 +115,7 @@ jobs:
       - name: Set remote_path based on branch
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "FRONT_URL=https://courir-a-plusieurs.site" >> $GITHUB_ENV
+            echo "FRONT_URL=https://defiqrcode.lucasbodin.com" >> $GITHUB_ENV
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             echo "FRONT_URL=https://defiqrcodedev.lucasbodin.com" >> $GITHUB_ENV
           fi
