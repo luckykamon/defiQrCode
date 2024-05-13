@@ -156,8 +156,15 @@ const TempsParcours: FC = () => {
             let timestampMin: number | null = null;
             let timestampMax: number | null = null;
             let allFound = true;
+            const nbQrCodeString = getLocalStorage("nbQrCode");
+            let nbQrCode = 7;
+            try {
+                nbQrCode = parseInt(nbQrCodeString);
+            } catch (error) {
+                console.log(error);
+            }
 
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i < nbQrCode; i++) {
                 const localStorage = getLocalStorage("QrCode-" + i)
                 if (localStorage !== null) {
                     const parseLocalStorage = JSON.parse(localStorage);
@@ -284,7 +291,15 @@ const InputMot: FC = () => {
     };
 
     let defiQrCodeBegin = false;
-    for (let i = 1; i <= 6; i++) {
+    const nbQrCodeString = getLocalStorage("nbQrCode");
+    let nbQrCode = 7;
+    try {
+        nbQrCode = parseInt(nbQrCodeString);
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (let i = 1; i <= nbQrCode; i++) {
         const localStorage = getLocalStorage("QrCode-" + i);
         if (localStorage !== null) {
             defiQrCodeBegin = true;
