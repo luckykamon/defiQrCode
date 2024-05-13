@@ -135,7 +135,7 @@ export const mot = async (body: { equipeId?: string, mot: string, defiId: string
         return false;
     }
 
-    let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === motCache;
+    let motIsFound = body.mot.toLowerCase().replace(new RegExp(" ", 'g'), "") === motCache.toLowerCase().replace(new RegExp(" ", 'g'), "");
 
     if (motIsFound && body.equipeId && Types.ObjectId.isValid(body.equipeId)) {
         await equipeSchema.updateOne({_id: body.equipeId}, {motTrouve: true, dateMot: new Date()});
