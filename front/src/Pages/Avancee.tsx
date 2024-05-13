@@ -299,7 +299,7 @@ const InputMot: FC = () => {
         console.log(error);
     }
 
-    for (let i = 1; i <= nbQrCode; i++) {
+    for (let i = 1; i < nbQrCode; i++) {
         const localStorage = getLocalStorage("QrCode-" + i);
         if (localStorage !== null) {
             defiQrCodeBegin = true;
