@@ -145,13 +145,11 @@ const CreateDefiQrCode: FC = () => {
             })
                 .then(response => {
                     if (response.status !== 200) {
-                        console.log('here');
                         reject(response);
                     }
                     return response.text();
                 })
                 .then(result => {
-                    console.log();
                     resolve("/" + result);
                 })
                 .catch(error => {
@@ -170,20 +168,23 @@ const CreateDefiQrCode: FC = () => {
 
     const checkForm = () => {
         const messages: string[] = [];
-        if (defiName.length === 0) {
+        if (!defiName || defiName.length === 0) {
             messages.push('Vous devez saisir un nom de défi.');
         }
         if (image === null) {
             messages.push('Vous devez choisir une image.');
         }
-        if (description.length === 0) {
+        if (!description || description.length === 0) {
             messages.push('Vous devez saisir une description.');
         }
         if (file === null) {
             messages.push('Vous devez choisir un fichier.');
         }
-        if (motCache.length === 0) {
+        if (!motCache || motCache.length === 0) {
             messages.push('Vous devez saisir un mot caché.');
+        }
+        if (steps.length <= 1) {
+            messages.push('Vous devez avoir au moins 2 étapes.');
         }
         for (let stepId = 0; stepId < steps.length; stepId++) {
             if (messageStep(steps[stepId]).length > 0) {
@@ -199,7 +200,7 @@ const CreateDefiQrCode: FC = () => {
         if (updatedStep.indice.length === 0) {
             messages.push('Vous devez saisir un indice.');
         }
-        if (updatedStep.images === null) {
+        if (updatedStep.images === null || updatedStep.images.length === 0) {
             messages.push('Vous devez choisir au moins une image.');
         }
         if (updatedStep.images?.length > 5) {
@@ -224,11 +225,12 @@ const CreateDefiQrCode: FC = () => {
                 break;
             case 'images':
                 if (value instanceof FileList) {
-                    if (value.length > 5) {
-                        messages.push('Seul les 5 premières images ont été prisent en compte.');
+                    const nbPreviousImage = updatedSteps[index][field]?.length ? updatedSteps[index][field]?.length : 0;
+                    if (value.length + nbPreviousImage  > 5) {
+                        messages.push('Seul 5 images sont prisent en compte.');
                     }
-                    newValue = [];
-                    for (let nbImage = 0; nbImage < Math.min(5, value.length); nbImage++) {
+                    newValue = updatedSteps[index][field] ? [...updatedSteps[index][field]] : [];
+                    for (let nbImage = 0; nbImage < Math.min(5 - nbPreviousImage, value.length); nbImage++) {
                         await uploadImage(value.item(nbImage))
                             .then((result) => {
                                 if (typeof result === "string" && typeof newValue !== "string") {
@@ -255,6 +257,23 @@ const CreateDefiQrCode: FC = () => {
         }
         setSteps(updatedSteps);
     };
+
+    const deleteImageStep = (step, image) => {
+        setIsDefiChanged(true);
+        const newSteps = [...steps];
+        const newStep = {...step};
+
+        newStep.images = newStep.images.filter((imageStep) => imageStep !== image); // On supprime l'image de notre étape
+
+        const messages = messageStep(newStep);
+        if (messages.length > 0) {
+            newStep.message = messages.join(' ');
+        } else {
+            newStep.message = '';
+        }
+        newSteps[steps.indexOf(step)] = newStep;
+        setSteps(newSteps);
+    }
 
     const prepareDataDefi = () => {
         const qrcodes = [];
@@ -404,7 +423,7 @@ const CreateDefiQrCode: FC = () => {
 
     const handleRemoveStep = (index: number) => {
         setIsDefiChanged(true);
-        if (steps.length === 1) return NotificationManager.error('Vous devez avoir au moins une étape.', "Erreur");
+        if (steps.length <= 2) return NotificationManager.error('Vous devez avoir au moins 2 étapes.', "Erreur");
         if (steps[index].indice !== "" || steps[index].images !== null) { // Si l'étape a déjà un indice ou une image d'ajouté, on ajoute un message de confirmation
             if (confirm('Êtes-vous sûr de vouloir supprimer cette étape ?') === false) return;
         }
@@ -576,8 +595,23 @@ const CreateDefiQrCode: FC = () => {
                                     style={{height: "40px", width: "40px", margin: "15px"}}><FontAwesomeIcon
                             icon={faQrcode}/> </ButtonLoad>)}
                         <div className={"file-preview"}> {step.images && step.images.map((image) => (
-                            <Image key={image} src={process.env.REACT_APP_URL_BACK + image}
-                                   alt={process.env.REACT_APP_URL_BACK + image}/>
+                            <div key={image} style={{position: 'relative'}}>
+                                <Image src={process.env.REACT_APP_URL_BACK + image}
+                                       alt={process.env.REACT_APP_URL_BACK + image}/>
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '2px',
+                                    right: '2px',
+                                    cursor: 'pointer',
+                                    backgroundColor: "red",
+                                    lineHeight: "20px",
+                                    height: "21px",
+                                    width: "21px",
+                                    borderRadius: "50%",
+                                }} onClick={() => deleteImageStep(step, image)}>
+                                    &#10005; {/* Symbole Unicode pour la croix */}
+                                </div>
+                            </div>
 
                         ))}</div>
                         <p style={{color: "red"}}>{step.message}</p><br/>

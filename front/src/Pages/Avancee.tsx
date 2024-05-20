@@ -1,9 +1,11 @@
-import {FC, ReactNode, useEffect, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {getCookieConsentValue} from "react-cookie-consent";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faRotate} from "@fortawesome/free-solid-svg-icons";
 import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
 import Confetti from 'react-confetti'
+import {ProgressBar, Step} from 'react-step-progress-bar';
+import "react-step-progress-bar/styles.css";
 
 const BaliseAIfHref: FC<{
     href: string,
@@ -16,9 +18,10 @@ const BaliseAIfHref: FC<{
     }
 }
 
-const ResultScan: FC = () => {
-    const resultScanTab: Array<{ nbQrCode: number, mot: string, url: string, timestamp: string }> = []
+const VerticalProgressBar: React.FC = () => {
+    let currentStep = -1;
 
+    const resultScanTab: Array<{ nbQrCode: number, mot: string, url: string, timestamp: string }> = []
     for (let i = 0; i < parseInt(getLocalStorage("nbQrCode")); i++) {
         const localStorage = getLocalStorage("QrCode-" + i)
         const resultScanJson: { nbQrCode: number, mot: string, url: string, timestamp: string } = {
@@ -29,53 +32,83 @@ const ResultScan: FC = () => {
             resultScanJson["mot"] = parseLocalStorage["mot"]
             resultScanJson["url"] = parseLocalStorage["url"]
             resultScanJson["timestamp"] = (new Date(parseInt(parseLocalStorage["timestamp"]))).toLocaleString()
+            if (currentStep + 1 === i) {
+                currentStep++;
+            }
         }
         resultScanTab.push(resultScanJson)
     }
 
-    return (
-        <tbody>
-        {resultScanTab.map(resultScan =>
-            <tr key={resultScan["nbQrCode"]}>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["nbQrCode"]}</BaliseAIfHref></td>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["mot"]}</BaliseAIfHref></td>
-                <td><BaliseAIfHref href={resultScan["url"]}>{resultScan["timestamp"]}</BaliseAIfHref></td>
-            </tr>
-        )}
-        </tbody>
-    )
-}
+    const nbSteps = resultScanTab.length;
+    const percentage = (currentStep / (nbSteps - 1)) * 100;
 
-const TableResult: FC = () => {
-    const [refresh, setRefresh] = useState(0);
-
-    // On actualise l'avancée toutes les 10 secondes afin que lorsque l'on scan un QrCode sur une autre page alors que l'on est sur la page des résultats, on voit le résultat s'actualiser
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setRefresh(refresh + 1);
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [refresh]);
-
-    if (!getCookieConsentValue("cookieConsent")) {
-        return (<div style={{textAlign: "center"}}>
-            <p>Le site sauvegarde les QrCode scannés dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
-        </div>)
-    }
+    const heightStep = 100;
+    const totalHeight = nbSteps * heightStep - 100
 
     return (
-        <table style={{textAlign: "center", width: "100%"}} id="ex1-grid" role="grid" aria-labelledby="grid1Label"
-               className="data">
-            <thead>
-            <tr>
-                <th style={{width: "25%"}}>Numéro QrCode</th>
-                <th style={{width: "25%"}}>Mot trouvé</th>
-                <th style={{width: "25%"}}>Date</th>
-            </tr>
-            </thead>
-            <ResultScan key={refresh}/>
-        </table>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            margin: "20px"
+        }}>
+            <div style={{
+                display: 'flex', // Utilisation de flexbox
+                flexDirection: 'row',
+                alignItems: 'center',
+            }}>
+                <div style={{
+                    height: totalHeight + 'px',
+                    position: 'relative'
+                }}>
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        height: totalHeight + 'px',
+                        width: '100%',
+                        transform: 'rotate(90deg)',
+                        transformOrigin: 'top left'
+                    }}>
+                        <ProgressBar percent={percentage} filledBackground="rgb(254, 105, 40)"
+                                     width={totalHeight}>
+                            {Array.from({length: nbSteps}, (_, index) => (
+                                <Step key={index} transition="scale">
+                                    {() => (
+                                        <div className={`indexedStep ${resultScanTab[index]["mot"] ? "accomplished" : ""}`}>
+                                            <h4>{index}</h4>
+                                        </div>
+                                    )}
+                                </Step>
+                            ))}
+                        </ProgressBar>
+                    </div>
+                </div>
+                {/* Texte à droite de la barre de progression */}
+                <div style={{marginLeft: '30px', marginTop: '0px'}}>
+                    {resultScanTab.map(resultScan =>
+                        (
+                            <div key={resultScan.nbQrCode} style={{height: heightStep, display: "flex", alignItems: "center"}}>
+                                {resultScan["mot"] && (
+                                    <BaliseAIfHref href={resultScan["url"]}>
+                                    <div style={{maxHeight: heightStep + "px"}}>
+                                        <h5 style={{lineHeight: "25px"}}>Date du scan: {resultScan["timestamp"]}</h5>
+                                        <h5 style={{lineHeight: "25px"}}>Indice: {resultScan["mot"]}</h5>
+                                    </div>
+                                    </BaliseAIfHref>
+                                )}
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const ProgressResult: FC = () => {
+    return (
+        <VerticalProgressBar/>
     )
 }
 
@@ -110,13 +143,6 @@ function afficherDuree(ms: number) {
     return (dureeString);
 }
 
-// function afficherScore(tempsParcoursTimeStamp: number, tempsMotTimeStamp: number) {
-//     if (tempsParcoursTimeStamp === 0 || tempsMotTimeStamp === 0) {
-//         return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour afficher le score</span>)
-//     }
-//     return parseInt((7200000 / (1 + Math.sqrt(tempsParcoursTimeStamp + tempsMotTimeStamp))).toString()) + " points";
-// }
-
 const TempsParcours: FC = () => {
     const [tempsParcoursTimeStamp, setTempsParcoursTimeStamp] = useState(0);
     const [tempsMotTimeStamp, setTempsMotTimeStamp] = useState(0);
@@ -130,8 +156,15 @@ const TempsParcours: FC = () => {
             let timestampMin: number | null = null;
             let timestampMax: number | null = null;
             let allFound = true;
+            const nbQrCodeString = getLocalStorage("nbQrCode");
+            let nbQrCode = 7;
+            try {
+                nbQrCode = parseInt(nbQrCodeString);
+            } catch (error) {
+                console.log(error);
+            }
 
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i < nbQrCode; i++) {
                 const localStorage = getLocalStorage("QrCode-" + i)
                 if (localStorage !== null) {
                     const parseLocalStorage = JSON.parse(localStorage);
@@ -258,7 +291,15 @@ const InputMot: FC = () => {
     };
 
     let defiQrCodeBegin = false;
-    for (let i = 1; i <= 6; i++) {
+    const nbQrCodeString = getLocalStorage("nbQrCode");
+    let nbQrCode = 7;
+    try {
+        nbQrCode = parseInt(nbQrCodeString);
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (let i = 1; i < nbQrCode; i++) {
         const localStorage = getLocalStorage("QrCode-" + i);
         if (localStorage !== null) {
             defiQrCodeBegin = true;
@@ -316,7 +357,7 @@ const Avancee: FC = () => {
                                                                                                     onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Si vous faîtes parti d'une équipe, cela vous déconnectera de celle-ci et ne supprimera pas son avancement)")}
                                                                                                     style={{cursor: "pointer"}}/>
             </h3>
-            <TableResult/><InputMot/><TempsParcours/>
+            <ProgressResult/><InputMot/> <TempsParcours/>
         </div>
     )
 }
