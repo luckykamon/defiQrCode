@@ -1,16 +1,16 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {getCookieConsentValue} from "react-cookie-consent";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faRotate} from "@fortawesome/free-solid-svg-icons";
-import {deleteLocalStorage, getLocalStorage, setLocalStorage} from "../Functions/LocalStorage";
+import React, { FC, ReactNode, useEffect, useState } from 'react';
+import { getCookieConsentValue } from "react-cookie-consent";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRecycle } from "@fortawesome/free-solid-svg-icons";
+import { deleteLocalStorage, getLocalStorage, setLocalStorage } from "../Functions/LocalStorage";
 import Confetti from 'react-confetti'
-import {ProgressBar, Step} from 'react-step-progress-bar';
+import { ProgressBar, Step } from 'react-step-progress-bar';
 import "react-step-progress-bar/styles.css";
 
 const BaliseAIfHref: FC<{
     href: string,
     children?: ReactNode
-}> = ({href, children}) => {
+}> = ({ href, children }) => {
     if (href !== "") {
         return <a href={href}>{children}</a>
     } else {
@@ -70,8 +70,8 @@ const VerticalProgressBar: React.FC = () => {
                         transformOrigin: 'top left'
                     }}>
                         <ProgressBar percent={percentage} filledBackground="rgb(254, 105, 40)"
-                                     width={totalHeight}>
-                            {Array.from({length: nbSteps}, (_, index) => (
+                            width={totalHeight}>
+                            {Array.from({ length: nbSteps }, (_, index) => (
                                 <Step key={index} transition="scale">
                                     {() => (
                                         <div className={`indexedStep ${resultScanTab[index]["mot"] ? "accomplished" : ""}`}>
@@ -84,20 +84,20 @@ const VerticalProgressBar: React.FC = () => {
                     </div>
                 </div>
                 {/* Texte à droite de la barre de progression */}
-                <div style={{marginLeft: '30px', marginTop: '0px'}}>
+                <div style={{ marginLeft: '30px', marginTop: '0px' }}>
                     {resultScanTab.map(resultScan =>
-                        (
-                            <div key={resultScan.nbQrCode} style={{height: heightStep, display: "flex", alignItems: "center"}}>
-                                {resultScan["mot"] && (
-                                    <BaliseAIfHref href={resultScan["url"]}>
-                                    <div style={{maxHeight: heightStep + "px"}}>
-                                        <h5 style={{lineHeight: "25px"}}>Date du scan: {resultScan["timestamp"]}</h5>
-                                        <h5 style={{lineHeight: "25px"}}>Indice: {resultScan["mot"]}</h5>
+                    (
+                        <div key={resultScan.nbQrCode} style={{ height: heightStep, display: "flex", alignItems: "center" }}>
+                            {resultScan["mot"] && (
+                                <BaliseAIfHref href={resultScan["url"]}>
+                                    <div style={{ maxHeight: heightStep + "px" }}>
+                                        <h5 style={{ lineHeight: "25px" }}>Date du scan: {resultScan["timestamp"]}</h5>
+                                        <h5 style={{ lineHeight: "25px" }}>Indice: {resultScan["mot"]}</h5>
                                     </div>
-                                    </BaliseAIfHref>
-                                )}
-                            </div>
-                        ))
+                                </BaliseAIfHref>
+                            )}
+                        </div>
+                    ))
                     }
                 </div>
             </div>
@@ -108,7 +108,7 @@ const VerticalProgressBar: React.FC = () => {
 
 const ProgressResult: FC = () => {
     return (
-        <VerticalProgressBar/>
+        <VerticalProgressBar />
     )
 }
 
@@ -119,7 +119,7 @@ const ProgressResult: FC = () => {
  */
 function afficherDuree(ms: number) {
     if (ms === 0) {
-        return (<span style={{fontSize: "15px"}}>Scannez le premier QrCode pour démarrer le chrono</span>)
+        return (<span style={{ fontSize: "15px" }}>Scannez le premier QrCode pour démarrer le chrono</span>)
     }
     const duree = new Date(ms);
     const jours = Math.floor(duree.getTime() / (1000 * 60 * 60 * 24));
@@ -225,8 +225,8 @@ const TempsParcours: FC = () => {
 
     return (
         <>
-            <h3 style={{textAlign: "center", color: "white"}}>Temps Mot: {tempsMotHuman}</h3>
-            <h3 style={{textAlign: "center", color: "white"}}>Temps Parcours: {tempsParcoursHuman}</h3>
+            <h3 style={{ textAlign: "center", color: "white" }}>Temps Mot: {tempsMotHuman}</h3>
+            <h3 style={{ textAlign: "center", color: "white" }}>Temps Parcours: {tempsParcoursHuman}</h3>
         </>
     )
 }
@@ -311,15 +311,15 @@ const InputMot: FC = () => {
 
     return (
         <div className={mauvaiseReponse ? "shake" : ""}
-             style={{display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap"}}>
-            <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici" onKeyDown={handleKeyDown}/>
-            <div style={{width: "100vw"}}></div>
-            <div style={mauvaiseReponse || confetti ? {display: "none"} : {}}>
+            style={{ display: "flex", justifyContent: "center", marginTop: "20px", flexWrap: "wrap" }}>
+            <input type="text" id="mot" name="mot" placeholder="Tapez votre mot ici" onKeyDown={handleKeyDown} />
+            <div style={{ width: "100vw" }}></div>
+            <div style={mauvaiseReponse || confetti ? { display: "none" } : {}}>
                 <button type="button" onClick={checkMot}
-                        style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}>Vérifier
+                    style={{ height: "40px", padding: "0 10px", borderRadius: "10px" }}>Vérifier
                 </button>
             </div>
-            {confetti && <Confetti width={width} height={height}/>}
+            {confetti && <Confetti width={width} height={height} />}
         </div>
     )
 }
@@ -350,14 +350,17 @@ const Avancee: FC = () => {
 
     return (
         <div>
-            <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>Pour terminer la course et obtenir
-                votre score.<br/>Vous devez scanner <u>tous</u> les <span style={{color: "#fe6928"}}>QrCode</span>&nbsp;
+            <h3 style={{ textAlign: "center", color: "white", marginTop: "40px" }}>Pour terminer la course et obtenir
+                votre score.<br />Vous devez scanner <u>tous</u> les <span style={{ color: "#fe6928" }}>QrCode</span>&nbsp;
                 <u>et</u> trouver le <span
-                    style={{color: "#fe6928"}}>mot caché</span>.<br/><br/>Avancée: <FontAwesomeIcon icon={faRotate}
-                                                                                                    onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Si vous faîtes parti d'une équipe, cela vous déconnectera de celle-ci et ne supprimera pas son avancement)")}
-                                                                                                    style={{cursor: "pointer"}}/>
+                    style={{ color: "#fe6928" }}>mot caché</span>.<br /><br />Avancée
             </h3>
-            <ProgressResult/><InputMot/> <TempsParcours/>
+            <ProgressResult /><InputMot /> <TempsParcours />
+            <h3 style={{ textAlign: "center", color: "white", marginTop: "40px" }}>
+                Réinitialiser votre progression:&ensp;
+                <FontAwesomeIcon icon={faRecycle} onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Si vous faîtes parti d'une équipe, cela vous déconnectera de celle-ci et ne supprimera pas son avancement)")}
+                    style={{ cursor: "pointer" }} />
+            </h3>
         </div>
     )
 }
