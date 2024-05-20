@@ -18,21 +18,12 @@ const getClassement = () => {
 }
 
 const ResultClassement: FC = () => {
-    const exempleDataClassement = useState([
-        {
-            "nameEquipe": "Exemple nom equipe",
-            "nbQrCode": 2,
-            "score": null,
-            "isMyEquipe": false,
-            "motTrouve": false
-        }])[0]
-
-    const [dataClassement, setDataClassement] = useState(exempleDataClassement);
+    const [dataClassement, setDataClassement] = useState([]);
 
     useEffect(() => {
         getClassement()
             .then((result: Array<object>) => {
-                const newDataClassement = [...exempleDataClassement]; // Crée une copie du tableau original
+                const newDataClassement = []; // Crée une copie du tableau original
 
                 result.sort((a: {
                     nameEquipe: string,
@@ -86,7 +77,7 @@ const ResultClassement: FC = () => {
             .catch((error) => {
                 console.log(error)
             })
-    }, [exempleDataClassement])
+    }, [])
 
     let nbEquipe = 0
 

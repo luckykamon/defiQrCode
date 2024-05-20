@@ -1,11 +1,11 @@
-import {deleteLocalStorage, getLocalStorage} from "../Functions/LocalStorage";
+import { deleteLocalStorage, getLocalStorage } from "../Functions/LocalStorage";
 import QRCode from "react-qr-code";
-import {useParams} from 'react-router-dom';
-import {getCookieConsentValue} from "react-cookie-consent";
+import { useParams } from 'react-router-dom';
+import { getCookieConsentValue } from "react-cookie-consent";
 import Classement from "../Components/Classement";
-import {faRotate} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {changeDefiFromIdToId} from "../Functions/ChangeDefiId";
+import { faPersonWalkingDashedLineArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { changeDefiFromIdToId } from "../Functions/ChangeDefiId";
 
 const Layout = (props) => {
     return (
@@ -16,7 +16,7 @@ const Layout = (props) => {
 }
 
 const Equipe = () => {
-    const {idEquipe} = useParams();
+    const { idEquipe } = useParams();
 
     const createEquipe = () => {
         const equipeName = document.getElementById("equipeName") as HTMLInputElement
@@ -59,7 +59,7 @@ const Equipe = () => {
         const shareNavigator = () => {
             return new Promise((resolve, reject) => {
                 if (navigator.share) {
-                    navigator.share({url: equipeUrl})
+                    navigator.share({ url: equipeUrl })
                         .then(() => {
                             resolve("Partage réussi par navigator.share")
                         })
@@ -105,7 +105,7 @@ const Equipe = () => {
     if (!getCookieConsentValue("cookieConsent")) {
         return (
             <Layout>
-                <div style={{textAlign: "center", marginTop: "30px"}}>
+                <div style={{ textAlign: "center", marginTop: "30px" }}>
                     <p>Le site sauvegarde les données d&apos;Équipes dans les Cookies, veuillez les acceptez 🍪 ci-dessous</p>
                 </div>
             </Layout>
@@ -149,23 +149,23 @@ const Equipe = () => {
             return (
                 <Layout>
                     <h3 id={"messageGetEquipe"}
-                        style={{textAlign: "center", color: "white", marginTop: "40px"}}>Chargement de votre équipe en
+                        style={{ textAlign: "center", color: "white", marginTop: "40px" }}>Chargement de votre équipe en
                         cours...</h3>
                 </Layout>
             )
         }
         return (
             <Layout>
-                <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}><p>Scannez votre numéro d&apos;équipe ou
+                <h3 style={{ textAlign: "center", color: "white", marginTop: "40px" }}><p>Scannez votre numéro d&apos;équipe ou
                     cliquez sur votre lien d&apos;équipe pour en rejoindre une.</p>
-                    <p style={{marginTop: "6px"}}>Ou créez votre équipe ci-dessous:</p>
+                    <p style={{ marginTop: "6px" }}>Ou créez votre équipe ci-dessous:</p>
                 </h3>
-                <div style={{textAlign: "center", margin: "auto"}}>
+                <div style={{ textAlign: "center", margin: "auto" }}>
                     <input type="text" id="equipeName" placeholder="Entrez votre nom d'équipe"
-                           style={{height: "40px", borderRadius: "10px", margin: "auto"}}/>
-                    <p style={{margin: "10px"}}></p>
-                    <button type="button" style={{height: "40px", padding: "0 10px", borderRadius: "10px"}}
-                            onClick={createEquipe}>Créer votre Équipe
+                        style={{ height: "40px", borderRadius: "10px", margin: "auto" }} />
+                    <p style={{ margin: "10px" }}></p>
+                    <button type="button" style={{ height: "40px", padding: "0 10px", borderRadius: "10px" }}
+                        onClick={createEquipe}>Créer votre Équipe
                     </button>
                 </div>
 
@@ -175,17 +175,20 @@ const Equipe = () => {
         return (
             <div>
                 <Layout>
-                    <h3 style={{textAlign: "center", color: "white", marginTop: "40px"}}>
-                        <p>Vous êtes l&apos;équipe: {equipeName} <FontAwesomeIcon icon={faRotate}
-                                                                             onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir réinitialiser votre progressions ? (Cela vous déconnectera de votre équipe et ne supprimera pas son avancement)")}
-                                                                             style={{cursor: "pointer"}}/></p>
+                    <h3 style={{ textAlign: "center", color: "white", marginTop: "40px" }}>
+                        <p>Vous êtes l&apos;équipe: {equipeName}</p>
                         <p>Envoyez l&apos;url ci-dessous aux membres de votre équipe pour synchroniser votre avancée ou
                             faîtes-leurs scanner le QrCode:</p></h3>
-                    <div style={{textAlign: "center", margin: "10px"}} onClick={() => shareLink(equipeURL)}>
-                        <a href={equipeURL}>{equipeURL}</a> <br/> <QRCode value={equipeURL}
-                                                                          style={{marginTop: "25px"}}/>
+                    <div style={{ textAlign: "center", margin: "10px" }} onClick={() => shareLink(equipeURL)}>
+                        <a href={equipeURL}>{equipeURL}</a> <br /> <QRCode value={equipeURL}
+                            style={{ marginTop: "25px" }} />
                     </div>
-                    <Classement/>
+                    <Classement />
+                    <h3 style={{ textAlign: "center", color: "white", marginTop: "40px" }}>
+                        <p>Quitter l&apos;équipe: <FontAwesomeIcon icon={faPersonWalkingDashedLineArrowRight}
+                            onClick={() => deleteLocalStorage("Etes-vous sûre de vouloir quitter votre équipe ? (Cela ne supprimera pas son avancement)")}
+                            style={{ cursor: "pointer" }} /></p>
+                    </h3>
                 </Layout>
             </div>
         )
