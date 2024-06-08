@@ -21,13 +21,14 @@ export const getById = async (_id: string): Promise<Equipe | null> => {
 }
 
 const calculScore = async (listQrCode: QrCode[], listEquipeMotTrouve: Equipe[]): Promise<number | null> => {
-    let nbQrCode = await qrcodeSchema.find({isSolution: true, number: {$ne: 0}}); // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
+    let equipeId = listQrCode[0]?.equipeId;
+    let defiId = listQrCode[0]?.defiId;
+    let nbQrCode = await qrcodeSchema.find({isSolution: true, number: {$ne: 0}, defiId: defiId}); // On ne prend pas en compte le QrCode 0 car c'est celui d'exemple
     let timeStampMin = null;
     let timeStampMax = null;
     let tempsParcoursTimeStamp = 0;
     let tempsMotTimeStamp = 0;
-    let equipeId = listQrCode[0]?.equipeId;
-    if (listQrCode.length <= nbQrCode.length +1) { // Si l'équipe a trouvé tous les QrCodes
+    if (listQrCode.length >= nbQrCode.length) { // Si l'équipe a trouvé tous les QrCodes
         // let score = 0;
         for (let qrcode of listQrCode) {
             if (timeStampMin === null) {
