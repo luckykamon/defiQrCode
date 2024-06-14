@@ -68,6 +68,11 @@ Pour démarrer le front, référez-vous au [README.md du front](./front/README.m
 
 Pour démarrer le back, référez-vous au [README.md du back](./back/README.md) situé dans le dossier back.
 
+### Commandes utiles
+Pour supprimer toutes les données des équipes, dans la table qrcodes, supprimez toutes les données avec le filtre suivant:
+{"equipeId": { "$ne": null }}
+Et supprimez toutes les données de la table equipes
+
 <a id="features--raliser"></a>
 ## Features à réaliser
 
